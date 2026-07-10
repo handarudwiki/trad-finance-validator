@@ -73,8 +73,8 @@ export function NewTransactionForm() {
         Choose the type of documentary credit instrument to begin validation.
       </p>
 
-      {/* Selectable Options List */}
-      <div className="flex flex-col gap-2.5">
+      {/* Selectable Options List (Horizontal Grid) */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {TYPE_OPTIONS.map((option) => {
           const isSelected = selected === option.value
           return (
