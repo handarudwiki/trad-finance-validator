@@ -24,10 +24,6 @@ export function TopBar(props: any) {
 
   return (
     <header className="topbar">
-      {/* Left Section - Spacer/Left Align */}
-      <div className="flex-1 flex items-center">
-        {/* Placeholder spacer */}
-      </div>
 
       {/* Center Section - Search Bar */}
       <div className="flex-1 flex justify-center max-w-md mx-4">
