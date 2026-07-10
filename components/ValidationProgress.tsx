@@ -37,7 +37,7 @@ export function ValidationProgress({ transactionId }: ValidationProgressProps) {
 
         if (data.status === 'COMPLETED') {
           if (intervalRef.current) clearInterval(intervalRef.current)
-          router.push(`/old/transactions/${transactionId}/report`)
+          router.push(`/transactions/${transactionId}/report`)
         } else if (data.status === 'FAILED') {
           if (intervalRef.current) clearInterval(intervalRef.current)
           setErrorDetails(data.errorDetails ?? 'Terjadi kesalahan yang tidak diketahui.')

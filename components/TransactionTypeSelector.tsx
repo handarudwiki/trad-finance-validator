@@ -58,7 +58,7 @@ export function TransactionTypeSelector() {
       }
 
       const data = await response.json()
-      router.push(`/old/transactions/${data.id}/upload`)
+      router.push(`/transactions/${data.id}/upload`)
     } catch {
       setError('Gagal terhubung ke server. Periksa koneksi internet Anda.')
     } finally {

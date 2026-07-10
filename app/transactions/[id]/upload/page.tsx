@@ -91,7 +91,7 @@ export default function UploadPage() {
         const data = await res.json()
         if (data.status === 'EXTRACTION_REVIEW') {
           if (intervalRef.current) clearInterval(intervalRef.current)
-          router.push(`/old/transactions/${transactionId}/review`)
+          router.push(`/transactions/${transactionId}/review`)
         } else if (data.status === 'FAILED') {
           if (intervalRef.current) clearInterval(intervalRef.current)
           setExtracting(false)
@@ -138,7 +138,7 @@ export default function UploadPage() {
         {/* Navigation */}
         <div className="mb-6">
           <Link
-            href="/old/transactions"
+            href="/transactions"
             className="inline-flex items-center gap-1.5 text-sm text-gray-500 hover:text-gray-700 transition-colors"
           >
             <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
@@ -226,7 +226,7 @@ export default function UploadPage() {
         {/* Cancel link */}
         <div className="mt-4 text-center">
           <Link
-            href="/old/transactions"
+            href="/transactions"
             className="text-sm text-gray-500 hover:text-gray-700 transition-colors"
           >
             Batalkan dan kembali

@@ -6,5 +6,5 @@ interface TransactionRedirectPageProps {
 
 export default async function TransactionRedirectPage({ params }: TransactionRedirectPageProps) {
   const { id } = await params
-  redirect(`/old/transactions/${id}/upload`)
+  redirect(`/transactions/${id}/upload`)
 }

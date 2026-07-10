@@ -15,28 +15,28 @@ export default async function ReviewPage({ params }: ReviewPageProps) {
   })
 
   if (!transaction) {
-    redirect('/old/transactions/new')
+    redirect('/transactions/new')
   }
 
   // Redirect to appropriate step if not in EXTRACTION_REVIEW status
   if (transaction.status !== 'EXTRACTION_REVIEW') {
     switch (transaction.status) {
       case 'DRAFT':
-        redirect(`/old/transactions/${id}/upload`)
+        redirect(`/transactions/${id}/upload`)
       case 'VALIDATING':
-        redirect(`/old/transactions/${id}/validate`)
+        redirect(`/transactions/${id}/validate`)
       case 'COMPLETED':
-        redirect(`/old/transactions/${id}/report`)
+        redirect(`/transactions/${id}/report`)
       case 'FAILED':
-        redirect(`/old/transactions/${id}/report`)
+        redirect(`/transactions/${id}/report`)
       default:
-        redirect(`/old/transactions/${id}/upload`)
+        redirect(`/transactions/${id}/upload`)
     }
   }
 
   const sourceDoc = transaction.sourceDocument
   if (!sourceDoc || !sourceDoc.extractedFields) {
-    redirect(`/old/transactions/${id}/upload`)
+    redirect(`/transactions/${id}/upload`)
   }
 
   const extractedFields = sourceDoc.extractedFields as Record<string, unknown>

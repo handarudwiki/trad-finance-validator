@@ -25,7 +25,7 @@ export default async function ReportPage({ params }: ReportPageProps) {
   })
 
   if (!transaction) {
-    redirect('/old/transactions/new')
+    redirect('/transactions/new')
   }
 
   // Show error details if transaction failed
@@ -49,19 +49,19 @@ export default async function ReportPage({ params }: ReportPageProps) {
   if (transaction.status !== 'COMPLETED') {
     switch (transaction.status) {
       case 'DRAFT':
-        redirect(`/old/transactions/${id}/upload`)
+        redirect(`/transactions/${id}/upload`)
       case 'EXTRACTION_REVIEW':
-        redirect(`/old/transactions/${id}/review`)
+        redirect(`/transactions/${id}/review`)
       case 'VALIDATING':
-        redirect(`/old/transactions/${id}/validate`)
+        redirect(`/transactions/${id}/validate`)
       default:
-        redirect(`/old/transactions/${id}/upload`)
+        redirect(`/transactions/${id}/upload`)
     }
   }
 
   const report = transaction.discrepancyReport
   if (!report) {
-    redirect(`/old/transactions/${id}/validate`)
+    redirect(`/transactions/${id}/validate`)
   }
 
   // Group findings by supporting document
