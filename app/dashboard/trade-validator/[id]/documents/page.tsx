@@ -12,7 +12,7 @@ interface RequiredDocument {
   requirements?: string | null
 }
 
-const STEPS = ['Create', 'Upload', 'Review', 'Documents', 'Validate', 'Report']
+const STEPS = ['Upload', 'Review', 'Documents', 'Validate', 'Report']
 
 function StepBar({ current }: { current: number }) {
   return (
@@ -125,7 +125,7 @@ export default function DocumentsPage() {
           </div>
         </div>
 
-        <StepBar current={3} />
+        <StepBar current={2} />
 
         <div style={{ maxWidth: '720px' }}>
           <div className="card" style={{ marginBottom: '20px' }}>
