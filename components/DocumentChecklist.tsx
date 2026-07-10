@@ -72,76 +72,98 @@ export function DocumentChecklist({
 
   return (
     <div className="space-y-6">
-      {/* Header with progress */}
-      <div className="flex items-center justify-between">
-        <h3 className="text-lg font-semibold text-gray-900">Dokumen Pendukung</h3>
-        <span className="text-sm text-gray-500">
-          {uploadedCount} / {totalCount} diunggah
-        </span>
+      {/* Overall completion progress card */}
+      <div className="card" style={{ boxShadow: 'none', border: '1px solid var(--border)', borderRadius: '8px' }}>
+        <div className="card-body" style={{ padding: '20px' }}>
+          <div className="flex items-center justify-between">
+            <div>
+              <h3 className="text-sm font-bold text-zinc-900">Required Documents Progress</h3>
+              <p className="text-xs text-zinc-500 mt-0.5">
+                Upload all specified files below to complete the validation task.
+              </p>
+            </div>
+            <span className="text-xs font-semibold text-zinc-650 bg-zinc-100 border border-zinc-200 px-3 py-1" style={{ borderRadius: '6px' }}>
+              {uploadedCount} / {totalCount} uploaded
+            </span>
+          </div>
+
+          {/* Progress bar */}
+          <div className="w-full bg-zinc-150 rounded-full h-2 mt-4" style={{ borderRadius: '8px', background: '#f4f4f5' }}>
+            <div
+              className="bg-zinc-800 h-2 transition-all duration-300"
+              style={{ 
+                width: `${totalCount > 0 ? (uploadedCount / totalCount) * 100 : 0}%`,
+                borderRadius: '8px'
+              }}
+            />
+          </div>
+        </div>
       </div>
 
-      {/* Progress bar */}
-      <div className="w-full bg-gray-200 rounded-full h-2">
-        <div
-          className="bg-blue-600 h-2 rounded-full transition-all duration-300"
-          style={{ width: `${totalCount > 0 ? (uploadedCount / totalCount) * 100 : 0}%` }}
-        />
-      </div>
-
-      {/* Upload slots */}
+      {/* Upload slots - rendered as separate cards */}
       <div className="space-y-4">
         {slots.map((slot, index) => (
           <div
             key={`${slot.document.documentType}-${index}`}
-            className={`rounded-lg border p-4 ${
-              slot.uploaded ? 'border-green-200 bg-green-50' : 'border-gray-200 bg-white'
-            }`}
+            className="card"
+            style={{ 
+              borderColor: slot.uploaded ? '#bbf7d0' : 'var(--border)',
+              background: slot.uploaded ? '#f0fdf4' : 'var(--surface)',
+              boxShadow: 'none',
+              borderRadius: '8px'
+            }}
           >
-            <div className="flex items-start justify-between mb-3">
-              <div>
-                <div className="flex items-center gap-2">
-                  {slot.uploaded && (
-                    <svg
-                      className="h-5 w-5 text-green-500 flex-shrink-0"
-                      fill="currentColor"
-                      viewBox="0 0 20 20"
-                    >
-                      <path
-                        fillRule="evenodd"
-                        d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                        clipRule="evenodd"
-                      />
-                    </svg>
+            <div className="card-body" style={{ padding: '20px' }}>
+              <div className="flex items-start justify-between">
+                <div className="space-y-2">
+                  <div className="flex items-center gap-2">
+                    {slot.uploaded ? (
+                      <div className="bg-emerald-100 text-emerald-700 p-0.5 rounded-full flex items-center justify-center">
+                        <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="3">
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                        </svg>
+                      </div>
+                    ) : (
+                      <div className="bg-zinc-100 text-zinc-500 p-0.5 rounded-full flex items-center justify-center border border-zinc-200">
+                        <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" />
+                        </svg>
+                      </div>
+                    )}
+                    <h4 className="text-sm font-bold text-zinc-900">
+                      {slot.document.documentType}
+                    </h4>
+                  </div>
+                  
+                  <div className="flex items-center gap-2 text-[11px] text-zinc-500 font-semibold">
+                    <span className="bg-zinc-100/60 border border-zinc-200/50 px-2 py-0.5" style={{ borderRadius: '4px' }}>Originals: {slot.document.originals}</span>
+                    <span className="bg-zinc-100/60 border border-zinc-200/50 px-2 py-0.5" style={{ borderRadius: '4px' }}>Copies: {slot.document.copies}</span>
+                  </div>
+                  
+                  {slot.document.requirements && (
+                    <p className="text-xs text-zinc-500 italic bg-zinc-50/40 p-2.5 border border-zinc-100" style={{ borderRadius: '6px', maxWidth: '640px' }}>
+                      <span className="font-semibold not-italic text-zinc-650">Requirements:</span> {slot.document.requirements}
+                    </p>
                   )}
-                  <h4 className="text-sm font-medium text-gray-900">
-                    {slot.document.documentType}
-                  </h4>
                 </div>
-                <div className="mt-1 flex items-center gap-3 text-xs text-gray-500">
-                  <span>Asli: {slot.document.originals}</span>
-                  <span>Salinan: {slot.document.copies}</span>
-                </div>
-                {slot.document.requirements && (
-                  <p className="mt-1 text-xs text-gray-600 italic">
-                    Persyaratan: {slot.document.requirements}
-                  </p>
-                )}
               </div>
-            </div>
 
-            {!slot.uploaded && (
-              <DocumentUploader
-                onUpload={handleUpload(index)}
-                label={`Unggah ${slot.document.documentType}`}
-              />
-            )}
+              {!slot.uploaded && (
+                <div style={{ marginTop: '20px' }}>
+                  <DocumentUploader
+                    onUpload={handleUpload(index)}
+                    label=""
+                  />
+                </div>
+              )}
+            </div>
           </div>
         ))}
       </div>
 
       {totalCount === 0 && (
-        <div className="text-center py-8 text-gray-500">
-          <p>Tidak ada dokumen pendukung yang diperlukan.</p>
+        <div className="card text-center py-8" style={{ border: '1px solid var(--border)', borderRadius: '8px', boxShadow: 'none' }}>
+          <p className="text-sm text-zinc-500">Tidak ada dokumen pendukung yang diperlukan.</p>
         </div>
       )}
     </div>
