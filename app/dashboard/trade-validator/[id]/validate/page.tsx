@@ -5,7 +5,7 @@ import Link from 'next/link'
 import { ValidationProgress } from '@/components/ValidationProgress'
 import { TopBar } from '@/components/layout/TopBar'
 
-const STEPS = ['Create', 'Upload', 'Review', 'Documents', 'Validate', 'Report']
+const STEPS = ['Upload', 'Review', 'Documents', 'Validate', 'Report']
 
 function StepBar({ current }: { current: number }) {
   return (
@@ -64,7 +64,7 @@ export default function ValidatePage() {
           </div>
         </div>
 
-        <StepBar current={4} />
+        <StepBar current={3} />
 
         <div style={{ maxWidth: '480px' }}>
           <div className="card">

@@ -7,9 +7,9 @@ import { DocumentUploader } from '@/components/DocumentUploader'
 import { TopBar } from '@/components/layout/TopBar'
 
 const STEPS = [
-  { label: 'Create' },
   { label: 'Upload' },
   { label: 'Review' },
+  { label: 'Documents' },
   { label: 'Validate' },
   { label: 'Report' },
 ]
@@ -174,7 +174,7 @@ export default function UploadPage() {
           </div>
         </div>
 
-        <StepBar current={1} />
+        <StepBar current={0} />
 
         <div style={{ maxWidth: '640px' }}>
           {/* Amendment section */}

@@ -7,7 +7,7 @@ interface ReviewPageProps {
   params: Promise<{ id: string }>
 }
 
-const STEPS = ['Create', 'Upload', 'Review', 'Validate', 'Report']
+const STEPS = ['Upload', 'Review', 'Documents', 'Validate', 'Report']
 
 function StepBar({ current }: { current: number }) {
   return (
@@ -83,7 +83,7 @@ export default async function ReviewPage({ params }: ReviewPageProps) {
           </div>
         </div>
 
-        <StepBar current={2} />
+        <StepBar current={1} />
 
         <ExtractionReviewForm
           initialValues={extractedFields as never}
