@@ -22,7 +22,7 @@ export default function NewValidationPage() {
         </div>
 
         {/* Centered create form */}
-        <div style={{ maxWidth: '600px' }}>
+        <div style={{ maxWidth: '800px' }}>
           <NewTransactionForm />
         </div>
       </div>
