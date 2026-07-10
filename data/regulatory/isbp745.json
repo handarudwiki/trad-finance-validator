@@ -1,0 +1,119 @@
+[
+  {
+    "source": "ISBP_745",
+    "article": "isbp745-a1",
+    "title": "General Principles - Abbreviations",
+    "text": "The use of generally accepted abbreviations, for example 'Ltd.' instead of 'Limited', 'Int'l' instead of 'International', 'Co.' instead of 'Company', 'kgs' or 'kg' instead of 'kilos', 'Ind' instead of 'Industry', 'Mfg' instead of 'Manufacturing' does not make a document discrepant.",
+    "relatedClauses": ["isbp745-a2", "isbp745-a3"],
+    "applicableTo": ["LC"],
+    "documentTypes": ["ALL"]
+  },
+  {
+    "source": "ISBP_745",
+    "article": "isbp745-a2",
+    "title": "General Principles - Corrections and Alterations",
+    "text": "Corrections and alterations of data in a document issued by the beneficiary themselves, except drafts, need not be authenticated. Any correction or alteration on a document issued by a third party, other than the beneficiary, must appear to be authenticated by the issuer of the document or its agent.",
+    "relatedClauses": ["isbp745-a1", "isbp745-a3"],
+    "applicableTo": ["LC"],
+    "documentTypes": ["ALL"]
+  },
+  {
+    "source": "ISBP_745",
+    "article": "isbp745-a3",
+    "title": "General Principles - Dates",
+    "text": "Documents bearing a date of issuance prior to the issuance date of the credit will be accepted provided all other terms and conditions of the credit are complied with. Transport and insurance documents must be dated no later than the date they are presented. Documents must not be dated later than their date of presentation.",
+    "relatedClauses": ["isbp745-a1", "isbp745-a2"],
+    "applicableTo": ["LC"],
+    "documentTypes": ["ALL"]
+  },
+  {
+    "source": "ISBP_745",
+    "article": "isbp745-b1",
+    "title": "Drafts and Bills of Exchange - Amounts",
+    "text": "The amount in words and figures in a draft must be consistent with each other and with the amount shown in the invoice. If a credit requires a draft to be drawn for a percentage of the invoice value, the amount of the draft must reflect that percentage. When the credit specifies a tolerance, the draft amount must be within the stated tolerance.",
+    "relatedClauses": ["isbp745-b2", "isbp745-c1"],
+    "applicableTo": ["LC"],
+    "documentTypes": ["BILL_OF_EXCHANGE"]
+  },
+  {
+    "source": "ISBP_745",
+    "article": "isbp745-b2",
+    "title": "Drafts and Bills of Exchange - Maturity Date",
+    "text": "When a credit requires a usance draft, the tenor must be in accordance with the stipulations of the credit. The maturity date must be determinable from the data in the draft itself. Expressions such as '60 days after sight' or '90 days after B/L date' are acceptable when combined with the relevant reference date.",
+    "relatedClauses": ["isbp745-b1"],
+    "applicableTo": ["LC"],
+    "documentTypes": ["BILL_OF_EXCHANGE"]
+  },
+  {
+    "source": "ISBP_745",
+    "article": "isbp745-c1",
+    "title": "Invoices - Description of Goods",
+    "text": "The description of the goods, services or performance in the invoice must correspond with the description in the credit. This does not mean that the description must be a mirror image. It means that the description must not be inconsistent with the credit. The invoice may contain additional data beyond what is stated in the credit, provided such data does not create a conflict or appear to refer to a different transaction.",
+    "relatedClauses": ["isbp745-c2", "isbp745-c3"],
+    "applicableTo": ["LC"],
+    "documentTypes": ["COMMERCIAL_INVOICE"]
+  },
+  {
+    "source": "ISBP_745",
+    "article": "isbp745-c2",
+    "title": "Invoices - Name and Address",
+    "text": "The invoice must be issued in the name of the beneficiary. The name and address of the applicant shown on the invoice must not be inconsistent with that stated in the credit. Minor variations in the address, such as abbreviation of city or country names, are acceptable provided the applicant can be clearly identified.",
+    "relatedClauses": ["isbp745-c1", "isbp745-c3"],
+    "applicableTo": ["LC"],
+    "documentTypes": ["COMMERCIAL_INVOICE"]
+  },
+  {
+    "source": "ISBP_745",
+    "article": "isbp745-c3",
+    "title": "Invoices - Amount and Quantity",
+    "text": "The invoice amount must not exceed the amount available under the credit. Where a credit allows tolerance of plus/minus 5% in amount, the invoice amount must fall within that tolerance applied to the credit amount. The quantity of goods in the invoice must match the credit terms, subject to any tolerance allowed under the credit.",
+    "relatedClauses": ["isbp745-c1", "isbp745-c2"],
+    "applicableTo": ["LC"],
+    "documentTypes": ["COMMERCIAL_INVOICE"]
+  },
+  {
+    "source": "ISBP_745",
+    "article": "isbp745-d1",
+    "title": "Transport Documents - On Board Notation",
+    "text": "When a credit requires a bill of lading to evidence that goods have been shipped on board a named vessel, the bill of lading must contain an on board notation indicating the date on which the goods were shipped on board. If the bill of lading incorporates the pre-printed wording 'shipped on board' or 'shipped' and is dated, that date will be deemed the on board date.",
+    "relatedClauses": ["isbp745-d2", "isbp745-d3"],
+    "applicableTo": ["LC"],
+    "documentTypes": ["BILL_OF_LADING"]
+  },
+  {
+    "source": "ISBP_745",
+    "article": "isbp745-d2",
+    "title": "Transport Documents - Port of Loading and Discharge",
+    "text": "The port of loading and port of discharge stated in the transport document must be consistent with those stated in the credit. If the credit states the port of loading as 'any port in China', a bill of lading showing Shanghai as port of loading would be acceptable. The use of alternative names for the same port is acceptable if the port can be identified.",
+    "relatedClauses": ["isbp745-d1", "isbp745-d3"],
+    "applicableTo": ["LC"],
+    "documentTypes": ["BILL_OF_LADING", "AIRWAY_BILL"]
+  },
+  {
+    "source": "ISBP_745",
+    "article": "isbp745-d3",
+    "title": "Transport Documents - Carrier Identification",
+    "text": "A transport document must identify the carrier by name. When the transport document is signed by an agent, the agent must be identified as an agent and indicate the name of the carrier on whose behalf it is acting. The carrier may be identified elsewhere in the transport document rather than in the signature area.",
+    "relatedClauses": ["isbp745-d1", "isbp745-d2"],
+    "applicableTo": ["LC"],
+    "documentTypes": ["BILL_OF_LADING", "AIRWAY_BILL"]
+  },
+  {
+    "source": "ISBP_745",
+    "article": "isbp745-k1",
+    "title": "Insurance Documents - Coverage Amount",
+    "text": "When a credit requires insurance to cover at least 110% of CIF or CIP value, the insurance document must show a minimum coverage of 110% of the invoice value in the same currency as the credit. If the credit states a specific insurance coverage percentage, the insurance document must meet at least that percentage. Insurance coverage must be effective no later than the date of shipment.",
+    "relatedClauses": ["isbp745-k2"],
+    "applicableTo": ["LC"],
+    "documentTypes": ["INSURANCE_CERTIFICATE"]
+  },
+  {
+    "source": "ISBP_745",
+    "article": "isbp745-k2",
+    "title": "Insurance Documents - Risks Covered",
+    "text": "The insurance document must cover all risks stipulated in the credit. If the credit requires 'all risks' coverage, the insurance document must indicate coverage against 'all risks', either by specific wording or by referencing clauses that provide equivalent comprehensive coverage such as Institute Cargo Clauses (A) or equivalent.",
+    "relatedClauses": ["isbp745-k1"],
+    "applicableTo": ["LC"],
+    "documentTypes": ["INSURANCE_CERTIFICATE"]
+  }
+]

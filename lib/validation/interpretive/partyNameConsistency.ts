@@ -1,0 +1,138 @@
+/**
+ * Interpretive validation: Party name consistency check.
+ * Verifies beneficiary and applicant name consistency across all documents.
+ * Satisfies: Requirements 8.1, 8.2, 8.3, 8.4, 8.5, 8.6, 8.10
+ */
+
+import { retrieveRegulatory } from '@/lib/rag/retrieve'
+import { getVisionModel } from '@/lib/gemini'
+import { FindingArraySchema, type Finding } from '@/schema/finding'
+import type { ExtractedLCFields } from '@/schema/extraction'
+
+/**
+ * Check beneficiary and applicant name consistency across the LC/SKBDN
+ * and all supporting documents.
+ *
+ * Uses RAG to retrieve relevant regulatory context on name variation
+ * acceptability, then calls Gemini to perform the interpretive judgment.
+ *
+ * @param lcFields - The reviewed LC/SKBDN extracted fields
+ * @param supportingDocs - Map of document type to extracted data for each supporting document
+ * @param transactionType - LC or SKBDN to filter RAG context
+ * @returns Array of Findings for any name consistency discrepancies
+ */
+export async function checkPartyNameConsistency(
+  lcFields: ExtractedLCFields,
+  supportingDocs: Map<string, Record<string, unknown>>,
+  transactionType: 'LC' | 'SKBDN',
+): Promise<Finding[]> {
+  // 1. Retrieve regulatory context via RAG
+  const ragChunks = await retrieveRegulatory(
+    'name variations beneficiary applicant consistency UCP ISBP',
+    transactionType,
+  )
+
+  const ragContext = ragChunks
+    .map((chunk) => `[${chunk.source} ${chunk.article}] ${chunk.title}: ${chunk.text}`)
+    .join('\n\n')
+
+  const ragChunkIds = ragChunks.map((chunk) => chunk.article)
+
+  // 2. Build grouped prompt with beneficiary/applicant names from all docs
+  const namesFromDocs: Record<string, { beneficiary?: string; applicant?: string }> = {}
+
+  for (const [docType, docData] of supportingDocs.entries()) {
+    const entry: { beneficiary?: string; applicant?: string } = {}
+    if (docData.beneficiaryName && typeof docData.beneficiaryName === 'string') {
+      entry.beneficiary = docData.beneficiaryName
+    }
+    if (docData.beneficiary && typeof docData.beneficiary === 'string') {
+      entry.beneficiary = docData.beneficiary
+    }
+    if (docData.applicantName && typeof docData.applicantName === 'string') {
+      entry.applicant = docData.applicantName
+    }
+    if (docData.applicant && typeof docData.applicant === 'string') {
+      entry.applicant = docData.applicant
+    }
+    // Also check nested objects for party names
+    if (docData.shipper && typeof docData.shipper === 'object') {
+      const shipper = docData.shipper as Record<string, unknown>
+      if (shipper.name && typeof shipper.name === 'string') {
+        entry.beneficiary = entry.beneficiary || shipper.name
+      }
+    }
+    if (docData.consignee && typeof docData.consignee === 'object') {
+      const consignee = docData.consignee as Record<string, unknown>
+      if (consignee.name && typeof consignee.name === 'string') {
+        entry.applicant = entry.applicant || consignee.name
+      }
+    }
+    if (entry.beneficiary || entry.applicant) {
+      namesFromDocs[docType] = entry
+    }
+  }
+
+  const prompt = `You are a trade finance document validation expert. Check beneficiary and applicant name consistency across the LC/SKBDN and all supporting documents.
+
+## Regulatory Context
+${ragContext}
+
+## LC/SKBDN Terms
+- Beneficiary Name: ${lcFields.beneficiary.name}
+- Beneficiary Address: ${lcFields.beneficiary.address}
+- Applicant Name: ${lcFields.applicant.name}
+- Applicant Address: ${lcFields.applicant.address}
+
+## Names Found in Supporting Documents
+${Object.entries(namesFromDocs)
+  .map(([docType, names]) => {
+    const parts: string[] = [`Document: ${docType}`]
+    if (names.beneficiary) parts.push(`  Beneficiary: ${names.beneficiary}`)
+    if (names.applicant) parts.push(`  Applicant: ${names.applicant}`)
+    return parts.join('\n')
+  })
+  .join('\n\n')}
+
+## Instructions
+Compare the beneficiary and applicant names across the LC/SKBDN and all supporting documents. Consider acceptable name variations per the regulatory context (e.g., abbreviations, trade names). Flag only genuine discrepancies that would be rejected by a bank checker.
+
+Return a JSON array of Finding objects. Each Finding must have:
+- "checkType": "INTERPRETIVE"
+- "severity": "FATAL" | "MAJOR" | "MINOR"
+- "field": the field name (e.g., "beneficiaryName", "applicantName")
+- "expected": the value from the LC/SKBDN
+- "found": the value from the supporting document
+- "description": a clear explanation of the discrepancy
+- "suggestedCorrection": recommended fix or null
+- "regulatoryRef": specific article/clause from the regulatory context provided
+- "ragChunkIds": []
+
+Return an empty array [] if no discrepancies are found.
+Return ONLY the JSON array, no other text.`
+
+  // 3. Call Gemini vision model
+  const model = getVisionModel()
+  const result = await model.generateContent(prompt)
+
+  // 4. Parse response with FindingArraySchema
+  try {
+    const raw = JSON.parse(result.response.text())
+    const findings = FindingArraySchema.parse(raw)
+    // Attach RAG chunk IDs to each finding
+    return findings.map((f) => ({ ...f, ragChunkIds: ragChunkIds }))
+  } catch {
+    // On parse failure: return one MAJOR Finding per Req 8.10
+    return [
+      {
+        checkType: 'INTERPRETIVE',
+        severity: 'MAJOR',
+        field: 'partyNameConsistency',
+        description:
+          'Interpretive check could not be completed: response parsing failed',
+        regulatoryRef: 'N/A',
+        ragChunkIds: [],
+      },
+    ]
+  }
+}

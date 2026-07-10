@@ -1,0 +1,119 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Transaction {
+  id                String              @id @default(cuid())
+  type              TransactionType
+  status            TransactionStatus   @default(DRAFT)
+  errorDetails      String?
+  createdAt         DateTime            @default(now())
+  updatedAt         DateTime            @updatedAt
+  sourceDocument    SourceDocument?
+  supportingDocs    SupportingDocument[]
+  discrepancyReport DiscrepancyReport?
+  userId            String?
+}
+
+model SourceDocument {
+  id               String      @id @default(cuid())
+  transactionId    String      @unique
+  transaction      Transaction @relation(fields: [transactionId], references: [id], onDelete: Cascade)
+  filePath         String
+  mimeType         String
+  extractedFields  Json?
+  reviewedFields   Json?
+  previousVersions Json[]      @default([])
+  confidence       Json?
+  extractedAt      DateTime?
+  reviewedAt       DateTime?
+  createdAt        DateTime    @default(now())
+}
+
+model SupportingDocument {
+  id            String            @id @default(cuid())
+  transactionId String
+  transaction   Transaction       @relation(fields: [transactionId], references: [id], onDelete: Cascade)
+  documentType  DocumentType
+  filePath      String
+  mimeType      String
+  extractedData Json?
+  uploadedAt    DateTime          @default(now())
+  extractedAt   DateTime?
+  findings      Finding[]
+
+  @@index([transactionId])
+}
+
+model DiscrepancyReport {
+  id            String             @id @default(cuid())
+  transactionId String             @unique
+  transaction   Transaction        @relation(fields: [transactionId], references: [id], onDelete: Cascade)
+  generatedAt   DateTime           @default(now())
+  summary       Json
+  findings      Finding[]
+  exportPath    String?
+}
+
+model Finding {
+  id                  String              @id @default(cuid())
+  reportId            String
+  report              DiscrepancyReport   @relation(fields: [reportId], references: [id], onDelete: Cascade)
+  supportingDocId     String?
+  supportingDoc       SupportingDocument? @relation(fields: [supportingDocId], references: [id])
+  checkType           CheckType
+  severity            Severity
+  field               String
+  expected            String?
+  found               String?
+  description         String
+  suggestedCorrection String?
+  regulatoryRef       String
+  ragChunkIds         String[]            @default([])
+  createdAt           DateTime            @default(now())
+}
+
+enum TransactionType {
+  LC
+  SKBDN
+}
+
+enum TransactionStatus {
+  DRAFT
+  EXTRACTION_REVIEW
+  VALIDATING
+  COMPLETED
+  FAILED
+}
+
+enum DocumentType {
+  BILL_OF_EXCHANGE
+  COMMERCIAL_INVOICE
+  PACKING_LIST
+  BILL_OF_LADING
+  AIRWAY_BILL
+  SURAT_JALAN
+  CERTIFICATE_OF_ORIGIN
+  INSURANCE_CERTIFICATE
+  INSPECTION_CERTIFICATE
+  BENEFICIARY_CERTIFICATE
+  CERTIFICATE_OF_ANALYSIS
+  PHYTOSANITARY_CERTIFICATE
+  OTHER
+}
+
+enum CheckType {
+  DETERMINISTIC
+  INTERPRETIVE
+  CROSS_DOCUMENT
+}
+
+enum Severity {
+  FATAL
+  MAJOR
+  MINOR
+}

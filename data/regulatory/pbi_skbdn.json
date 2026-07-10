@@ -1,0 +1,65 @@
+[
+  {
+    "source": "PBI_SKBDN",
+    "article": "pbi-skbdn-art1",
+    "title": "Ketentuan Umum SKBDN",
+    "text": "Surat Kredit Berdokumen Dalam Negeri (SKBDN) adalah janji tertulis berdasarkan permintaan tertulis pemohon (applicant) yang mengikat Bank Pembuka (issuing bank) untuk melakukan pembayaran kepada penerima (beneficiary) atau ordernya, atau mengaksep dan membayar wesel yang ditarik penerima, atau memberikan kuasa kepada bank lain untuk melakukan pembayaran kepada penerima, atau mengaksep dan membayar wesel yang ditarik penerima, setelah dokumen yang dipersyaratkan diterima sesuai syarat dan kondisi SKBDN.",
+    "relatedClauses": ["pbi-skbdn-art2", "pbi-skbdn-art3"],
+    "applicableTo": ["SKBDN"],
+    "documentTypes": ["ALL"]
+  },
+  {
+    "source": "PBI_SKBDN",
+    "article": "pbi-skbdn-art2",
+    "title": "Pihak-Pihak dalam SKBDN",
+    "text": "Pihak-pihak yang terlibat dalam transaksi SKBDN meliputi: Pemohon (Applicant) yaitu pihak yang mengajukan penerbitan SKBDN kepada Bank Pembuka; Bank Pembuka (Issuing Bank) yaitu bank yang menerbitkan SKBDN; Penerima (Beneficiary) yaitu pihak yang berhak menerima pembayaran berdasarkan SKBDN; Bank Penerus (Advising Bank) yaitu bank yang meneruskan SKBDN kepada penerima; Bank Penegosiasi (Negotiating Bank) yaitu bank yang melakukan negosiasi dokumen.",
+    "relatedClauses": ["pbi-skbdn-art1", "pbi-skbdn-art3"],
+    "applicableTo": ["SKBDN"],
+    "documentTypes": ["ALL"]
+  },
+  {
+    "source": "PBI_SKBDN",
+    "article": "pbi-skbdn-art3",
+    "title": "Persyaratan Penerbitan SKBDN",
+    "text": "Bank Pembuka wajib memeriksa kelengkapan dan kebenaran permohonan penerbitan SKBDN sebelum menerbitkan SKBDN. SKBDN harus memuat sekurang-kurangnya: nama dan alamat pemohon, nama dan alamat penerima, jenis SKBDN (sight payment, deferred payment, acceptance, atau negotiation), jumlah uang dan mata uang, jangka waktu berlaku, uraian barang atau jasa, persyaratan dokumen yang harus dipenuhi, dan tempat penyerahan dokumen.",
+    "relatedClauses": ["pbi-skbdn-art1", "pbi-skbdn-art4"],
+    "applicableTo": ["SKBDN"],
+    "documentTypes": ["ALL"]
+  },
+  {
+    "source": "PBI_SKBDN",
+    "article": "pbi-skbdn-art4",
+    "title": "Pemeriksaan Dokumen SKBDN",
+    "text": "Bank Pembuka dan Bank Penegosiasi wajib memeriksa dokumen-dokumen yang diserahkan penerima untuk menentukan kesesuaian penyerahan dokumen dengan syarat dan kondisi SKBDN. Pemeriksaan dokumen dilakukan berdasarkan dokumen yang diserahkan saja (on their face). Jangka waktu pemeriksaan dokumen paling lama 5 (lima) hari kerja terhitung sejak tanggal penerimaan dokumen. Apabila dokumen yang diserahkan tidak memenuhi syarat dan kondisi SKBDN, Bank Pembuka berhak menolak dokumen tersebut.",
+    "relatedClauses": ["pbi-skbdn-art3", "pbi-skbdn-art5"],
+    "applicableTo": ["SKBDN"],
+    "documentTypes": ["ALL"]
+  },
+  {
+    "source": "PBI_SKBDN",
+    "article": "pbi-skbdn-art5",
+    "title": "Kewajiban Pembayaran SKBDN",
+    "text": "Bank Pembuka wajib melakukan pembayaran kepada penerima atau bank yang ditunjuk apabila dokumen yang diserahkan telah memenuhi syarat dan kondisi SKBDN. Pembayaran wajib dilakukan dalam mata uang Rupiah. Untuk SKBDN berjangka (usance), Bank Pembuka wajib mengaksep wesel yang ditarik atas dirinya dan melakukan pembayaran pada saat jatuh tempo. Bank Pembuka tidak dapat membatalkan kewajiban pembayaran kecuali terdapat indikasi penipuan (fraud).",
+    "relatedClauses": ["pbi-skbdn-art4", "pbi-skbdn-art6"],
+    "applicableTo": ["SKBDN"],
+    "documentTypes": ["ALL"]
+  },
+  {
+    "source": "PBI_SKBDN",
+    "article": "pbi-skbdn-art6",
+    "title": "Dokumen Pengangkutan dalam SKBDN",
+    "text": "Dokumen pengangkutan dalam SKBDN dapat berupa Surat Jalan, Surat Pengantar Barang, atau dokumen pengangkutan darat lainnya yang menunjukkan bahwa barang telah dikirim atau diterima untuk pengiriman. Dokumen pengangkutan harus mencantumkan nama pengirim, nama penerima, uraian barang, tanggal pengiriman, dan tujuan pengiriman sesuai dengan syarat SKBDN.",
+    "relatedClauses": ["pbi-skbdn-art4", "pbi-skbdn-art5"],
+    "applicableTo": ["SKBDN"],
+    "documentTypes": ["SURAT_JALAN", "BILL_OF_LADING"]
+  },
+  {
+    "source": "PBI_SKBDN",
+    "article": "pbi-skbdn-art7",
+    "title": "Perubahan (Amendment) SKBDN",
+    "text": "Perubahan SKBDN hanya dapat dilakukan dengan persetujuan semua pihak yang terkait, yaitu Bank Pembuka, pemohon, dan penerima. Perubahan SKBDN harus diberitahukan kepada penerima melalui Bank Penerus. Penerima berhak menerima atau menolak perubahan SKBDN. Penolakan perubahan harus disampaikan secara tertulis. Sampai dengan penerima menyatakan menerima perubahan, syarat dan kondisi SKBDN semula tetap berlaku.",
+    "relatedClauses": ["pbi-skbdn-art3", "pbi-skbdn-art4"],
+    "applicableTo": ["SKBDN"],
+    "documentTypes": ["ALL"]
+  }
+]
