@@ -24,12 +24,13 @@ const STATUS_LABELS: Record<TransactionStatus, string> = {
   FAILED: 'Failed',
 }
 
-const STATUS_BADGE: Record<TransactionStatus, string> = {
-  DRAFT: 'badge badge-draft',
-  EXTRACTION_REVIEW: 'badge badge-review',
-  VALIDATING: 'badge badge-validating',
-  COMPLETED: 'badge badge-completed',
-  FAILED: 'badge badge-failed',
+// Minimalist status dots matching Vercel/Shadcn table guidelines
+const STATUS_DOT_COLOR: Record<TransactionStatus, string> = {
+  DRAFT: 'bg-zinc-400',
+  EXTRACTION_REVIEW: 'bg-blue-500',
+  VALIDATING: 'bg-purple-500',
+  COMPLETED: 'bg-emerald-500',
+  FAILED: 'bg-red-500',
 }
 
 function getTransactionLink(id: string, status: TransactionStatus): string {
@@ -99,22 +100,15 @@ export function TradeValidatorTableClient({ initialTransactions }: TradeValidato
     })
   }
 
-  // Filter logic: Search matches ID directly, other filters match active filter states
+  // Filter logic
   const filteredTransactions = initialTransactions.filter((tx) => {
-    // Search query matches ID (case-insensitive)
     const matchesSearch = tx.id.toLowerCase().includes(searchQuery.toLowerCase())
-
-    // Filter by type
     const matchesType = activeFilters.type === 'ALL' || tx.type === activeFilters.type
-
-    // Filter by status
     const matchesStatus = activeFilters.status === 'ALL' || tx.status === activeFilters.status
 
-    // Filter by created date (format YYYY-MM-DD)
     const txCreatedDate = new Date(tx.createdAt).toISOString().split('T')[0]
     const matchesCreatedDate = !activeFilters.date || txCreatedDate === activeFilters.date
 
-    // Filter by updated date (format YYYY-MM-DD)
     const txUpdatedDate = new Date(tx.updatedAt).toISOString().split('T')[0]
     const matchesUpdatedDate = !activeFilters.updatedDate || txUpdatedDate === activeFilters.updatedDate
 
@@ -124,13 +118,13 @@ export function TradeValidatorTableClient({ initialTransactions }: TradeValidato
   const recordCount = filteredTransactions.length
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-6">
       {/* Search & Filter Header Row */}
       <div className="flex flex-col gap-4">
         <div className="flex items-center gap-3">
           <div className="relative flex-1 max-w-sm">
             <span className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-zinc-400">
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <circle cx="11" cy="11" r="8" />
                 <path d="m21 21-4.3-4.3" />
               </svg>
@@ -146,27 +140,28 @@ export function TradeValidatorTableClient({ initialTransactions }: TradeValidato
 
           <button
             onClick={() => setIsFilterOpen(!isFilterOpen)}
-            className={`btn btn-secondary btn-sm flex items-center gap-2 ${isFilterOpen ? 'bg-zinc-100 border-zinc-950' : ''}`}
+            className={`btn btn-secondary btn-sm flex items-center gap-2 ${isFilterOpen ? 'bg-zinc-50 border-zinc-950' : ''}`}
           >
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3" />
             </svg>
             Filters
           </button>
         </div>
 
-        {/* Dropdown/Collapsible Filter Panel */}
+        {/* Collapsible Filter Panel */}
         {isFilterOpen && (
-          <div className="p-5 border border-zinc-200 bg-white rounded-md space-y-4">
-            <h3 className="text-xs font-semibold uppercase tracking-wider text-zinc-500">Filter Berdasarkan :</h3>
+          <div className="p-4 border border-zinc-200 bg-white rounded-lg space-y-4">
+            <h3 className="text-[11px] font-semibold uppercase tracking-wider text-zinc-400">Filter Berdasarkan :</h3>
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
               {/* Type */}
               <div className="form-group mb-0">
-                <label className="form-label text-xs font-medium text-zinc-500">Tipe</label>
+                <label className="form-label text-[11px] font-medium text-zinc-400">Tipe</label>
                 <select
                   value={filterType}
                   onChange={(e) => setFilterType(e.target.value)}
                   className="form-input"
+                  style={{ borderRadius: '6px' }}
                 >
                   <option value="ALL">Pilih Tipe</option>
                   <option value="LC">LC</option>
@@ -176,11 +171,12 @@ export function TradeValidatorTableClient({ initialTransactions }: TradeValidato
 
               {/* Status */}
               <div className="form-group mb-0">
-                <label className="form-label text-xs font-medium text-zinc-500">Status</label>
+                <label className="form-label text-[11px] font-medium text-zinc-400">Status</label>
                 <select
                   value={filterStatus}
                   onChange={(e) => setFilterStatus(e.target.value)}
                   className="form-input"
+                  style={{ borderRadius: '6px' }}
                 >
                   <option value="ALL">Pilih Status</option>
                   <option value="DRAFT">Draft</option>
@@ -193,23 +189,25 @@ export function TradeValidatorTableClient({ initialTransactions }: TradeValidato
 
               {/* Created Date */}
               <div className="form-group mb-0">
-                <label className="form-label text-xs font-medium text-zinc-500">Tanggal Dibuat</label>
+                <label className="form-label text-[11px] font-medium text-zinc-400">Tanggal Dibuat</label>
                 <input
                   type="date"
                   value={filterDate}
                   onChange={(e) => setFilterDate(e.target.value)}
                   className="form-input"
+                  style={{ borderRadius: '6px' }}
                 />
               </div>
 
               {/* Updated Date */}
               <div className="form-group mb-0">
-                <label className="form-label text-xs font-medium text-zinc-500">Tanggal Update</label>
+                <label className="form-label text-[11px] font-medium text-zinc-400">Tanggal Update</label>
                 <input
                   type="date"
                   value={filterUpdatedDate}
                   onChange={(e) => setFilterUpdatedDate(e.target.value)}
                   className="form-input"
+                  style={{ borderRadius: '6px' }}
                 />
               </div>
             </div>
@@ -218,12 +216,14 @@ export function TradeValidatorTableClient({ initialTransactions }: TradeValidato
               <button
                 onClick={handleApplyFilters}
                 className="btn btn-primary btn-sm"
+                style={{ borderRadius: '6px' }}
               >
                 Terapkan
               </button>
               <button
                 onClick={handleResetFilters}
                 className="btn btn-secondary btn-sm"
+                style={{ borderRadius: '6px' }}
               >
                 Reset
               </button>
@@ -232,93 +232,99 @@ export function TradeValidatorTableClient({ initialTransactions }: TradeValidato
         )}
       </div>
 
-      {/* History Table */}
-      <div className="table-wrapper">
-        <div className="card-header">
-          <span className="card-title">Validation History</span>
-          <span style={{ fontSize: '12px', color: 'var(--text-tertiary)' }}>
+      {/* Flat Table Section (Next.js Dashboard Style) */}
+      <div className="space-y-3">
+        <div className="flex items-center justify-between px-1">
+          <h2 className="text-sm font-semibold text-zinc-900">Validation History</h2>
+          <span className="text-xs text-zinc-500 font-medium">
             {recordCount} record{recordCount !== 1 ? 's' : ''}
           </span>
         </div>
 
-        {filteredTransactions.length === 0 ? (
-          <div className="empty-state">
-            <div className="empty-state-icon">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M9 12h.01M15 12h.01M10 16c.5.3 1.2.5 2 .5s1.5-.2 2-.5" />
-                <path d="M12 22C6.477 22 2 17.523 2 12S6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z" />
-                <path d="M12 8v4" />
-              </svg>
+        <div className="border border-zinc-200 bg-white rounded-xl overflow-hidden">
+          {filteredTransactions.length === 0 ? (
+            <div className="empty-state">
+              <div className="empty-state-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M9 12h.01M15 12h.01M10 16c.5.3 1.2.5 2 .5s1.5-.2 2-.5" />
+                  <path d="M12 22C6.477 22 2 17.523 2 12S6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z" />
+                  <path d="M12 8v4" />
+                </svg>
+              </div>
+              <p className="empty-state-title">No transactions found</p>
+              <p className="empty-state-desc">
+                Try adjusting your search criteria or filter selections.
+              </p>
             </div>
-            <p className="empty-state-title">No transactions found</p>
-            <p className="empty-state-desc">
-              Try adjusting your search criteria or filter selections.
-            </p>
-          </div>
-        ) : (
-          <table className="data-table">
-            <thead>
-              <tr>
-                <th>Transaction ID</th>
-                <th>Type</th>
-                <th>Status</th>
-                <th>Created</th>
-                <th>Last Updated</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {filteredTransactions.map((tx) => (
-                <tr key={tx.id}>
-                  <td>
-                    <Link
-                      href={getTransactionLink(tx.id, tx.status)}
-                      className="table-id-link"
-                      title={tx.id}
-                    >
-                      {tx.id.slice(0, 8)}…
-                    </Link>
-                  </td>
-                  <td>
-                    <span className="badge-type">{tx.type}</span>
-                  </td>
-                  <td>
-                    <span className={STATUS_BADGE[tx.status]}>
-                      {STATUS_LABELS[tx.status]}
-                    </span>
-                  </td>
-                  <td style={{ color: 'var(--text-secondary)' }}>
-                    {new Date(tx.createdAt).toLocaleDateString('en-GB', {
-                      day: 'numeric',
-                      month: 'short',
-                      year: 'numeric',
-                    })}
-                  </td>
-                  <td style={{ color: 'var(--text-secondary)' }}>
-                    {new Date(tx.updatedAt).toLocaleDateString('en-GB', {
-                      day: 'numeric',
-                      month: 'short',
-                      year: 'numeric',
-                      hour: '2-digit',
-                      minute: '2-digit',
-                    })}
-                  </td>
-                  <td>
-                    <Link
-                      href={getTransactionLink(tx.id, tx.status)}
-                      className="btn btn-secondary btn-sm"
-                    >
-                      {getActionLabel(tx.status)}
-                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                        <path d="M5 12h14M12 5l7 7-7 7" />
-                      </svg>
-                    </Link>
-                  </td>
+          ) : (
+            <table className="data-table">
+              <thead>
+                <tr>
+                  <th style={{ padding: '0.75rem 1.25rem' }}>Transaction ID</th>
+                  <th>Type</th>
+                  <th>Status</th>
+                  <th>Created</th>
+                  <th>Last Updated</th>
+                  <th style={{ textAlign: 'right', paddingRight: '1.25rem' }}>Actions</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
-        )}
+              </thead>
+              <tbody>
+                {filteredTransactions.map((tx) => (
+                  <tr key={tx.id}>
+                    <td style={{ padding: '0.875rem 1.25rem' }}>
+                      <Link
+                        href={getTransactionLink(tx.id, tx.status)}
+                        className="font-mono text-xs text-zinc-950 font-medium hover:underline transition"
+                        title={tx.id}
+                      >
+                        {tx.id.slice(0, 8)}
+                      </Link>
+                    </td>
+                    <td>
+                      <span className="text-xs font-semibold text-zinc-500 bg-zinc-50 px-2 py-0.5 rounded border border-zinc-100">
+                        {tx.type}
+                      </span>
+                    </td>
+                    <td>
+                      {/* Minimalist status indicators using color-coded dot and labels */}
+                      <span className="flex items-center gap-2 text-xs font-medium text-zinc-800">
+                        <span className={`w-1.5 h-1.5 rounded-full ${STATUS_DOT_COLOR[tx.status]}`} />
+                        {STATUS_LABELS[tx.status]}
+                      </span>
+                    </td>
+                    <td className="text-xs text-zinc-500 font-medium">
+                      {new Date(tx.createdAt).toLocaleDateString('en-GB', {
+                        day: 'numeric',
+                        month: 'short',
+                        year: 'numeric',
+                      })}
+                    </td>
+                    <td className="text-xs text-zinc-500 font-medium">
+                      {new Date(tx.updatedAt).toLocaleDateString('en-GB', {
+                        day: 'numeric',
+                        month: 'short',
+                        year: 'numeric',
+                        hour: '2-digit',
+                        minute: '2-digit',
+                      })}
+                    </td>
+                    <td style={{ textAlign: 'right', paddingRight: '1.25rem' }}>
+                      <Link
+                        href={getTransactionLink(tx.id, tx.status)}
+                        className="inline-flex items-center gap-1 text-xs font-semibold text-zinc-900 hover:text-zinc-600 transition"
+                      >
+                        {getActionLabel(tx.status)}
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                          <path d="M5 12h14M12 5l7 7-7 7" />
+                        </svg>
+                      </Link>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          )}
+        </div>
       </div>
     </div>
   )
