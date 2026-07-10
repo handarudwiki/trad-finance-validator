@@ -117,27 +117,16 @@ export function DocumentChecklist({
               <div className="flex items-start justify-between">
                 <div className="space-y-2">
                   <div className="flex items-center gap-2">
-                    {slot.uploaded ? (
+                    {slot.uploaded && (
                       <div className="bg-emerald-100 text-emerald-700 p-0.5 rounded-full flex items-center justify-center">
                         <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="3">
                           <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
-                        </svg>
-                      </div>
-                    ) : (
-                      <div className="bg-zinc-100 text-zinc-500 p-0.5 rounded-full flex items-center justify-center border border-zinc-200">
-                        <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
-                          <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" />
                         </svg>
                       </div>
                     )}
                     <h4 className="text-sm font-bold text-zinc-900">
                       {slot.document.documentType}
                     </h4>
-                  </div>
-                  
-                  <div className="flex items-center gap-2 text-[11px] text-zinc-500 font-semibold">
-                    <span className="bg-zinc-100/60 border border-zinc-200/50 px-2 py-0.5" style={{ borderRadius: '4px' }}>Originals: {slot.document.originals}</span>
-                    <span className="bg-zinc-100/60 border border-zinc-200/50 px-2 py-0.5" style={{ borderRadius: '4px' }}>Copies: {slot.document.copies}</span>
                   </div>
                   
                   {slot.document.requirements && (
