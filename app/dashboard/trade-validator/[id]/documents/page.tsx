@@ -127,50 +127,43 @@ export default function DocumentsPage() {
 
         <StepBar current={2} />
 
-        <div style={{ maxWidth: '720px' }}>
-          <div className="card" style={{ marginBottom: '20px' }}>
-            <div className="card-header">
-              <span className="card-title">Required Documents</span>
-              <span style={{ fontSize: '12px', color: 'var(--text-tertiary)' }}>
-                {requiredDocuments.length} document{requiredDocuments.length !== 1 ? 's' : ''} required
-              </span>
-            </div>
-            <div className="card-body">
-              <DocumentChecklist
-                requiredDocuments={requiredDocuments}
-                transactionId={transactionId}
-              />
-            </div>
-          </div>
+        <div>
+          <DocumentChecklist
+            requiredDocuments={requiredDocuments}
+            transactionId={transactionId}
+          />
 
           {error && (
-            <div className="alert alert-error" style={{ marginBottom: '16px' }}>
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0, marginTop: '1px' }}>
+            <div className="alert alert-error" style={{ margin: '20px 0 16px 0', borderRadius: '8px' }}>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0, marginTop: '1px' }}>
                 <circle cx="12" cy="12" r="10" /><path d="M12 8v4M12 16h.01" />
               </svg>
               {error}
             </div>
           )}
 
-          <button
-            onClick={handleValidate}
-            disabled={validating}
-            className="btn btn-primary btn-lg btn-full"
-          >
-            {validating ? (
-              <>
-                <span className="spinner" style={{ width: '16px', height: '16px' }} />
-                Starting validation…
-              </>
-            ) : (
-              <>
-                Validate Documents
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" /><path d="M9 12l2 2 4-4" />
-                </svg>
-              </>
-            )}
-          </button>
+          <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '24px' }}>
+            <button
+              onClick={handleValidate}
+              disabled={validating}
+              className="btn btn-primary h-10 px-8 text-sm font-semibold flex items-center justify-center gap-2"
+              style={{ borderRadius: '8px', minWidth: '220px' }}
+            >
+              {validating ? (
+                <>
+                  <span className="spinner w-4 h-4" />
+                  <span>Starting validation…</span>
+                </>
+              ) : (
+                <>
+                  <span>Validate Documents</span>
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" /><path d="M9 12l2 2 4-4" />
+                  </svg>
+                </>
+              )}
+            </button>
+          </div>
         </div>
       </div>
     </>
