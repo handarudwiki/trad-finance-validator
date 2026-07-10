@@ -217,6 +217,15 @@ export default function UploadPage() {
               </div>
               <div className="card-body">
                 <DocumentUploader onUpload={handleUpload} label="LC / SKBDN Document" />
+                
+                {/* Download example document */}
+                <div className="mt-4 pt-4 border-t border-zinc-100 flex items-center gap-2 text-xs text-zinc-500 font-medium">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="text-zinc-400">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/>
+                  </svg>
+                  <span>Need a test file?</span>
+                  <a href="/examples/sample_lc.pdf" download className="text-zinc-850 hover:underline font-bold">Download Sample LC Document</a>
+                </div>
               </div>
             </div>
           )}
