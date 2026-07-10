@@ -66,8 +66,8 @@ export default function ValidatePage() {
 
         <StepBar current={3} />
 
-        <div style={{ maxWidth: '480px' }}>
-          <div className="card">
+        <div>
+          <div className="card" style={{ boxShadow: 'none', border: '1px solid var(--border)', borderRadius: '8px' }}>
             <div className="card-body" style={{ padding: '40px 32px' }}>
               <ValidationProgress transactionId={transactionId} />
             </div>
