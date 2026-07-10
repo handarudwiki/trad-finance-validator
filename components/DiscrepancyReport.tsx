@@ -30,55 +30,63 @@ interface DiscrepancyReportProps {
  */
 export function DiscrepancyReport({ report }: DiscrepancyReportProps) {
   return (
-    <div className="space-y-8">
-      {/* Header */}
-      <div>
-        <h1 className="text-2xl font-bold text-gray-900">
-          Laporan Penyimpangan
-        </h1>
-        <p className="mt-1 text-sm text-gray-500">
-          Dibuat pada:{' '}
-          {new Date(report.generatedAt).toLocaleString('id-ID', {
-            dateStyle: 'long',
-            timeStyle: 'short',
-          })}
-        </p>
+    <div className="space-y-6">
+      {/* Header Metadata */}
+      <div className="flex items-center justify-between">
+        <span className="text-[11px] font-bold uppercase tracking-wider text-zinc-400">
+          Generated: {new Date(report.generatedAt).toLocaleString('id-ID', { dateStyle: 'long', timeStyle: 'short' })}
+        </span>
       </div>
 
       {/* Summary Counts */}
       <div className="grid grid-cols-4 gap-4">
-        <div className="rounded-lg border border-red-200 bg-red-50 p-4 text-center">
-          <p className="text-2xl font-bold text-red-700">
-            {report.summary.fatal}
-          </p>
-          <p className="text-sm font-medium text-red-600">Fatal</p>
+        {/* Fatal */}
+        <div className="card" style={{ border: '1px solid var(--border)', borderRadius: '8px', boxShadow: 'none' }}>
+          <div className="card-body" style={{ padding: '16px', textAlign: 'center' }}>
+            <p className="text-2xl font-bold" style={{ color: report.summary.fatal > 0 ? 'var(--danger)' : 'var(--text-primary)' }}>
+              {report.summary.fatal}
+            </p>
+            <p className="text-[10px] font-bold uppercase tracking-wider text-zinc-400 mt-1">Fatal</p>
+          </div>
         </div>
-        <div className="rounded-lg border border-orange-200 bg-orange-50 p-4 text-center">
-          <p className="text-2xl font-bold text-orange-700">
-            {report.summary.major}
-          </p>
-          <p className="text-sm font-medium text-orange-600">Besar</p>
+
+        {/* Major */}
+        <div className="card" style={{ border: '1px solid var(--border)', borderRadius: '8px', boxShadow: 'none' }}>
+          <div className="card-body" style={{ padding: '16px', textAlign: 'center' }}>
+            <p className="text-2xl font-bold" style={{ color: report.summary.major > 0 ? '#d97706' : 'var(--text-primary)' }}>
+              {report.summary.major}
+            </p>
+            <p className="text-[10px] font-bold uppercase tracking-wider text-zinc-400 mt-1">Major</p>
+          </div>
         </div>
-        <div className="rounded-lg border border-yellow-200 bg-yellow-50 p-4 text-center">
-          <p className="text-2xl font-bold text-yellow-700">
-            {report.summary.minor}
-          </p>
-          <p className="text-sm font-medium text-yellow-600">Kecil</p>
+
+        {/* Minor */}
+        <div className="card" style={{ border: '1px solid var(--border)', borderRadius: '8px', boxShadow: 'none' }}>
+          <div className="card-body" style={{ padding: '16px', textAlign: 'center' }}>
+            <p className="text-2xl font-bold" style={{ color: report.summary.minor > 0 ? '#2563eb' : 'var(--text-primary)' }}>
+              {report.summary.minor}
+            </p>
+            <p className="text-[10px] font-bold uppercase tracking-wider text-zinc-400 mt-1">Minor</p>
+          </div>
         </div>
-        <div className="rounded-lg border border-gray-200 bg-gray-50 p-4 text-center">
-          <p className="text-2xl font-bold text-gray-700">
-            {report.summary.total}
-          </p>
-          <p className="text-sm font-medium text-gray-600">Total Temuan</p>
+
+        {/* Total */}
+        <div className="card" style={{ border: '1px solid var(--border)', borderRadius: '8px', boxShadow: 'none' }}>
+          <div className="card-body" style={{ padding: '16px', textAlign: 'center' }}>
+            <p className="text-2xl font-bold text-zinc-900">
+              {report.summary.total}
+            </p>
+            <p className="text-[10px] font-bold uppercase tracking-wider text-zinc-400 mt-1">Total Findings</p>
+          </div>
         </div>
       </div>
 
       {/* Findings by Document */}
       {report.findingsByDocument.map((docGroup) => (
-        <section key={docGroup.documentId}>
-          <h2 className="mb-4 text-lg font-semibold text-gray-800 border-b border-gray-200 pb-2">
-            {docGroup.documentType}
-          </h2>
+        <section key={docGroup.documentId} className="pt-2">
+          <h3 className="text-xs font-bold uppercase tracking-wider text-zinc-400 mb-4 border-b border-zinc-200 pb-2">
+            {docGroup.documentType.split('_').join(' ')}
+          </h3>
           <div className="space-y-3">
             {docGroup.findings.map((finding, idx) => (
               <FindingCard key={`${docGroup.documentId}-${idx}`} finding={finding} />
@@ -89,10 +97,10 @@ export function DiscrepancyReport({ report }: DiscrepancyReportProps) {
 
       {/* Cross-Document Findings */}
       {report.crossDocumentFindings.length > 0 && (
-        <section>
-          <h2 className="mb-4 text-lg font-semibold text-gray-800 border-b border-gray-200 pb-2">
-            Temuan Lintas Dokumen
-          </h2>
+        <section className="pt-2">
+          <h3 className="text-xs font-bold uppercase tracking-wider text-zinc-400 mb-4 border-b border-zinc-200 pb-2">
+            Cross-Document Findings
+          </h3>
           <div className="space-y-3">
             {report.crossDocumentFindings.map((finding, idx) => (
               <FindingCard key={`cross-${idx}`} finding={finding} />
