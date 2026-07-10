@@ -61,9 +61,11 @@ export default function NewValidationPage() {
 
         <StepBar current={0} />
 
-        {/* Form container aligned left */}
-        <div style={{ maxWidth: '680px', marginTop: '24px' }}>
-          <NewTransactionForm />
+        {/* Form container centered horizontally */}
+        <div style={{ width: '100%', display: 'flex', justifyContent: 'center', marginTop: '32px' }}>
+          <div style={{ width: '100%', maxWidth: '680px' }}>
+            <NewTransactionForm />
+          </div>
         </div>
       </div>
     </>
