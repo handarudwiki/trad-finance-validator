@@ -44,14 +44,14 @@ function FieldWrapper({
   return (
     <div className="space-y-1">
       <div className="flex items-center gap-2">
-        <label className="block text-sm font-medium text-gray-700">{label}</label>
+        <label className="block text-xs font-semibold text-zinc-600">{label}</label>
         {lowConf && score !== undefined && (
-          <span className="inline-flex items-center rounded-full bg-amber-100 px-2 py-0.5 text-[10px] font-medium text-amber-700">
+          <span className="inline-flex items-center rounded bg-amber-50 border border-amber-200 px-2 py-0.5 text-[10px] font-medium text-amber-700" style={{ borderRadius: '6px' }}>
             ⚠️ {(score * 100).toFixed(0)}% — perlu diisi manual
           </span>
         )}
       </div>
-      <div className={lowConf ? 'rounded-md border-2 border-amber-400 bg-amber-50/30 p-1' : ''}>
+      <div className={lowConf ? 'border border-amber-300 bg-amber-50/20 p-0.5' : ''} style={lowConf ? { borderRadius: '8px' } : {}}>
         {children}
       </div>
       {error && <p className="text-xs text-red-600">{error}</p>}
@@ -158,33 +158,33 @@ export function ExtractionReviewForm({
     }
   }
 
-  const inputClass =
-    'block w-full rounded-md border border-gray-300 px-3 py-2 text-sm shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500'
+  const inputClass = 'form-input'
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
       {/* Low Confidence Fields Summary */}
       {lowConfidenceFields.length > 0 && (
-        <div className="rounded-lg border border-amber-300 bg-amber-50 p-5">
+        <div className="border border-amber-200 bg-amber-50/30 p-4" style={{ borderRadius: '8px' }}>
           <div className="flex items-start gap-3">
             <svg className="h-5 w-5 text-amber-600 mt-0.5 shrink-0" fill="currentColor" viewBox="0 0 20 20">
               <path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
             </svg>
-            <div className="space-y-2">
-              <h3 className="text-sm font-semibold text-amber-800">
+            <div className="space-y-1.5">
+              <h3 className="text-xs font-bold uppercase tracking-wider text-amber-800">
                 {lowConfidenceFields.length} kolom dengan kepercayaan rendah
               </h3>
               <p className="text-xs text-amber-700">
                 Field berikut memiliki confidence score di bawah {(LOW_CONFIDENCE_THRESHOLD * 100).toFixed(0)}%.
                 Silakan periksa dan isi manual jika diperlukan.
               </p>
-              <div className="flex flex-wrap gap-2 mt-2">
+              <div className="flex flex-wrap gap-1.5 mt-2">
                 {lowConfidenceFields.map((field) => {
                   const score = confidence[field]
                   return (
                     <span
                       key={field}
-                      className="inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-xs font-medium bg-amber-100 text-amber-800"
+                      className="inline-flex items-center gap-1 px-2.5 py-1 text-xs font-semibold bg-amber-100/55 text-amber-850 border border-amber-200"
+                      style={{ borderRadius: '6px' }}
                     >
                       {FIELD_LABELS[field] || field}
                       <span className="text-[10px] opacity-70">({(score * 100).toFixed(0)}%)</span>
@@ -199,7 +199,7 @@ export function ExtractionReviewForm({
 
       {/* Section 1: Transaction Identity */}
       <section>
-        <h3 className="text-lg font-semibold text-gray-900 mb-4 border-b pb-2">
+        <h3 className="text-xs font-bold uppercase tracking-wider text-zinc-400 mb-4 border-b border-zinc-200 pb-2">
           Identitas Transaksi
         </h3>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -243,7 +243,7 @@ export function ExtractionReviewForm({
 
       {/* Section 2: Parties */}
       <section>
-        <h3 className="text-lg font-semibold text-gray-900 mb-4 border-b pb-2">
+        <h3 className="text-xs font-bold uppercase tracking-wider text-zinc-400 mb-4 border-b border-zinc-200 pb-2">
           Pihak-pihak
         </h3>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -351,7 +351,7 @@ export function ExtractionReviewForm({
 
       {/* Section 3: Financial Terms */}
       <section>
-        <h3 className="text-lg font-semibold text-gray-900 mb-4 border-b pb-2">
+        <h3 className="text-xs font-bold uppercase tracking-wider text-zinc-400 mb-4 border-b border-zinc-200 pb-2">
           Ketentuan Keuangan
         </h3>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -439,7 +439,7 @@ export function ExtractionReviewForm({
 
       {/* Section 4: Goods & Shipment */}
       <section>
-        <h3 className="text-lg font-semibold text-gray-900 mb-4 border-b pb-2">
+        <h3 className="text-xs font-bold uppercase tracking-wider text-zinc-400 mb-4 border-b border-zinc-200 pb-2">
           Barang &amp; Pengiriman
         </h3>
         <div className="space-y-4">
@@ -551,17 +551,18 @@ export function ExtractionReviewForm({
 
       {/* Section 5: Required Documents (dynamic table) */}
       <section>
-        <h3 className="text-lg font-semibold text-gray-900 mb-4 border-b pb-2">
+        <h3 className="text-xs font-bold uppercase tracking-wider text-zinc-400 mb-4 border-b border-zinc-200 pb-2">
           Dokumen yang Diperlukan
         </h3>
         <div className="space-y-3">
           {docFields.map((field, index) => (
             <div
               key={field.id}
-              className="grid grid-cols-1 md:grid-cols-12 gap-3 items-end border rounded-md p-3 bg-gray-50"
+              className="grid grid-cols-1 md:grid-cols-12 gap-3 items-end border bg-gray-50/50 p-3"
+              style={{ borderRadius: '8px', borderColor: 'var(--border)' }}
             >
               <div className="md:col-span-4">
-                <label className="block text-xs font-medium text-gray-600 mb-1">
+                <label className="block text-xs font-semibold text-zinc-650 mb-1">
                   Jenis Dokumen
                 </label>
                 <input
@@ -570,7 +571,7 @@ export function ExtractionReviewForm({
                 />
               </div>
               <div className="md:col-span-2">
-                <label className="block text-xs font-medium text-gray-600 mb-1">Asli</label>
+                <label className="block text-xs font-semibold text-zinc-650 mb-1">Asli</label>
                 <Controller
                   name={`requiredDocuments.${index}.originals`}
                   control={control}
@@ -586,7 +587,7 @@ export function ExtractionReviewForm({
                 />
               </div>
               <div className="md:col-span-2">
-                <label className="block text-xs font-medium text-gray-600 mb-1">Salinan</label>
+                <label className="block text-xs font-semibold text-zinc-650 mb-1">Salinan</label>
                 <Controller
                   name={`requiredDocuments.${index}.copies`}
                   control={control}
@@ -602,7 +603,7 @@ export function ExtractionReviewForm({
                 />
               </div>
               <div className="md:col-span-3">
-                <label className="block text-xs font-medium text-gray-600 mb-1">
+                <label className="block text-xs font-semibold text-zinc-650 mb-1">
                   Persyaratan
                 </label>
                 <input
@@ -614,7 +615,8 @@ export function ExtractionReviewForm({
                 <button
                   type="button"
                   onClick={() => removeDoc(index)}
-                  className="rounded-md bg-red-50 p-2 text-red-600 hover:bg-red-100"
+                  className="btn btn-secondary text-red-600 hover:text-red-700 hover:bg-red-50/50 p-2 h-10 w-10 flex items-center justify-center border border-zinc-200"
+                  style={{ borderRadius: '8px' }}
                   title="Hapus"
                 >
                   <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -634,16 +636,20 @@ export function ExtractionReviewForm({
             onClick={() =>
               appendDoc({ documentType: '', originals: 0, copies: 0, requirements: '' })
             }
-            className="text-sm text-blue-600 hover:text-blue-800 font-medium"
+            className="btn btn-secondary h-9 px-4 text-xs font-semibold flex items-center gap-1.5 border border-zinc-200 hover:bg-zinc-50"
+            style={{ borderRadius: '8px', marginTop: '8px' }}
           >
-            + Tambah Dokumen
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M12 5v14M5 12h14" />
+            </svg>
+            Tambah Dokumen
           </button>
         </div>
       </section>
 
       {/* Section 6: Additional Conditions */}
       <section>
-        <h3 className="text-lg font-semibold text-gray-900 mb-4 border-b pb-2">
+        <h3 className="text-xs font-bold uppercase tracking-wider text-zinc-400 mb-4 border-b border-zinc-200 pb-2">
           Syarat Tambahan
         </h3>
         <FieldWrapper
@@ -658,15 +664,15 @@ export function ExtractionReviewForm({
 
       {/* API Error */}
       {apiError && (
-        <div className="rounded-md bg-red-50 border border-red-200 p-4">
-          <p className="text-sm text-red-700">{apiError}</p>
+        <div className="alert alert-error" style={{ borderRadius: '8px' }}>
+          <p className="text-xs font-semibold">{apiError}</p>
         </div>
       )}
 
       {/* Low confidence info */}
       {lowConfidenceFields.length > 0 && (
-        <div className="rounded-md bg-amber-50 border border-amber-200 p-4">
-          <p className="text-sm text-amber-800">
+        <div className="alert alert-warning" style={{ borderRadius: '8px' }}>
+          <p className="text-xs font-semibold">
             Terdapat {lowConfidenceFields.length} kolom dengan tingkat kepercayaan rendah.
             Pastikan kolom tersebut sudah terisi dengan benar sebelum melanjutkan.
           </p>
@@ -674,41 +680,26 @@ export function ExtractionReviewForm({
       )}
 
       {/* Submit */}
-      <div className="flex justify-end pt-4 border-t">
+      <div className="flex justify-end pt-4 border-t border-zinc-200">
         <button
           type="submit"
           disabled={isSubmitting}
-          className="rounded-md bg-blue-600 px-6 py-3 text-white font-medium hover:bg-blue-700 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors"
+          className="btn btn-primary h-10 px-6 text-sm font-semibold flex items-center gap-2"
+          style={{ borderRadius: '8px' }}
         >
           {isSubmitting ? (
-            <span className="flex items-center gap-2">
-              <svg
-                className="animate-spin h-4 w-4 text-white"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-              >
-                <circle
-                  className="opacity-25"
-                  cx="12"
-                  cy="12"
-                  r="10"
-                  stroke="currentColor"
-                  strokeWidth="4"
-                />
-                <path
-                  className="opacity-75"
-                  fill="currentColor"
-                  d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
-                />
-              </svg>
-              Menyimpan...
-            </span>
+            <>
+              <span className="spinner w-4 h-4" />
+              <span>Menyimpan...</span>
+            </>
           ) : (
-            'Konfirmasi & Lanjut ke Unggah Dokumen'
+            <>
+              <span>Konfirmasi &amp; Lanjut</span>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M5 12h14M12 5l7 7-7 7" />
+              </svg>
+            </>
           )}
         </button>
       </div>
     </form>
-  )
-}
