@@ -176,13 +176,13 @@ export default function UploadPage() {
 
         <StepBar current={0} />
 
-        <div style={{ maxWidth: '640px' }}>
+        <div>
           {/* Amendment section */}
           {hasReviewedFields && (
-            <div className="card" style={{ marginBottom: '20px', border: '1px solid #FDE68A' }}>
-              <div className="card-header" style={{ background: '#FFFBEB', borderBottom: '1px solid #FDE68A' }}>
+            <div className="card" style={{ marginBottom: '20px', border: '1px solid #fde68a', borderRadius: '8px', boxShadow: 'none' }}>
+              <div className="card-header" style={{ background: '#fffbeb', borderBottom: '1px solid #fde68a' }}>
                 <span className="card-title" style={{ color: '#78350F' }}>Upload Amendment</span>
-                <span style={{ fontSize: '11px', background: '#FEF3C7', color: '#92400E', padding: '2px 8px', borderRadius: 'var(--radius-full)', fontWeight: 600 }}>
+                <span style={{ fontSize: '11px', background: '#FEF3C7', color: '#92400E', padding: '2px 8px', borderRadius: '8px', fontWeight: 600 }}>
                   Amendment
                 </span>
               </div>
@@ -198,7 +198,7 @@ export default function UploadPage() {
                   </div>
                 )}
                 {amendmentSuccess && (
-                  <div className="alert alert-success" style={{ marginTop: '12px' }}>
+                  <div className="alert alert-success" style={{ marginTop: '12px', borderRadius: '8px' }}>
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0 }}>
                       <path d="M20 6L9 17l-5-5" />
                     </svg>
@@ -211,7 +211,7 @@ export default function UploadPage() {
 
           {/* Standard upload */}
           {!hasReviewedFields && (
-            <div className="card" style={{ marginBottom: '20px' }}>
+            <div className="card" style={{ marginBottom: '20px', border: '1px solid var(--border)', borderRadius: '8px', boxShadow: 'none' }}>
               <div className="card-header">
                 <span className="card-title">Source Document</span>
               </div>
@@ -223,17 +223,23 @@ export default function UploadPage() {
 
           {/* Extract button */}
           {uploaded && !extracting && (
-            <button onClick={handleExtract} className="btn btn-primary btn-lg btn-full">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <circle cx="11" cy="11" r="8" /><path d="M21 21l-4.35-4.35M11 8v6M8 11h6" />
-              </svg>
-              Extract Data from Document
-            </button>
+            <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '24px' }}>
+              <button
+                onClick={handleExtract}
+                className="btn btn-primary h-10 px-8 text-sm font-semibold flex items-center justify-center gap-2"
+                style={{ borderRadius: '8px', minWidth: '220px' }}
+              >
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                  <circle cx="11" cy="11" r="8" /><path d="M21 21l-4.35-4.35M11 8v6M8 11h6" />
+                </svg>
+                Extract Data from Document
+              </button>
+            </div>
           )}
 
           {/* Extracting state */}
           {extracting && (
-            <div className="card">
+            <div className="card" style={{ border: '1px solid var(--border)', borderRadius: '8px', boxShadow: 'none' }}>
               <div className="card-body" style={{ textAlign: 'center', padding: '40px 24px' }}>
                 <span className="spinner spinner-dark" style={{ width: '32px', height: '32px', borderWidth: '3px', display: 'inline-block', marginBottom: '16px' }} />
                 <p style={{ fontWeight: 600, color: 'var(--text-primary)', marginBottom: '4px' }}>Extracting data…</p>
@@ -246,7 +252,7 @@ export default function UploadPage() {
 
           {/* Error */}
           {error && (
-            <div className="alert alert-error" style={{ marginTop: '16px' }}>
+            <div className="alert alert-error" style={{ marginTop: '16px', borderRadius: '8px' }}>
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0, marginTop: '1px' }}>
                 <circle cx="12" cy="12" r="10" /><path d="M12 8v4M12 16h.01" />
               </svg>
