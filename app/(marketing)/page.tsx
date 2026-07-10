@@ -37,7 +37,7 @@ const impactFeatures = [
 
 function IconBox({ children }: { children: React.ReactNode }) {
   return (
-    <span className="flex h-11 w-11 shrink-0 items-center justify-center bg-[#2d2926] text-[#f5f2e9]">
+    <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg bg-slate-900 text-slate-50 shadow-sm">
       {children}
     </span>
   )
@@ -92,72 +92,72 @@ const stepIcons = [<UploadIcon key="upload" />, <SparkIcon key="spark" />, <Comp
 
 export default function LandingPage() {
   return (
-    <main className="min-h-screen bg-[#f5f2e9] text-[#2d2926]">
-      <section className="bg-[#2d2926] text-[#f5f2e9]">
+    <main className="min-h-screen bg-[#f6f8fc] text-slate-900">
+      <section className="bg-slate-950 text-slate-50">
         <div className="mx-auto grid max-w-[1440px] gap-12 px-6 pb-10 pt-16 sm:px-10 lg:grid-cols-[minmax(0,560px)_minmax(420px,620px)] lg:px-[88px] lg:pb-10 lg:pt-[72px]">
           <div className="flex flex-col justify-center gap-6 lg:min-h-[500px]">
-            <p className="text-sm font-bold uppercase text-[#d7c88c] sm:text-[15px]">
+            <p className="text-sm font-bold uppercase tracking-[0.24em] text-sky-300 sm:text-[15px]">
               AI Audit Engine untuk Koperasi Desa Merah Putih
             </p>
             <h1 className="max-w-2xl text-5xl font-bold leading-[0.98] tracking-normal sm:text-6xl lg:text-[64px]">
               Validasi dokumen transaksi koperasi sebelum jadi masalah.
             </h1>
-            <p className="max-w-xl text-lg leading-7 text-[#d9d3c8] sm:text-[19px]">
+            <p className="max-w-xl text-lg leading-7 text-slate-300 sm:text-[19px]">
               LLM mengekstrak isi dokumen, membandingkannya dengan data transaksi koperasi, lalu menandai hanya bagian yang perlu ditinjau petugas.
             </p>
             <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
-              <Link href="/transactions/new" className="inline-flex items-center justify-center gap-2 bg-[#d7c88c] px-[18px] py-[14px] text-sm font-bold text-[#2d2926] transition hover:bg-[#e5d89d]">
+              <Link href="/transactions/new" className="inline-flex items-center justify-center gap-2 rounded-xl bg-sky-500 px-[18px] py-3.5 text-sm font-bold text-white shadow-sm transition hover:bg-sky-400">
                 <UploadIcon />
                 Mulai audit otomatis
               </Link>
-              <Link href="/transactions" className="inline-flex items-center justify-center gap-2 px-3 py-[14px] text-sm font-semibold text-[#f5f2e9] transition hover:bg-white/10">
+              <Link href="/transactions" className="inline-flex items-center justify-center gap-2 rounded-xl px-3 py-3.5 text-sm font-semibold text-slate-100 transition hover:bg-white/10">
                 <CompareIcon />
                 Lihat review queue
               </Link>
             </div>
           </div>
 
-          <div className="relative min-h-[420px] border border-[#5d5547] bg-[#1e1b18] p-5 shadow-2xl shadow-black/20 lg:h-[492px]">
-            <div className="absolute inset-0 opacity-80 [background:linear-gradient(135deg,rgba(245,242,233,.08),transparent_35%),radial-gradient(circle_at_20%_20%,rgba(215,200,140,.18),transparent_24%),linear-gradient(90deg,rgba(255,255,255,.06)_1px,transparent_1px),linear-gradient(rgba(255,255,255,.05)_1px,transparent_1px)] bg-size-[auto,auto,42px_42px,42px_42px]" />
+          <div className="relative min-h-[420px] border border-slate-800 bg-[radial-gradient(circle_at_top,rgba(96,165,250,.18),transparent_24%),linear-gradient(180deg,rgba(15,23,42,.98),rgba(15,23,42,.92))] p-5 shadow-2xl shadow-slate-950/30 lg:h-[492px]">
+            <div className="absolute inset-0 opacity-80 [background:linear-gradient(135deg,rgba(255,255,255,.06),transparent_35%),radial-gradient(circle_at_20%_20%,rgba(96,165,250,.20),transparent_24%),linear-gradient(90deg,rgba(255,255,255,.05)_1px,transparent_1px),linear-gradient(rgba(255,255,255,.05)_1px,transparent_1px)] bg-size-[auto,auto,42px_42px,42px_42px]" />
             <div className="relative grid h-full gap-4 sm:grid-cols-[1fr_220px]">
-              <div className="flex flex-col justify-between border border-[#5d5547] bg-[#f5f2e9] p-5 text-[#2d2926]">
+              <div className="flex flex-col justify-between border border-slate-200 bg-white p-5 text-slate-900 shadow-sm">
                 <div className="space-y-5">
-                  <div className="flex items-center justify-between border-b border-[#c7b987] pb-3 text-xs font-bold uppercase text-[#7d6b3d]">
+                  <div className="flex items-center justify-between border-b border-slate-200 pb-3 text-xs font-bold uppercase tracking-[0.18em] text-sky-700">
                     <span>Invoice Koperasi</span>
                     <span>DOC-8841</span>
                   </div>
                   {['Pemasok: BUMDes Sumber Makmur', 'Total: Rp 84.250.000', 'Tanggal: 10 Juli 2026', 'Tujuan: Pengadaan gabah'].map((item) => (
                     <div key={item} className="flex items-center gap-3">
-                      <span className="h-2.5 w-2.5 bg-[#2f6b45]" />
-                      <span className="text-sm text-[#5e5954]">{item}</span>
+                      <span className="h-2.5 w-2.5 rounded-full bg-sky-500" />
+                      <span className="text-sm text-slate-600">{item}</span>
                     </div>
                   ))}
                 </div>
                 <div className="mt-8 grid grid-cols-3 gap-2">
-                  <div className="h-16 bg-[#efe8d7]" />
-                  <div className="h-16 bg-[#d7c88c]" />
-                  <div className="h-16 bg-[#efe8d7]" />
+                  <div className="h-16 rounded-md bg-slate-100" />
+                  <div className="h-16 rounded-md bg-sky-100" />
+                  <div className="h-16 rounded-md bg-slate-100" />
                 </div>
               </div>
-              <div className="hidden flex-col justify-between border border-[#5d5547] bg-[#2d2926] p-4 text-[#f5f2e9] sm:flex">
-                <p className="text-xs font-bold uppercase text-[#d7c88c]">AI Checks</p>
-                <div className="space-y-3 text-sm text-[#d9d3c8]">
+              <div className="hidden flex-col justify-between border border-slate-700 bg-slate-900 p-4 text-slate-50 sm:flex">
+                <p className="text-xs font-bold uppercase tracking-[0.18em] text-sky-300">AI Checks</p>
+                <div className="space-y-3 text-sm text-slate-300">
                   <p>Nominal match</p>
                   <p>Supplier verified</p>
                   <p>Date in period</p>
                   <p>Purpose aligned</p>
                 </div>
-                <div className="h-24 border border-[#5d5547] bg-[#3a352f]" />
+                <div className="h-24 rounded-lg border border-slate-700 bg-slate-800" />
               </div>
             </div>
-            <div className="absolute bottom-10 left-8 right-8 border border-[#2d2926] bg-[#f5f2e9ee] p-5 text-[#2d2926] sm:flex sm:items-center sm:gap-5">
+            <div className="absolute bottom-10 left-8 right-8 border border-slate-200 bg-white/95 p-5 text-slate-900 shadow-lg backdrop-blur-sm sm:flex sm:items-center sm:gap-5">
               <div className="mb-3 w-32 sm:mb-0">
-                <p className="text-xs font-bold uppercase text-[#5e5954]">Confidence</p>
+                <p className="text-xs font-bold uppercase tracking-[0.18em] text-slate-500">Confidence</p>
                 <p className="font-mono text-4xl font-bold">94%</p>
               </div>
               <div>
-                <p className="text-lg font-bold text-[#2d2926]">Verified</p>
-                <p className="mt-1 text-sm leading-5 text-[#5e5954]">
+                <p className="text-lg font-bold text-slate-900">Verified</p>
+                <p className="mt-1 text-sm leading-5 text-slate-600">
                   Jumlah barang, berat, pemasok, harga, dan tanggal konsisten dengan transaksi koperasi.
                 </p>
               </div>
@@ -165,86 +165,86 @@ export default function LandingPage() {
           </div>
         </div>
 
-        <div className="mx-auto grid max-w-[1264px] border-y border-[#5d5547] bg-[#3a352f] sm:grid-cols-2 lg:grid-cols-4">
+        <div className="mx-auto grid max-w-[1264px] border-y border-slate-800 bg-slate-900 sm:grid-cols-2 lg:grid-cols-4">
           {problemMetrics.map(([label, detail]) => (
-            <div key={label} className="border-[#5d5547] px-6 py-5 lg:border-r last:border-r-0">
-              <p className="font-mono text-sm font-bold text-[#d7c88c]">{label}</p>
-              <p className="mt-1 text-sm text-[#d9d3c8]">{detail}</p>
+            <div key={label} className="border-slate-800 px-6 py-5 lg:border-r last:border-r-0">
+              <p className="font-mono text-sm font-bold text-sky-300">{label}</p>
+              <p className="mt-1 text-sm text-slate-300">{detail}</p>
             </div>
           ))}
         </div>
       </section>
 
-      <section className="px-6 py-16 sm:px-10 lg:px-[88px]">
+      <section className="bg-slate-50 px-6 py-16 sm:px-10 lg:px-[88px]">
         <div className="mx-auto max-w-[1264px]">
           <div className="grid gap-8 lg:grid-cols-[650px_350px] lg:items-end lg:justify-between">
             <div>
-              <p className="text-sm font-bold uppercase text-[#7d6b3d]">Solusi: Context-Aware Validation</p>
+              <p className="text-sm font-bold uppercase tracking-[0.22em] text-sky-700">Solusi: Context-Aware Validation</p>
               <h2 className="mt-3 max-w-3xl text-4xl font-bold leading-tight sm:text-[42px]">
                 AI membandingkan dokumen dengan transaksi, bukan sekadar membaca teks.
               </h2>
-              <p className="mt-4 max-w-2xl text-[17px] leading-7 text-[#5e5954]">
+              <p className="mt-4 max-w-2xl text-[17px] leading-7 text-slate-600">
                 Setiap unggahan diproses LLM, diekstrak menjadi data terstruktur, lalu dibandingkan secara kontekstual dengan catatan koperasi.
               </p>
             </div>
-            <aside className="border border-[#2d2926] bg-[#efe8d7] p-5">
-              <p className="text-xs font-bold uppercase text-[#5e5954]">Ambang Keputusan</p>
+            <aside className="border border-slate-200 bg-white p-5 shadow-sm">
+              <p className="text-xs font-bold uppercase tracking-[0.18em] text-slate-500">Ambang Keputusan</p>
               <p className="mt-2 font-mono text-4xl font-bold">&gt;= 90%</p>
-              <p className="mt-2 text-sm leading-5 text-[#5e5954]">
+              <p className="mt-2 text-sm leading-5 text-slate-600">
                 Di bawah ambang ini, AI tidak memaksa keputusan dan mengirim dokumen ke petugas.
               </p>
             </aside>
           </div>
 
-          <div className="mt-8 grid border border-[#2d2926] bg-[#f9f6ed] md:grid-cols-2 xl:grid-cols-4">
+          <div className="mt-8 grid border border-slate-200 bg-white md:grid-cols-2 xl:grid-cols-4 shadow-sm">
             {pipelineSteps.map(([number, title, description], index) => (
-              <div key={title} className="border-[#c7b987] p-6 md:border-r md:nth-[2n]:border-r-0 xl:nth-[2n]:border-r xl:last:border-r-0">
+              <div key={title} className="border-slate-200 p-6 md:border-r md:nth-[2n]:border-r-0 xl:nth-[2n]:border-r xl:last:border-r-0">
                 <div className="flex items-center gap-3">
                   <IconBox>{stepIcons[index]}</IconBox>
                   <div>
-                    <p className="font-mono text-xs font-bold text-[#7d6b3d]">{number}</p>
+                    <p className="font-mono text-xs font-bold text-sky-700">{number}</p>
                     <h3 className="text-xl font-bold">{title}</h3>
                   </div>
                 </div>
-                <p className="mt-5 text-[15px] leading-6 text-[#5e5954]">{description}</p>
+                <p className="mt-5 text-[15px] leading-6 text-slate-600">{description}</p>
               </div>
             ))}
           </div>
 
           <div className="mt-8 grid gap-5 lg:grid-cols-2">
-            <div className="flex items-center gap-4 border border-[#2f6b45] bg-[#e7efe4] p-5">
-              <span className="flex h-8 w-8 shrink-0 items-center justify-center border border-[#2f6b45] text-[#2f6b45]">?</span>
+            <div className="flex items-center gap-4 border border-emerald-200 bg-emerald-50 p-5">
+              <span className="flex h-8 w-8 shrink-0 items-center justify-center border border-emerald-300 text-emerald-700">?</span>
               <div>
                 <p className="font-bold">Verified otomatis</p>
-                <p className="text-sm text-[#5e5954]">Data konsisten, transaksi dapat dilanjutkan lebih cepat.</p>
+                <p className="text-sm text-slate-600">Data konsisten, transaksi dapat dilanjutkan lebih cepat.</p>
               </div>
             </div>
-            <div className="flex items-center gap-4 border border-[#a05a20] bg-[#fff2d8] p-5">
-              <span className="flex h-8 w-8 shrink-0 items-center justify-center border border-[#a05a20] text-[#a05a20]">!</span>
+            <div className="flex items-center gap-4 border border-amber-200 bg-amber-50 p-5">
+              <span className="flex h-8 w-8 shrink-0 items-center justify-center border border-amber-300 text-amber-700">!</span>
               <div>
                 <p className="font-bold">Review Queue</p>
-                <p className="text-sm text-[#5e5954]">Petugas hanya memeriksa field yang ditandai AI.</p>
+                <p className="text-sm text-slate-600">Petugas hanya memeriksa field yang ditandai AI.</p>
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      <section className="bg-[#7d6b3d] px-6 py-12 text-[#f5f2e9] sm:px-10 lg:px-[88px]">
+      <section className="bg-slate-900 px-6 py-12 text-slate-50 sm:px-10 lg:px-[88px]">
         <div className="mx-auto max-w-[1264px]">
           <div className="grid gap-8 lg:grid-cols-[690px_1fr]">
             <div>
-              <p className="font-mono text-sm font-semibold uppercase text-[#f5f2e9]">Kebaruan Ide dan Dampak</p>
+              <p className="font-mono text-sm font-semibold uppercase tracking-[0.24em] text-sky-300">Kebaruan Ide dan Dampak</p>
               <h2 className="mt-2 max-w-2xl text-3xl font-bold leading-tight sm:text-[32px]">
                 Audit koperasi yang membaca konteks sebelum angka bergerak
               </h2>
-              <p className="mt-3 text-sm leading-5 text-[#f5f2e9dd]">
+              <p className="mt-3 text-sm leading-5 text-slate-300">
                 Mesin audit menilai dokumen, keputusan manusia, dan risiko transaksi sebagai satu alur kendali.
               </p>
             </div>
-            <div className="grid border border-[#f5f2e966] sm:grid-cols-[132px_1fr_1fr_1fr]">
-              <div className="hidden border-r border-[#f5f2e955] bg-[#6f5f36] p-4 sm:block">
-                <div className="h-full bg-[linear-gradient(135deg,rgba(245,242,233,.25),transparent),linear-gradient(rgba(245,242,233,.16)_1px,transparent_1px),linear-gradient(90deg,rgba(245,242,233,.16)_1px,transparent_1px)] bg-size-[auto,18px_18px,18px_18px]" />
+            <div className="grid border border-slate-700 sm:grid-cols-[132px_1fr_1fr_1fr]">
+              <div className="hidden border-r border-slate-700 bg-slate-800 p-4 sm:block">
+                <div className="h-full bg-[linear-gradient(135deg,rgba(255,255,255,.22),transparent),linear-gradient(rgba(255,255,255,.10)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.10)_1px,transparent_1px)] bg-size-[auto,18px_18px,18px_18px]" />
               </div>
               {[
                 ['3', 'lapis kendali'],
@@ -253,7 +253,7 @@ export default function LandingPage() {
               ].map(([value, label]) => (
                 <div key={label} className="p-4">
                   <p className="font-mono text-2xl font-semibold">{value}</p>
-                  <p className="mt-2 text-xs leading-4 text-[#f5f2e9cc]">{label}</p>
+                  <p className="mt-2 text-xs leading-4 text-slate-300">{label}</p>
                 </div>
               ))}
             </div>
@@ -261,26 +261,26 @@ export default function LandingPage() {
         </div>
       </section>
 
-      <section className="px-6 py-12 sm:px-10 lg:px-[88px]">
+      <section className="bg-[#f6f8fc] px-6 py-12 sm:px-10 lg:px-[88px]">
         <div className="mx-auto max-w-[1264px]">
           <div className="grid gap-8 lg:grid-cols-[260px_1fr]">
             <div>
-              <p className="text-sm font-bold uppercase text-[#7d6b3d]">Model Kerja</p>
-              <h3 className="mt-2 text-3xl font-bold leading-tight text-[#2d2926]">
+              <p className="text-sm font-bold uppercase tracking-[0.22em] text-sky-700">Model Kerja</p>
+              <h3 className="mt-2 text-3xl font-bold leading-tight text-slate-900">
                 Validasi, verifikasi, pencegahan
               </h3>
-              <p className="mt-3 text-sm leading-6 text-[#5e5954]">
+              <p className="mt-3 text-sm leading-6 text-slate-600">
                 Desain untuk pengurus level jasa, audit internal, dan petugas yang membutuhkan konteks sebelum keputusan manusia.
               </p>
             </div>
 
             <div className="grid gap-4 md:grid-cols-3">
               {impactFeatures.map(([number, title, copy, impact]) => (
-                <div key={title} className="border border-[#c7b987] bg-[#f9f6ed] p-5">
-                  <p className="font-mono text-sm font-bold text-[#7d6b3d]">{number}</p>
-                  <h4 className="mt-2 text-lg font-bold text-[#2d2926]">{title}</h4>
-                  <p className="mt-3 text-sm leading-6 text-[#5e5954]">{copy}</p>
-                  <p className="mt-4 text-sm leading-6 text-[#2d2926]">{impact}</p>
+                <div key={title} className="border border-slate-200 bg-white p-5 shadow-sm">
+                  <p className="font-mono text-sm font-bold text-sky-700">{number}</p>
+                  <h4 className="mt-2 text-lg font-bold text-slate-900">{title}</h4>
+                  <p className="mt-3 text-sm leading-6 text-slate-600">{copy}</p>
+                  <p className="mt-4 text-sm leading-6 text-slate-800">{impact}</p>
                 </div>
               ))}
             </div>
