@@ -1,11 +1,17 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { extractSourceDocument } from '@/lib/extraction/extractSourceDocument'
 import { ExtractionError } from '@/lib/extraction/ExtractionError'
-import { getVisionModel } from '@/lib/gemini'
+
+const mockGenerateContent = vi.fn()
 
 // Mock the gemini module
 vi.mock('@/lib/gemini', () => ({
-  getVisionModel: vi.fn(),
+  ai: {
+    models: {
+      generateContent: (...args: any[]) => mockGenerateContent(...args),
+    },
+  },
+  VISION_MODEL: 'gemini-2.5-flash-preview-05-20',
 }))
 
 describe('extractSourceDocument', () => {
@@ -45,21 +51,13 @@ describe('extractSourceDocument', () => {
   }
 
   function mockGeminiResponse(responseText: string) {
-    const mockGenerateContent = vi.fn().mockResolvedValue({
-      response: { text: () => responseText },
+    mockGenerateContent.mockResolvedValue({
+      text: responseText,
     })
-    vi.mocked(getVisionModel).mockReturnValue({
-      generateContent: mockGenerateContent,
-    } as any)
-    return mockGenerateContent
   }
 
   function mockGeminiError(error: Error) {
-    const mockGenerateContent = vi.fn().mockRejectedValue(error)
-    vi.mocked(getVisionModel).mockReturnValue({
-      generateContent: mockGenerateContent,
-    } as any)
-    return mockGenerateContent
+    mockGenerateContent.mockRejectedValue(error)
   }
 
   it('should extract LC fields from a valid Gemini response', async () => {
@@ -84,7 +82,7 @@ describe('extractSourceDocument', () => {
       currency: 'IDR',
       amount: 500000000,
     }
-    const mockFn = mockGeminiResponse(JSON.stringify(skbdnResponse))
+    mockGeminiResponse(JSON.stringify(skbdnResponse))
 
     const result = await extractSourceDocument(
       Buffer.from('fake-pdf-content'),
@@ -95,9 +93,10 @@ describe('extractSourceDocument', () => {
     expect(result.lcNumber).toBe('SKBDN-2024-001')
     expect(result.currency).toBe('IDR')
 
-    // Verify the SKBDN prompt was used
-    const callArgs = mockFn.mock.calls[0][0]
-    expect(callArgs[1]).toContain('SKBDN')
+    // Verify the SKBDN prompt was used in the contents
+    const callArgs = mockGenerateContent.mock.calls[0][0]
+    const textPart = callArgs.contents[0].parts[1].text
+    expect(textPart).toContain('SKBDN')
   })
 
   it('should throw ExtractionError when Gemini returns invalid JSON', async () => {

@@ -12,6 +12,8 @@ const { mockSearch, mockCollectionExists, mockCreateCollection, mockUpsert } = v
   mockUpsert: vi.fn(),
 }))
 
+const mockEmbedContent = vi.hoisted(() => vi.fn())
+
 // Mock @/lib/config
 vi.mock('@/lib/config', () => ({
   env: {
@@ -27,12 +29,13 @@ vi.mock('@/lib/config', () => ({
 
 // Mock @/lib/gemini
 vi.mock('@/lib/gemini', () => ({
-  embeddingModel: {
-    embedContent: vi.fn(),
+  ai: {
+    models: {
+      embedContent: (...args: any[]) => mockEmbedContent(...args),
+    },
   },
-  visionModel: {},
-  genAI: {},
-  getVisionModel: vi.fn(),
+  EMBEDDING_MODEL: 'text-embedding-004',
+  VISION_MODEL: 'gemini-2.5-flash-preview-05-20',
 }))
 
 // Mock @qdrant/js-client-rest with a proper constructor
@@ -53,7 +56,6 @@ vi.mock('fs/promises', () => ({
 import { embedText } from '@/lib/rag/embed'
 import { retrieveRegulatory, type RegulatoryChunk } from '@/lib/rag/retrieve'
 import { ensureCollection, upsertChunk, loadRegDataFile } from '@/lib/rag/ingest'
-import { embeddingModel } from '@/lib/gemini'
 import { readFile } from 'fs/promises'
 
 describe('lib/rag/embed', () => {
@@ -61,20 +63,23 @@ describe('lib/rag/embed', () => {
     vi.clearAllMocks()
   })
 
-  it('should call embeddingModel.embedContent and return the embedding values', async () => {
+  it('should call ai.models.embedContent and return the embedding values', async () => {
     const mockValues = [0.1, 0.2, 0.3, 0.4, 0.5]
-    vi.mocked(embeddingModel.embedContent).mockResolvedValue({
-      embedding: { values: mockValues },
-    } as any)
+    mockEmbedContent.mockResolvedValue({
+      embeddings: [{ values: mockValues }],
+    })
 
     const result = await embedText('test query')
 
-    expect(embeddingModel.embedContent).toHaveBeenCalledWith('test query')
+    expect(mockEmbedContent).toHaveBeenCalledWith({
+      model: 'text-embedding-004',
+      contents: 'test query',
+    })
     expect(result).toEqual(mockValues)
   })
 
   it('should propagate errors from the embedding model', async () => {
-    vi.mocked(embeddingModel.embedContent).mockRejectedValue(new Error('API error'))
+    mockEmbedContent.mockRejectedValue(new Error('API error'))
 
     await expect(embedText('test')).rejects.toThrow('API error')
   })
@@ -87,9 +92,9 @@ describe('lib/rag/retrieve', () => {
 
   it('should embed query and search Qdrant with LC transaction type filter', async () => {
     const mockEmbedding = Array(768).fill(0.1)
-    vi.mocked(embeddingModel.embedContent).mockResolvedValue({
-      embedding: { values: mockEmbedding },
-    } as any)
+    mockEmbedContent.mockResolvedValue({
+      embeddings: [{ values: mockEmbedding }],
+    })
 
     const mockChunk: RegulatoryChunk = {
       source: 'UCP_600',
@@ -107,7 +112,10 @@ describe('lib/rag/retrieve', () => {
 
     const result = await retrieveRegulatory('document examination', 'LC')
 
-    expect(embeddingModel.embedContent).toHaveBeenCalledWith('document examination')
+    expect(mockEmbedContent).toHaveBeenCalledWith({
+      model: 'text-embedding-004',
+      contents: 'document examination',
+    })
     expect(mockSearch).toHaveBeenCalledWith('regulatory_knowledge', {
       vector: mockEmbedding,
       filter: {
@@ -123,9 +131,9 @@ describe('lib/rag/retrieve', () => {
 
   it('should include documentType filter when documentType is provided', async () => {
     const mockEmbedding = Array(768).fill(0.2)
-    vi.mocked(embeddingModel.embedContent).mockResolvedValue({
-      embedding: { values: mockEmbedding },
-    } as any)
+    mockEmbedContent.mockResolvedValue({
+      embeddings: [{ values: mockEmbedding }],
+    })
 
     mockSearch.mockResolvedValue([])
 
@@ -146,9 +154,9 @@ describe('lib/rag/retrieve', () => {
 
   it('should use default topK of 5 when not specified', async () => {
     const mockEmbedding = Array(768).fill(0.1)
-    vi.mocked(embeddingModel.embedContent).mockResolvedValue({
-      embedding: { values: mockEmbedding },
-    } as any)
+    mockEmbedContent.mockResolvedValue({
+      embeddings: [{ values: mockEmbedding }],
+    })
     mockSearch.mockResolvedValue([])
 
     await retrieveRegulatory('query', 'LC')
@@ -160,9 +168,9 @@ describe('lib/rag/retrieve', () => {
   })
 
   it('should return empty array when no results found', async () => {
-    vi.mocked(embeddingModel.embedContent).mockResolvedValue({
-      embedding: { values: Array(768).fill(0) },
-    } as any)
+    mockEmbedContent.mockResolvedValue({
+      embeddings: [{ values: Array(768).fill(0) }],
+    })
     mockSearch.mockResolvedValue([])
 
     const result = await retrieveRegulatory('no match', 'LC')

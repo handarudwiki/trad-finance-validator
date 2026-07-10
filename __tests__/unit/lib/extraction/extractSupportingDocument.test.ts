@@ -1,11 +1,17 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { extractSupportingDocument, getDocumentPrompt } from '@/lib/extraction/extractSupportingDocument'
 import { ExtractionError } from '@/lib/extraction/ExtractionError'
-import { getVisionModel } from '@/lib/gemini'
+
+const mockGenerateContent = vi.fn()
 
 // Mock the gemini module
 vi.mock('@/lib/gemini', () => ({
-  getVisionModel: vi.fn(),
+  ai: {
+    models: {
+      generateContent: (...args: any[]) => mockGenerateContent(...args),
+    },
+  },
+  VISION_MODEL: 'gemini-2.5-flash-preview-05-20',
 }))
 
 describe('extractSupportingDocument', () => {
@@ -14,21 +20,13 @@ describe('extractSupportingDocument', () => {
   })
 
   function mockGeminiResponse(responseText: string) {
-    const mockGenerateContent = vi.fn().mockResolvedValue({
-      response: { text: () => responseText },
+    mockGenerateContent.mockResolvedValue({
+      text: responseText,
     })
-    vi.mocked(getVisionModel).mockReturnValue({
-      generateContent: mockGenerateContent,
-    } as any)
-    return mockGenerateContent
   }
 
   function mockGeminiError(error: Error) {
-    const mockGenerateContent = vi.fn().mockRejectedValue(error)
-    vi.mocked(getVisionModel).mockReturnValue({
-      generateContent: mockGenerateContent,
-    } as any)
-    return mockGenerateContent
+    mockGenerateContent.mockRejectedValue(error)
   }
 
   it('should extract invoice data from a valid Gemini response', async () => {
@@ -57,35 +55,32 @@ describe('extractSupportingDocument', () => {
 
   it('should use invoice prompt for COMMERCIAL_INVOICE type', async () => {
     mockGeminiResponse(JSON.stringify({ invoiceNumber: 'INV-001' }))
-    const mockFn = vi.mocked(getVisionModel).mockReturnValue({
-      generateContent: vi.fn().mockResolvedValue({
-        response: { text: () => JSON.stringify({ invoiceNumber: 'INV-001' }) },
-      }),
-    } as any)
 
     await extractSupportingDocument(Buffer.from('fake'), 'application/pdf', 'COMMERCIAL_INVOICE')
 
-    const model = getVisionModel()
-    const callArgs = (model.generateContent as any).mock.calls[0][0]
-    expect(callArgs[1]).toContain('Commercial Invoice')
+    const callArgs = mockGenerateContent.mock.calls[0][0]
+    const textPart = callArgs.contents[0].parts[1].text
+    expect(textPart).toContain('Commercial Invoice')
   })
 
   it('should use bill of lading prompt for BILL_OF_LADING type', async () => {
-    const mockFn = mockGeminiResponse(JSON.stringify({ blNumber: 'BL-001' }))
+    mockGeminiResponse(JSON.stringify({ blNumber: 'BL-001' }))
 
     await extractSupportingDocument(Buffer.from('fake'), 'application/pdf', 'BILL_OF_LADING')
 
-    const callArgs = mockFn.mock.calls[0][0]
-    expect(callArgs[1]).toContain('Bill of Lading')
+    const callArgs = mockGenerateContent.mock.calls[0][0]
+    const textPart = callArgs.contents[0].parts[1].text
+    expect(textPart).toContain('Bill of Lading')
   })
 
   it('should use generic prompt for OTHER document type', async () => {
-    const mockFn = mockGeminiResponse(JSON.stringify({ documentNumber: 'DOC-001' }))
+    mockGeminiResponse(JSON.stringify({ documentNumber: 'DOC-001' }))
 
     await extractSupportingDocument(Buffer.from('fake'), 'application/pdf', 'OTHER')
 
-    const callArgs = mockFn.mock.calls[0][0]
-    expect(callArgs[1]).toContain('trade finance supporting document')
+    const callArgs = mockGenerateContent.mock.calls[0][0]
+    const textPart = callArgs.contents[0].parts[1].text
+    expect(textPart).toContain('trade finance supporting document')
   })
 
   it('should throw ExtractionError when Gemini returns invalid JSON', async () => {

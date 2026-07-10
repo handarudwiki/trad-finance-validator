@@ -1,10 +1,10 @@
 /**
- * Text embedding service using Google Generative AI text-embedding-004 model.
+ * Text embedding service using Google GenAI text-embedding-004 model.
  * Generates vector embeddings for RAG queries and regulatory chunk ingestion.
  * Satisfies: Requirements 8.1, 12.1
  */
 
-import { embeddingModel } from '@/lib/gemini'
+import { ai, EMBEDDING_MODEL } from '@/lib/gemini'
 
 /**
  * Generate a vector embedding for the given text using text-embedding-004.
@@ -12,6 +12,9 @@ import { embeddingModel } from '@/lib/gemini'
  * @returns A 768-dimensional embedding vector
  */
 export async function embedText(text: string): Promise<number[]> {
-  const result = await embeddingModel.embedContent(text)
-  return result.embedding.values
+  const response = await ai.models.embedContent({
+    model: EMBEDDING_MODEL,
+    contents: text,
+  })
+  return response.embeddings![0].values!
 }

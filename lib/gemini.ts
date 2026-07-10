@@ -1,21 +1,20 @@
 /**
- * Google Generative AI client initialization.
- * Exports configured model instances for vision extraction and text embedding.
+ * Google GenAI client initialization.
+ * Exports configured client for vision extraction, text generation, and embeddings.
  * Satisfies: Requirements 3.1 (extraction), 8.1 (interpretive), 12.1 (embeddings)
  */
 
-import { GoogleGenerativeAI } from '@google/generative-ai'
-import { env } from '@/lib/config'
+import { GoogleGenAI } from '@google/genai'
 
-export const genAI = new GoogleGenerativeAI(env.GEMINI_API_KEY)
-
-/** Gemini 1.5 Pro for vision-based document extraction and interpretive validation */
-export const visionModel = genAI.getGenerativeModel({ model: 'gemini-1.5-pro' })
-
-/** Returns the Gemini 1.5 Pro vision model instance */
-export function getVisionModel() {
-  return visionModel
+const apiKey = process.env.GEMINI_API_KEY
+if (!apiKey) {
+  throw new Error('GEMINI_API_KEY environment variable is not set')
 }
 
-/** text-embedding-004 for generating embeddings used in RAG retrieval */
-export const embeddingModel = genAI.getGenerativeModel({ model: 'text-embedding-004' })
+export const ai = new GoogleGenAI({ apiKey })
+
+/** Model name for vision/text generation */
+export const VISION_MODEL = 'gemini-2.5-flash-preview-05-20'
+
+/** Model name for text embeddings */
+export const EMBEDDING_MODEL = 'text-embedding-004'

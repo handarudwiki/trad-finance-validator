@@ -9,7 +9,7 @@ import type { ExtractedLCFields } from '@/schema/extraction'
 import type { Finding } from '@/schema/finding'
 import { FindingArraySchema } from '@/schema/finding'
 import { retrieveRegulatory } from '@/lib/rag/retrieve'
-import { visionModel } from '@/lib/gemini'
+import { ai, VISION_MODEL } from '@/lib/gemini'
 
 /**
  * Checks that certificate documents contain mandatory wording
@@ -64,8 +64,11 @@ Rules:
 Return ONLY valid JSON array.`
 
   try {
-    const result = await visionModel.generateContent(prompt)
-    const responseText = result.response.text()
+    const result = await ai.models.generateContent({
+      model: VISION_MODEL,
+      contents: prompt,
+    })
+    const responseText = result.text!
     const raw = JSON.parse(responseText)
     return FindingArraySchema.parse(raw)
   } catch {
