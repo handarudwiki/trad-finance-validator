@@ -152,7 +152,7 @@ export function TradeValidatorTableClient({ initialTransactions }: TradeValidato
 
         {/* Minimalist Filter Panel (Attachment 2 refactor) */}
         {isFilterOpen && (
-          <div className="p-4 border border-zinc-200 bg-white rounded-lg space-y-4" style={{ borderRadius: '12px' }}>
+          <div className="p-4 border border-zinc-200 bg-white rounded-lg space-y-4">
             <h3 className="text-xs font-semibold uppercase tracking-wider text-zinc-500">Filter Berdasarkan :</h3>
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
               {/* Type */}
@@ -234,7 +234,7 @@ export function TradeValidatorTableClient({ initialTransactions }: TradeValidato
       </div>
 
       {/* Table (Reverted to card wrapper but removed .card-header box) */}
-      <div className="table-wrapper" style={{ borderRadius: '12px' }}>
+      <div className="table-wrapper">
         {filteredTransactions.length === 0 ? (
           <div className="empty-state">
             <div className="empty-state-icon">
