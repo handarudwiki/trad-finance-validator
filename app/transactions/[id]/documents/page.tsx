@@ -70,11 +70,11 @@ export default function DocumentsPage() {
       setError('Gagal terhubung ke server. Periksa koneksi internet Anda.')
       setValidating(false)
     }
-  }
+}
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
+      <div className="flex min-h-screen items-center justify-center">
         <div className="h-10 w-10 animate-spin rounded-full border-4 border-gray-200 border-t-blue-600" />
       </div>
     )
@@ -82,7 +82,7 @@ export default function DocumentsPage() {
 
   return (
     <div className="min-h-screen px-4 py-12">
-      <div className="max-w-3xl mx-auto space-y-6">
+      <div className="mx-auto max-w-3xl space-y-6">
         <div>
           <h1 className="text-2xl font-bold text-gray-900">Unggah Dokumen Pendukung</h1>
           <p className="mt-1 text-gray-600">
@@ -95,16 +95,16 @@ export default function DocumentsPage() {
           transactionId={transactionId}
         />
 
-        <div className="pt-4 border-t">
+        <div className="border-t pt-4">
           <button
             onClick={handleValidate}
             disabled={validating}
-            className="w-full rounded-md bg-blue-600 px-4 py-3 text-white font-medium hover:bg-blue-700 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors"
+            className="w-full rounded-md bg-blue-600 px-4 py-3 font-medium text-white transition-colors hover:bg-blue-700 disabled:cursor-not-allowed disabled:bg-gray-300"
           >
             {validating ? (
               <span className="flex items-center justify-center gap-2">
                 <svg
-                  className="animate-spin h-5 w-5 text-white"
+                  className="h-5 w-5 animate-spin text-white"
                   fill="none"
                   viewBox="0 0 24 24"
                 >
@@ -131,7 +131,7 @@ export default function DocumentsPage() {
         </div>
 
         {error && (
-          <div className="rounded-md bg-red-50 border border-red-200 p-4">
+          <div className="rounded-md border border-red-200 bg-red-50 p-4">
             <p className="text-sm text-red-700">{error}</p>
           </div>
         )}

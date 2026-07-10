@@ -43,14 +43,54 @@ export async function POST(
   const buffer = Buffer.from(await file.arrayBuffer())
   await saveFile(buffer, storagePath)
 
-  // Create SourceDocument record
-  const sourceDoc = await prisma.sourceDocument.create({
-    data: {
-      transactionId: id,
-      filePath: storagePath,
-      mimeType: file.type,
-    },
+  // Check if SourceDocument already exists
+  const existingSourceDoc = await prisma.sourceDocument.findUnique({
+    where: { transactionId: id },
   })
+
+  let sourceDoc
+  if (existingSourceDoc) {
+    // Delete old file from storage to avoid orphan files
+    try {
+      const { unlink } = await import('fs/promises')
+      await unlink(existingSourceDoc.filePath)
+    } catch (e) {
+      console.warn(`Failed to delete old file: ${existingSourceDoc.filePath}`, e)
+    }
+
+    // Update existing SourceDocument record and reset fields
+    sourceDoc = await prisma.sourceDocument.update({
+      where: { transactionId: id },
+      data: {
+        filePath: storagePath,
+        mimeType: file.type,
+        extractedFields: null,
+        reviewedFields: null,
+        confidence: null,
+        extractedAt: null,
+        reviewedAt: null,
+        previousVersions: [],
+      },
+    })
+
+    // Reset transaction status to DRAFT and clear errors
+    await prisma.transaction.update({
+      where: { id },
+      data: {
+        status: 'DRAFT',
+        errorDetails: null,
+      },
+    })
+  } else {
+    // Create SourceDocument record
+    sourceDoc = await prisma.sourceDocument.create({
+      data: {
+        transactionId: id,
+        filePath: storagePath,
+        mimeType: file.type,
+      },
+    })
+  }
 
   return NextResponse.json(
     {
