@@ -15,6 +15,9 @@ export async function embedText(text: string): Promise<number[]> {
   const response = await ai.models.embedContent({
     model: EMBEDDING_MODEL,
     contents: text,
+    config: {
+      outputDimensionality: 768,
+    },
   })
   return response.embeddings![0].values!
 }

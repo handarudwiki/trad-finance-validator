@@ -85,7 +85,8 @@ REQUIRED JSON SCHEMA:
   "presentationPeriodDays": number or null,
   "requiredDocuments": [
     {
-      "documentType": string,
+      "documentType": string (MUST be one of: "BILL_OF_EXCHANGE", "COMMERCIAL_INVOICE", "PACKING_LIST", "BILL_OF_LADING", "AIRWAY_BILL", "SURAT_JALAN", "CERTIFICATE_OF_ORIGIN", "INSURANCE_CERTIFICATE", "INSPECTION_CERTIFICATE", "BENEFICIARY_CERTIFICATE", "CERTIFICATE_OF_ANALYSIS", "PHYTOSANITARY_CERTIFICATE", "INSURANCE_POLICY", "OTHER".
+        Mapping guide: Marine BL / Ocean BL / Combined Transport BL / Multimodal BL = "BILL_OF_LADING". Draft / Wesel = "BILL_OF_EXCHANGE". Insurance Policy or Certificate = "INSURANCE_POLICY" or "INSURANCE_CERTIFICATE". Survey/Analysis Report = "CERTIFICATE_OF_ANALYSIS". Beneficiary Statement/Certificate = "BENEFICIARY_CERTIFICATE". If unsure, use "OTHER"),
       "originals": number,
       "copies": number,
       "requirements": string or null

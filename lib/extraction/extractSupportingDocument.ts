@@ -27,6 +27,7 @@ export type DocumentType =
   | 'BENEFICIARY_CERTIFICATE'
   | 'CERTIFICATE_OF_ANALYSIS'
   | 'PHYTOSANITARY_CERTIFICATE'
+  | 'INSURANCE_POLICY'
   | 'OTHER'
 
 export function getDocumentPrompt(documentType: DocumentType): string {

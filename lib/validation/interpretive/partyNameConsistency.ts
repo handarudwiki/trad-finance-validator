@@ -5,7 +5,7 @@
  */
 
 import { retrieveRegulatory } from '@/lib/rag/retrieve'
-import { ai, VISION_MODEL } from '@/lib/gemini'
+import { generateText } from '@/lib/llm'
 import { FindingArraySchema, type Finding } from '@/schema/finding'
 import type { ExtractedLCFields } from '@/schema/extraction'
 
@@ -109,17 +109,16 @@ Return a JSON array of Finding objects. Each Finding must have:
 - "ragChunkIds": []
 
 Return an empty array [] if no discrepancies are found.
+Write "description" and "suggestedCorrection" fields in Bahasa Indonesia.
 Return ONLY the JSON array, no other text.`
 
-  // 3. Call Gemini model
+  // 3. Call LLM with fallback
   try {
-    const result = await ai.models.generateContent({
-      model: VISION_MODEL,
-      contents: prompt,
-    })
+    const responseText = await generateText(prompt)
+    const cleaned = responseText.replace(/```(?:json)?\s*\n?([\s\S]*?)\n?```/, '$1').trim()
 
     // 4. Parse response with FindingArraySchema
-    const raw = JSON.parse(result.text!)
+    const raw = JSON.parse(cleaned)
     const findings = FindingArraySchema.parse(raw)
     // Attach RAG chunk IDs to each finding
     return findings.map((f) => ({ ...f, ragChunkIds: ragChunkIds }))

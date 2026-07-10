@@ -9,7 +9,7 @@ import type { ExtractedLCFields } from '@/schema/extraction'
 import type { Finding } from '@/schema/finding'
 import { FindingArraySchema } from '@/schema/finding'
 import { retrieveRegulatory } from '@/lib/rag/retrieve'
-import { ai, VISION_MODEL } from '@/lib/gemini'
+import { generateText } from '@/lib/llm'
 
 /**
  * Checks that certificate documents contain mandatory wording
@@ -60,16 +60,14 @@ Rules:
 - Return a JSON array of findings. Each finding must have: checkType, severity, field, expected, found, description, suggestedCorrection, regulatoryRef, ragChunkIds.
 - Use checkType: "INTERPRETIVE"
 - Return an empty array [] if no discrepancy is found.
+- Write "description" and "suggestedCorrection" fields in Bahasa Indonesia.
 
 Return ONLY valid JSON array.`
 
   try {
-    const result = await ai.models.generateContent({
-      model: VISION_MODEL,
-      contents: prompt,
-    })
-    const responseText = result.text!
-    const raw = JSON.parse(responseText)
+    const responseText = await generateText(prompt)
+    const cleaned = responseText.replace(/```(?:json)?\s*\n?([\s\S]*?)\n?```/, '$1').trim()
+    const raw = JSON.parse(cleaned)
     return FindingArraySchema.parse(raw)
   } catch {
     return [

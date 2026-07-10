@@ -14,7 +14,7 @@ if (!apiKey) {
 export const ai = new GoogleGenAI({ apiKey: apiKey })
 
 /** Model name for vision/text generation */
-export const VISION_MODEL = 'gemini-2.5-flash-preview-05-20'
+export const VISION_MODEL = 'gemini-3.1-flash-lite'
 
 /** Model name for text embeddings */
-export const EMBEDDING_MODEL = 'text-embedding-004'
+export const EMBEDDING_MODEL = 'gemini-embedding-001'
