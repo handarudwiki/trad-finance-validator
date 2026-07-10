@@ -62,10 +62,10 @@
   --shadow: none;
   --shadow-md: none;
 
-  /* Radius (Standardized to shadcn 8px) */
+  /* Radius (Standardized, maximum 12px / 0.75rem) */
   --radius-sm: 0.25rem;
   --radius: 0.5rem;
-  --radius-lg: 0.5rem;
+  --radius-lg: 0.75rem;
   --radius-xl: 0.75rem;
   --radius-full: 9999px;
 
@@ -283,7 +283,7 @@
   height: 4rem;
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: right;
   padding: 0 2.5rem;
   border-bottom: 1px solid var(--border);
   background: var(--surface);
