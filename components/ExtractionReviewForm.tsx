@@ -703,3 +703,5 @@ export function ExtractionReviewForm({
         </button>
       </div>
     </form>
+  )
+}
