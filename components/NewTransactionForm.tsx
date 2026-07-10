@@ -68,7 +68,7 @@ export function NewTransactionForm() {
   }
 
   return (
-    <div className="flex flex-col items-start w-full">
+    <div className="flex flex-col items-center w-full">
       {/* Selectable Options List (Vertical Cards Grid) */}
       <div 
         style={{ 
@@ -153,8 +153,8 @@ export function NewTransactionForm() {
         </div>
       )}
 
-      {/* Left-aligned actions section */}
-      <div className="flex flex-col items-start gap-3">
+      {/* Centered actions section */}
+      <div className="flex flex-col items-center gap-3">
         <button
           onClick={handleSubmit}
           disabled={!selected || isLoading}
