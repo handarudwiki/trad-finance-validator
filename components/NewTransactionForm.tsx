@@ -69,6 +69,16 @@ export function NewTransactionForm() {
 
   return (
     <div className="flex flex-col items-center w-full">
+      {/* Title above both selection cards */}
+      <div className="text-center mb-6">
+        <h3 style={{ fontSize: '16px', fontWeight: 600, color: 'var(--text-primary)', marginBottom: '6px' }}>
+          Select Document Type
+        </h3>
+        <p style={{ fontSize: '13px', color: 'var(--text-secondary)' }}>
+          Choose the type of documentary credit instrument to begin validation.
+        </p>
+      </div>
+
       {/* Selectable Options List (Vertical Cards Grid) */}
       <div 
         style={{ 
