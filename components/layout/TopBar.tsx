@@ -1,52 +1,58 @@
-'use clients'
+'use client'
 
-import React from 'react'
-import Link from 'next/link'
+import React, { useState, useRef, useEffect } from 'react'
 
 export interface BreadcrumbItem {
   label: string
   href?: string
 }
 
-interface TopBarProps {
-  breadcrumbs: BreadcrumbItem[]
-  actions?: React.ReactNode
-}
+export function TopBar(props: any) {
+  const [isOpen, setIsOpen] = useState(false)
+  const dropdownRef = useRef<HTMLDivElement>(null)
 
-export function TopBar({ breadcrumbs, actions }: TopBarProps) {
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setIsOpen(false)
+      }
+    }
+    document.addEventListener('mousedown', handleClickOutside)
+    return () => document.removeEventListener('mousedown', handleClickOutside)
+  }, [])
+
   return (
-    <header className="topbar">
-      <nav className="topbar-breadcrumb" aria-label="Breadcrumb">
-        {breadcrumbs.map((crumb, index) => {
-          const isLast = index === breadcrumbs.length - 1
-          return (
-            <React.Fragment key={index}>
-              {index > 0 && (
-                <span className="topbar-breadcrumb-sep" aria-hidden="true">
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M9 18l6-6-6-6" />
-                  </svg>
-                </span>
-              )}
-              {isLast ? (
-                <span className="topbar-breadcrumb-current">{crumb.label}</span>
-              ) : crumb.href ? (
-                <Link
-                  href={crumb.href}
-                  style={{ color: 'var(--text-secondary)', textDecoration: 'none', fontSize: '13px' }}
-                  onMouseEnter={e => (e.currentTarget.style.color = 'var(--text-primary)')}
-                  onMouseLeave={e => (e.currentTarget.style.color = 'var(--text-secondary)')}
-                >
-                  {crumb.label}
-                </Link>
-              ) : (
-                <span>{crumb.label}</span>
-              )}
-            </React.Fragment>
-          )
-        })}
-      </nav>
-      {actions && <div className="topbar-actions">{actions}</div>}
+    <header className="topbar" style={{ justifyContent: 'flex-end', padding: '0 1.5rem' }}>
+      <div className="relative" ref={dropdownRef}>
+        <button 
+          onClick={() => setIsOpen(!isOpen)}
+          className="flex items-center justify-center w-8 h-8 rounded-full bg-zinc-100 text-zinc-900 border border-zinc-200 hover:bg-zinc-200 transition focus:outline-none focus:ring-2 focus:ring-zinc-950 focus:ring-offset-1"
+        >
+          <span className="text-xs font-semibold">AD</span>
+        </button>
+        
+        {isOpen && (
+          <div className="absolute right-0 mt-2 w-56 bg-white border border-zinc-200 rounded-md shadow-md py-1 z-50">
+            <div className="px-4 py-3 border-b border-zinc-100">
+              <p className="text-sm font-semibold text-zinc-950">Admin Koperasi</p>
+              <p className="text-xs text-zinc-500">admin@koperasi.id</p>
+            </div>
+            <div className="py-1">
+              <button className="w-full text-left px-4 py-2 text-sm text-zinc-700 hover:bg-zinc-50 transition">
+                Profile Settings
+              </button>
+              <button className="w-full text-left px-4 py-2 text-sm text-zinc-700 hover:bg-zinc-50 transition">
+                Help & Support
+              </button>
+            </div>
+            <div className="border-t border-zinc-100 py-1">
+              <button className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition">
+                Log out
+              </button>
+            </div>
+          </div>
+        )}
+      </div>
     </header>
   )
 }
