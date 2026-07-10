@@ -97,6 +97,21 @@ export function DocumentChecklist({
               }}
             />
           </div>
+
+          {/* Example Documents download links */}
+          <div className="mt-4 pt-4 border-t border-zinc-100 flex items-center gap-3 text-xs text-zinc-500 font-medium">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="text-zinc-400">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/>
+            </svg>
+            <span>Need test files? Download examples:</span>
+            <div className="flex gap-2">
+              <a href="/examples/commercial_invoice.pdf" download className="text-zinc-850 hover:underline font-bold">Invoice</a>
+              <span className="text-zinc-300">•</span>
+              <a href="/examples/bill_of_lading.pdf" download className="text-zinc-850 hover:underline font-bold">Bill of Lading</a>
+              <span className="text-zinc-300">•</span>
+              <a href="/examples/packing_list.pdf" download className="text-zinc-850 hover:underline font-bold">Packing List</a>
+            </div>
+          </div>
         </div>
       </div>
 
