@@ -7,6 +7,28 @@ import { z } from 'zod'
 
 const ISODateString = z.string().regex(/^\d{4}-\d{2}-\d{2}$/, 'Must be YYYY-MM-DD')
 
+/**
+ * Valid document types — must match the DocumentType enum in prisma/schema.prisma
+ */
+export const VALID_DOCUMENT_TYPES = [
+  'BILL_OF_EXCHANGE',
+  'COMMERCIAL_INVOICE',
+  'PACKING_LIST',
+  'BILL_OF_LADING',
+  'AIRWAY_BILL',
+  'SURAT_JALAN',
+  'CERTIFICATE_OF_ORIGIN',
+  'INSURANCE_CERTIFICATE',
+  'INSPECTION_CERTIFICATE',
+  'BENEFICIARY_CERTIFICATE',
+  'CERTIFICATE_OF_ANALYSIS',
+  'PHYTOSANITARY_CERTIFICATE',
+  'INSURANCE_POLICY',
+  'OTHER',
+] as const
+
+export const DocumentTypeEnum = z.enum(VALID_DOCUMENT_TYPES)
+
 export const ExtractedLCFieldsSchema = z.object({
   lcNumber: z.string().min(1),
   issueDate: ISODateString,
@@ -46,7 +68,7 @@ export const ExtractedLCFieldsSchema = z.object({
   transshipment: z.enum(['ALLOWED', 'NOT_ALLOWED', 'NOT_SPECIFIED']),
   presentationPeriodDays: z.number().int().positive().optional().nullable(),
   requiredDocuments: z.array(z.object({
-    documentType: z.string().min(1),
+    documentType: DocumentTypeEnum,
     originals: z.number().int().min(0),
     copies: z.number().int().min(0),
     requirements: z.string().optional().nullable(),

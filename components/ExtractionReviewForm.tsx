@@ -632,7 +632,7 @@ export function ExtractionReviewForm({
           <button
             type="button"
             onClick={() =>
-              appendDoc({ documentType: '', originals: 0, copies: 0, requirements: '' })
+              appendDoc({ documentType: 'OTHER', originals: 0, copies: 0, requirements: '' })
             }
             className="text-sm text-blue-600 hover:text-blue-800 font-medium"
           >

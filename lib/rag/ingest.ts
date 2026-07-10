@@ -6,6 +6,7 @@
 
 import { QdrantClient } from '@qdrant/js-client-rest'
 import { readFile } from 'fs/promises'
+import { createHash } from 'crypto'
 import { env } from '@/lib/config'
 import type { RegulatoryChunk } from '@/lib/rag/retrieve'
 
@@ -40,7 +41,7 @@ export async function ensureCollection(): Promise<void> {
 
 /**
  * Upsert a regulatory chunk with its embedding vector into Qdrant.
- * Uses the chunk's article field as a deterministic string-based point ID for idempotent updates.
+ * Generates a deterministic UUID from the chunk's article field for idempotent updates.
  *
  * @param chunk - The regulatory chunk metadata to store as payload
  * @param vector - The 768-dimensional embedding vector for the chunk
@@ -48,11 +49,14 @@ export async function ensureCollection(): Promise<void> {
  * Satisfies: Requirements 12.1, 12.2
  */
 export async function upsertChunk(chunk: RegulatoryChunk, vector: number[]): Promise<void> {
+  // Generate a deterministic UUID v5-style ID from the article string
+  const id = stringToUuid(chunk.article)
+
   await qdrant.upsert(collectionName, {
     wait: true,
     points: [
       {
-        id: chunk.article,
+        id,
         vector,
         payload: {
           source: chunk.source,
@@ -66,6 +70,16 @@ export async function upsertChunk(chunk: RegulatoryChunk, vector: number[]): Pro
       },
     ],
   })
+}
+
+/**
+ * Convert a string to a deterministic UUID format using MD5 hash.
+ * Produces a valid UUID v4-format string (with modified version bits).
+ */
+function stringToUuid(input: string): string {
+  const hash = createHash('md5').update(input).digest('hex')
+  // Format as UUID: 8-4-4-4-12
+  return `${hash.slice(0, 8)}-${hash.slice(8, 12)}-${hash.slice(12, 16)}-${hash.slice(16, 20)}-${hash.slice(20, 32)}`
 }
 
 /**

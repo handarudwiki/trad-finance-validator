@@ -23,6 +23,7 @@ const VALID_DOCUMENT_TYPES = [
   'BENEFICIARY_CERTIFICATE',
   'CERTIFICATE_OF_ANALYSIS',
   'PHYTOSANITARY_CERTIFICATE',
+  'INSURANCE_POLICY',
   'OTHER',
 ] as const
 
@@ -50,6 +51,8 @@ export async function POST(
   if (!documentType) {
     return NextResponse.json({ error: 'documentType field is required' }, { status: 400 })
   }
+
+  // console.log(VALID_DOCUMENT_TYPES)
 
   // Validate documentType is a valid enum value
   if (!VALID_DOCUMENT_TYPES.includes(documentType as typeof VALID_DOCUMENT_TYPES[number])) {

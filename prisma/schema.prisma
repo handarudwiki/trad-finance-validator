@@ -25,10 +25,62 @@ model SourceDocument {
   transaction      Transaction @relation(fields: [transactionId], references: [id], onDelete: Cascade)
   filePath         String
   mimeType         String
+
+  /// Extracted fields from OCR + LLM. Shape: ExtractedLCFields (see schema/extraction.ts)
+  /// Example:
+  /// {
+  ///   "lcNumber": "LC-2026-JKT-004521",
+  ///   "issueDate": "2026-07-01",
+  ///   "expiryDate": "2026-10-15",
+  ///   "expiryPlace": "di counter Bank Penerbit",
+  ///   "issuingBank": { "name": "BANK CONTOH SEJAHTERA", "address": "Jl. Sudirman Kav. 10", "swiftCode": "BCSJIDJA" },
+  ///   "advisingBank": null,
+  ///   "applicant": { "name": "PT MAJU BERSAMA SEJAHTERA", "address": "Jl. Industri Raya No. 88" },
+  ///   "beneficiary": { "name": "GLOBAL COMMODITY TRADING PTE LTD", "address": "8 Marina Boulevard" },
+  ///   "currency": "USD",
+  ///   "amount": 485000.00,
+  ///   "tolerancePct": 10,
+  ///   "paymentTenor": "AT SIGHT",
+  ///   "availableWith": "ANY BANK",
+  ///   "availableBy": "NEGOTIATION",
+  ///   "goodsDescription": "5,000 MT Refined Bleached Deodorized (RBD) Palm Olein...",
+  ///   "quantity": "5,000 MT",
+  ///   "incoterms": "CIF",
+  ///   "portOfLoading": "Singapore Port",
+  ///   "portOfDischarge": "Tanjung Priok Port, Jakarta",
+  ///   "latestShipmentDate": "2026-09-30",
+  ///   "partialShipment": "NOT_ALLOWED",
+  ///   "transshipment": "ALLOWED",
+  ///   "presentationPeriodDays": 21,
+  ///   "requiredDocuments": [
+  ///     { "documentType": "COMMERCIAL_INVOICE", "originals": 3, "copies": 0, "requirements": "Signed" },
+  ///     { "documentType": "BILL_OF_LADING", "originals": 3, "copies": 0, "requirements": "Full set, clean on board" }
+  ///   ],
+  ///   "additionalConditions": "All documents must be issued in English.",
+  ///   "confidence": { "lcNumber": 0.98, "amount": 0.95, "goodsDescription": 0.72 }
+  /// }
   extractedFields  Json?
+
+  /// Reviewed/corrected fields after human review. Same shape as extractedFields.
+  /// Contains the final confirmed values (user may have edited low-confidence fields).
   reviewedFields   Json?
+
+  /// Array of previous extractedFields versions (for amendment tracking).
+  /// Each entry has the same shape as extractedFields.
   previousVersions Json[]      @default([])
+
+  /// Confidence scores per field. Shape: Record<string, number> (0.0 to 1.0)
+  /// Example:
+  /// {
+  ///   "lcNumber": 0.98,
+  ///   "issueDate": 0.95,
+  ///   "amount": 0.92,
+  ///   "goodsDescription": 0.72,
+  ///   "issuingBank.name": 0.90,
+  ///   "beneficiary.address": 0.65
+  /// }
   confidence       Json?
+
   extractedAt      DateTime?
   reviewedAt       DateTime?
   createdAt        DateTime    @default(now())
@@ -41,7 +93,38 @@ model SupportingDocument {
   documentType  DocumentType
   filePath      String
   mimeType      String
+
+  /// Extracted data from supporting document (invoice, BL, packing list, etc).
+  /// Shape varies by documentType. Common structure:
+  /// For COMMERCIAL_INVOICE:
+  /// {
+  ///   "invoiceNumber": "INV-2026-001",
+  ///   "invoiceDate": "2026-08-15",
+  ///   "beneficiaryName": "GLOBAL COMMODITY TRADING PTE LTD",
+  ///   "applicantName": "PT MAJU BERSAMA SEJAHTERA",
+  ///   "currency": "USD",
+  ///   "totalAmount": 485000.00,
+  ///   "goodsDescription": "5,000 MT RBD Palm Olein",
+  ///   "quantity": "5,000 MT",
+  ///   "unitPrice": 97.00,
+  ///   "incoterms": "CIF"
+  /// }
+  /// For BILL_OF_LADING:
+  /// {
+  ///   "blNumber": "SG-JKT-2026-0012",
+  ///   "shipper": "GLOBAL COMMODITY TRADING PTE LTD",
+  ///   "consignee": "TO ORDER OF BANK CONTOH SEJAHTERA",
+  ///   "notifyParty": "PT MAJU BERSAMA SEJAHTERA",
+  ///   "portOfLoading": "Singapore Port",
+  ///   "portOfDischarge": "Tanjung Priok Port",
+  ///   "vessel": "MV OCEANIC STAR",
+  ///   "onBoardDate": "2026-09-01",
+  ///   "goodsDescription": "5,000 MT RBD Palm Olein in bulk",
+  ///   "freightStatus": "PREPAID",
+  ///   "cleanOnBoard": true
+  /// }
   extractedData Json?
+
   uploadedAt    DateTime          @default(now())
   extractedAt   DateTime?
   findings      Finding[]
@@ -54,7 +137,17 @@ model DiscrepancyReport {
   transactionId String             @unique
   transaction   Transaction        @relation(fields: [transactionId], references: [id], onDelete: Cascade)
   generatedAt   DateTime           @default(now())
+
+  /// Summary counts of findings by severity.
+  /// Shape:
+  /// {
+  ///   "fatal": 2,
+  ///   "major": 3,
+  ///   "minor": 1,
+  ///   "total": 6
+  /// }
   summary       Json
+
   findings      Finding[]
   exportPath    String?
 }
@@ -103,6 +196,7 @@ enum DocumentType {
   BENEFICIARY_CERTIFICATE
   CERTIFICATE_OF_ANALYSIS
   PHYTOSANITARY_CERTIFICATE
+  INSURANCE_POLICY
   OTHER
 }
 
