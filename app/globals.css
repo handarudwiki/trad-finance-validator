@@ -57,10 +57,10 @@
   --danger: #EF4444;
   --danger-subtle: #FEF2F2;
 
-  /* Shadow (Very crisp, minimal) */
-  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-  --shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05), 0 1px 2px -1px rgba(0, 0, 0, 0.05);
-  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
+  /* Shadow (None, for flat minimalist styling) */
+  --shadow-sm: none;
+  --shadow: none;
+  --shadow-md: none;
 
   /* Radius (Standardized to shadcn 8px) */
   --radius-sm: 0.25rem;
