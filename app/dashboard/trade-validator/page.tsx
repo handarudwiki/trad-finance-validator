@@ -46,6 +46,12 @@ export default async function TradeValidatorPage() {
               Validate LC and SKBDN trade finance documents against UCP 600, ISBP 745, and PBI regulations.
             </p>
           </div>
+          <Link href="/dashboard/trade-validator/new" className="btn btn-primary h-10 px-4 flex items-center gap-2" style={{ borderRadius: '8px' }}>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M12 5v14M5 12h14" />
+            </svg>
+            New Validation
+          </Link>
         </div>
 
         {/* Client-side Search, Filtering, and History Table */}
