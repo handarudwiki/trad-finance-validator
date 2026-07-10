@@ -152,7 +152,7 @@ export function ExtractionReviewForm({
         return
       }
 
-      router.push(`/transactions/${transactionId}/documents`)
+      router.push(`/dashboard/trade-validator/${transactionId}/documents`)
     } catch {
       setApiError('Gagal terhubung ke server. Periksa koneksi internet Anda.')
     }
