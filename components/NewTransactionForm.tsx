@@ -87,7 +87,7 @@ export function NewTransactionForm() {
           gap: '20px', 
           width: '100%', 
           maxWidth: '680px', 
-          marginBottom: '28px' 
+          marginBottom: '48px' 
         }}
       >
         {TYPE_OPTIONS.map((option) => {
@@ -174,11 +174,11 @@ export function NewTransactionForm() {
           {isLoading ? (
             <>
               <span className="spinner w-4 h-4" />
-              <span>Creating transaction…</span>
+              <span>Processing…</span>
             </>
           ) : (
             <>
-              <span>Start Validation</span>
+              <span>Next Step</span>
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M5 12h14M12 5l7 7-7 7" />
               </svg>
