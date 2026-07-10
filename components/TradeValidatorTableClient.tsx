@@ -84,6 +84,7 @@ export function TradeValidatorTableClient({ initialTransactions }: TradeValidato
       date: filterDate,
       updatedDate: filterUpdatedDate,
     })
+    setIsFilterOpen(false) // Close panel on apply to let tags display cleanly
   }
 
   const handleResetFilters = () => {
@@ -97,6 +98,18 @@ export function TradeValidatorTableClient({ initialTransactions }: TradeValidato
       date: '',
       updatedDate: '',
     })
+  }
+
+  const handleRemoveFilter = (key: 'type' | 'status' | 'date' | 'updatedDate') => {
+    if (key === 'type') setFilterType('ALL')
+    if (key === 'status') setFilterStatus('ALL')
+    if (key === 'date') setFilterDate('')
+    if (key === 'updatedDate') setFilterUpdatedDate('')
+
+    setActiveFilters((prev) => ({
+      ...prev,
+      [key]: key === 'type' || key === 'status' ? 'ALL' : '',
+    }))
   }
 
   // Filter logic
@@ -115,6 +128,12 @@ export function TradeValidatorTableClient({ initialTransactions }: TradeValidato
   })
 
   const recordCount = filteredTransactions.length
+
+  const hasActiveFilters = 
+    activeFilters.type !== 'ALL' || 
+    activeFilters.status !== 'ALL' || 
+    activeFilters.date !== '' || 
+    activeFilters.updatedDate !== ''
 
   return (
     <div className="space-y-6">
@@ -150,7 +169,7 @@ export function TradeValidatorTableClient({ initialTransactions }: TradeValidato
           </button>
         </div>
 
-        {/* Minimalist Filter Panel (Attachment 2 refactor) */}
+        {/* Collapsible Filter Panel */}
         {isFilterOpen && (
           <div className="p-4 border border-zinc-200 bg-white rounded-lg space-y-4">
             <h3 className="text-xs font-semibold uppercase tracking-wider text-zinc-500">Filter Berdasarkan :</h3>
@@ -216,14 +235,14 @@ export function TradeValidatorTableClient({ initialTransactions }: TradeValidato
             <div className="flex items-center gap-2 pt-2">
               <button
                 onClick={handleApplyFilters}
-                className="btn btn-primary btn-sm"
+                className="btn btn-primary h-10 px-5 text-sm"
                 style={{ borderRadius: '8px' }}
               >
                 Terapkan
               </button>
               <button
                 onClick={handleResetFilters}
-                className="btn btn-secondary btn-sm"
+                className="btn btn-secondary h-10 px-5 text-sm"
                 style={{ borderRadius: '8px' }}
               >
                 Reset
@@ -231,9 +250,88 @@ export function TradeValidatorTableClient({ initialTransactions }: TradeValidato
             </div>
           </div>
         )}
+
+        {/* Active Filters Row (Attachment 2 refactor) */}
+        {hasActiveFilters && (
+          <div className="flex items-center flex-wrap gap-2.5 py-1 text-sm font-sans">
+            <span className="font-semibold text-zinc-950">Filter Berdasarkan :</span>
+            
+            {activeFilters.type !== 'ALL' && (
+              <span className="inline-flex items-center gap-1.5 px-3 h-9 bg-zinc-100 border border-zinc-200 text-zinc-900 rounded-md text-xs font-medium">
+                Tipe: {activeFilters.type}
+                <button 
+                  onClick={() => handleRemoveFilter('type')}
+                  className="text-zinc-400 hover:text-zinc-900 transition focus:outline-none ml-0.5"
+                  title="Remove Type filter"
+                >
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                  </svg>
+                </button>
+              </span>
+            )}
+
+            {activeFilters.status !== 'ALL' && (
+              <span className="inline-flex items-center gap-1.5 px-3 h-9 bg-zinc-100 border border-zinc-200 text-zinc-900 rounded-md text-xs font-medium">
+                Status: {STATUS_LABELS[activeFilters.status]}
+                <button 
+                  onClick={() => handleRemoveFilter('status')}
+                  className="text-zinc-400 hover:text-zinc-900 transition focus:outline-none ml-0.5"
+                  title="Remove Status filter"
+                >
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                  </svg>
+                </button>
+              </span>
+            )}
+
+            {activeFilters.date && (
+              <span className="inline-flex items-center gap-1.5 px-3 h-9 bg-zinc-100 border border-zinc-200 text-zinc-900 rounded-md text-xs font-medium">
+                Dibuat: {activeFilters.date}
+                <button 
+                  onClick={() => handleRemoveFilter('date')}
+                  className="text-zinc-400 hover:text-zinc-900 transition focus:outline-none ml-0.5"
+                  title="Remove Date filter"
+                >
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                  </svg>
+                </button>
+              </span>
+            )}
+
+            {activeFilters.updatedDate && (
+              <span className="inline-flex items-center gap-1.5 px-3 h-9 bg-zinc-100 border border-zinc-200 text-zinc-900 rounded-md text-xs font-medium">
+                Update: {activeFilters.updatedDate}
+                <button 
+                  onClick={() => handleRemoveFilter('updatedDate')}
+                  className="text-zinc-400 hover:text-zinc-900 transition focus:outline-none ml-0.5"
+                  title="Remove Updated Date filter"
+                >
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                  </svg>
+                </button>
+              </span>
+            )}
+
+            <button
+              onClick={handleResetFilters}
+              className="btn btn-primary h-9 px-4 text-xs font-semibold"
+              style={{ borderRadius: '8px' }}
+            >
+              Atur Ulang
+            </button>
+          </div>
+        )}
       </div>
 
-      {/* Table (Reverted to card wrapper but removed .card-header box) */}
+      {/* Table */}
       <div className="table-wrapper">
         {filteredTransactions.length === 0 ? (
           <div className="empty-state">
