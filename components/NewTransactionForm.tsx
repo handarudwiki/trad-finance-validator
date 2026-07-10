@@ -67,14 +67,14 @@ export function NewTransactionForm() {
   }
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-4" style={{ width: '100%' }}>
       {/* Title description - compact */}
       <p className="text-zinc-500 text-sm">
         Choose the type of documentary credit instrument to begin validation.
       </p>
 
-      {/* Selectable Options List (Horizontal Grid) */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      {/* Selectable Options List (Horizontal Grid - inline styled to fill 100% width) */}
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', width: '100%' }}>
         {TYPE_OPTIONS.map((option) => {
           const isSelected = selected === option.value
           return (
@@ -147,8 +147,8 @@ export function NewTransactionForm() {
       <button
         onClick={handleSubmit}
         disabled={!selected || isLoading}
-        className="btn btn-primary h-10 w-full flex items-center justify-center gap-2 text-sm font-semibold"
-        style={{ borderRadius: '8px' }}
+        className="btn btn-primary btn-full h-10 flex items-center justify-center gap-2 text-sm font-semibold"
+        style={{ borderRadius: '8px', width: '100%' }}
       >
         {isLoading ? (
           <>

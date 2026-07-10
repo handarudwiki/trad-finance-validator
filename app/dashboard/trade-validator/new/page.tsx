@@ -22,7 +22,7 @@ export default function NewValidationPage() {
         </div>
 
         {/* Centered create form */}
-        <div className="w-full">
+        <div style={{ width: '100%' }}>
           <NewTransactionForm />
         </div>
       </div>
