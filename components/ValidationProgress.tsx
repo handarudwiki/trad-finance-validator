@@ -18,11 +18,29 @@ interface ValidationProgressProps {
  * Shows spinner while VALIDATING, redirects on COMPLETED, shows error on FAILED.
  * Satisfies: Requirements 14.1–14.6
  */
+const LOADING_STEPS = [
+  'Initializing validator...',
+  'Analyzing document structure...',
+  'Running compliance rules...',
+  'Verifying LC/SKBDN terms...',
+  'Checking signature validity...',
+  'Generating final audit report...',
+]
+
 export function ValidationProgress({ transactionId }: ValidationProgressProps) {
   const router = useRouter()
   const [status, setStatus] = useState<TransactionResponse['status']>('VALIDATING')
   const [errorDetails, setErrorDetails] = useState<string | null>(null)
+  const [loadingStepIndex, setLoadingStepIndex] = useState(0)
   const intervalRef = useRef<NodeJS.Timeout | null>(null)
+
+  useEffect(() => {
+    if (status !== 'VALIDATING') return
+    const stepInterval = setInterval(() => {
+      setLoadingStepIndex((prev) => (prev + 1) % LOADING_STEPS.length)
+    }, 2500)
+    return () => clearInterval(stepInterval)
+  }, [status])
 
   useEffect(() => {
     const poll = async () => {
@@ -60,14 +78,14 @@ export function ValidationProgress({ transactionId }: ValidationProgressProps) {
 
   if (status === 'FAILED') {
     return (
-      <div className="flex flex-col items-center gap-4 p-8">
-        <div className="flex h-16 w-16 items-center justify-center rounded-full bg-red-100">
+      <div className="flex flex-col items-center gap-4 p-8 text-center">
+        <div className="flex h-12 w-12 items-center justify-center rounded-full bg-red-50 border border-red-200">
           <svg
-            className="h-8 w-8 text-red-600"
+            className="h-6 w-6 text-red-600"
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"
-            strokeWidth={2}
+            strokeWidth={2.5}
           >
             <path
               strokeLinecap="round"
@@ -76,8 +94,8 @@ export function ValidationProgress({ transactionId }: ValidationProgressProps) {
             />
           </svg>
         </div>
-        <h2 className="text-xl font-semibold text-red-700">Validasi Gagal</h2>
-        <p className="max-w-md text-center text-sm text-gray-600">
+        <h2 className="text-base font-bold text-red-700">Validasi Gagal</h2>
+        <p className="max-w-md text-xs text-red-650 font-semibold mt-1">
           {errorDetails}
         </p>
       </div>
@@ -85,10 +103,15 @@ export function ValidationProgress({ transactionId }: ValidationProgressProps) {
   }
 
   return (
-    <div className="flex flex-col items-center gap-4 p-8">
-      <div className="h-12 w-12 animate-spin rounded-full border-4 border-gray-200 border-t-blue-600" />
-      <h2 className="text-xl font-semibold text-gray-800">Sedang Divalidasi</h2>
-      <p className="text-sm text-gray-500">
+    <div className="flex flex-col items-center gap-4 p-8 text-center">
+      <div className="spinner" style={{ width: '40px', height: '40px' }} />
+      <h2 className="text-base font-bold text-zinc-900">Validating Documents</h2>
+      <div className="h-6 flex items-center justify-center">
+        <p className="text-xs font-semibold uppercase tracking-wider text-zinc-400 animate-pulse">
+          {LOADING_STEPS[loadingStepIndex]}
+        </p>
+      </div>
+      <p className="text-xs text-zinc-500 max-w-sm mt-1">
         Sistem sedang memvalidasi dokumen Anda. Mohon tunggu...
       </p>
     </div>
