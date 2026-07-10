@@ -29,6 +29,10 @@
     "react-dom": "19.1.0",
     "react-hook-form": "^7.81.0",
     "tesseract.js": "^7.0.0",
+<<<<<<< HEAD
+=======
+    "unpdf": "^1.6.2",
+>>>>>>> f4cb06d20ac2362b207ac2eebc6fb80eb873524b
     "zod": "^4.4.3"
   },
   "devDependencies": {

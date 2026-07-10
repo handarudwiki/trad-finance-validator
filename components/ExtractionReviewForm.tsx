@@ -5,7 +5,6 @@ import { useForm, useFieldArray, Controller } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useRouter } from 'next/navigation'
 import { ExtractedLCFieldsSchema, type ExtractedLCFields } from '@/schema/extraction'
-import { LowConfidenceConfirmCheckbox } from './LowConfidenceConfirmCheckbox'
 
 const LOW_CONFIDENCE_THRESHOLD = 0.85
 
@@ -28,9 +27,6 @@ interface FieldWrapperProps {
   fieldName: string
   label: string
   confidence: Record<string, number>
-  confirmedFields: Set<string>
-  onConfirm: (fieldName: string) => void
-  extractedValue: string
   children: React.ReactNode
   error?: string
 }
@@ -39,45 +35,63 @@ function FieldWrapper({
   fieldName,
   label,
   confidence,
-  confirmedFields,
-  onConfirm,
-  extractedValue,
   children,
   error,
 }: FieldWrapperProps) {
   const lowConf = isLowConfidence(confidence, fieldName)
+  const score = getFieldConfidence(confidence, fieldName)
 
   return (
     <div className="space-y-1">
-      <label className="block text-sm font-medium text-gray-700">{label}</label>
-      <div className={lowConf ? 'rounded-md border-2 border-amber-400 p-2' : ''}>
+      <div className="flex items-center gap-2">
+        <label className="block text-sm font-medium text-gray-700">{label}</label>
+        {lowConf && score !== undefined && (
+          <span className="inline-flex items-center rounded-full bg-amber-100 px-2 py-0.5 text-[10px] font-medium text-amber-700">
+            ⚠️ {(score * 100).toFixed(0)}% — perlu diisi manual
+          </span>
+        )}
+      </div>
+      <div className={lowConf ? 'rounded-md border-2 border-amber-400 bg-amber-50/30 p-1' : ''}>
         {children}
-        {lowConf && !confirmedFields.has(fieldName) && (
-          <div className="mt-2">
-            <LowConfidenceConfirmCheckbox
-              fieldName={fieldName}
-              extractedValue={extractedValue}
-              confidence={confidence[fieldName]}
-              onConfirm={onConfirm}
-            />
-          </div>
-        )}
-        {lowConf && confirmedFields.has(fieldName) && (
-          <div className="mt-1 flex items-center gap-1 text-xs text-green-600">
-            <svg className="h-3.5 w-3.5" fill="currentColor" viewBox="0 0 20 20">
-              <path
-                fillRule="evenodd"
-                d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                clipRule="evenodd"
-              />
-            </svg>
-            Dikonfirmasi
-          </div>
-        )}
       </div>
       {error && <p className="text-xs text-red-600">{error}</p>}
     </div>
   )
+}
+
+// Human-readable labels for field names
+const FIELD_LABELS: Record<string, string> = {
+  lcNumber: 'Nomor LC/SKBDN',
+  issueDate: 'Tanggal Terbit',
+  expiryDate: 'Tanggal Berakhir',
+  expiryPlace: 'Tempat Berakhir',
+  'issuingBank.name': 'Bank Penerbit - Nama',
+  'issuingBank.address': 'Bank Penerbit - Alamat',
+  'issuingBank.swiftCode': 'Bank Penerbit - SWIFT',
+  'advisingBank.name': 'Bank Penerus - Nama',
+  'advisingBank.address': 'Bank Penerus - Alamat',
+  'advisingBank.swiftCode': 'Bank Penerus - SWIFT',
+  'applicant.name': 'Pemohon - Nama',
+  'applicant.address': 'Pemohon - Alamat',
+  'beneficiary.name': 'Penerima - Nama',
+  'beneficiary.address': 'Penerima - Alamat',
+  currency: 'Mata Uang',
+  amount: 'Jumlah',
+  tolerancePct: 'Toleransi (%)',
+  paymentTenor: 'Tenor Pembayaran',
+  availableWith: 'Tersedia Pada',
+  availableBy: 'Tersedia Dengan',
+  goodsDescription: 'Deskripsi Barang',
+  quantity: 'Kuantitas',
+  incoterms: 'Incoterms',
+  portOfLoading: 'Pelabuhan Muat',
+  portOfDischarge: 'Pelabuhan Bongkar',
+  latestShipmentDate: 'Tgl Pengiriman Terakhir',
+  partialShipment: 'Pengiriman Parsial',
+  transshipment: 'Transshipment',
+  presentationPeriodDays: 'Periode Penyerahan',
+  additionalConditions: 'Syarat Tambahan',
+  requiredDocuments: 'Dokumen Diperlukan',
 }
 
 export function ExtractionReviewForm({
@@ -86,7 +100,6 @@ export function ExtractionReviewForm({
   transactionId,
 }: ExtractionReviewFormProps) {
   const router = useRouter()
-  const [confirmedFields, setConfirmedFields] = useState<Set<string>>(new Set())
   const [apiError, setApiError] = useState<string | null>(null)
 
   const {
@@ -109,12 +122,6 @@ export function ExtractionReviewForm({
   const lowConfidenceFields = Object.entries(confidence)
     .filter(([, score]) => score < LOW_CONFIDENCE_THRESHOLD)
     .map(([field]) => field)
-
-  const allLowConfirmed = lowConfidenceFields.every((f) => confirmedFields.has(f))
-
-  const handleConfirm = (fieldName: string) => {
-    setConfirmedFields((prev) => new Set(prev).add(fieldName))
-  }
 
   const onSubmit = async (data: ExtractedLCFields) => {
     setApiError(null)
@@ -156,6 +163,40 @@ export function ExtractionReviewForm({
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
+      {/* Low Confidence Fields Summary */}
+      {lowConfidenceFields.length > 0 && (
+        <div className="rounded-lg border border-amber-300 bg-amber-50 p-5">
+          <div className="flex items-start gap-3">
+            <svg className="h-5 w-5 text-amber-600 mt-0.5 shrink-0" fill="currentColor" viewBox="0 0 20 20">
+              <path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+            </svg>
+            <div className="space-y-2">
+              <h3 className="text-sm font-semibold text-amber-800">
+                {lowConfidenceFields.length} kolom dengan kepercayaan rendah
+              </h3>
+              <p className="text-xs text-amber-700">
+                Field berikut memiliki confidence score di bawah {(LOW_CONFIDENCE_THRESHOLD * 100).toFixed(0)}%.
+                Silakan periksa dan isi manual jika diperlukan.
+              </p>
+              <div className="flex flex-wrap gap-2 mt-2">
+                {lowConfidenceFields.map((field) => {
+                  const score = confidence[field]
+                  return (
+                    <span
+                      key={field}
+                      className="inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-xs font-medium bg-amber-100 text-amber-800"
+                    >
+                      {FIELD_LABELS[field] || field}
+                      <span className="text-[10px] opacity-70">({(score * 100).toFixed(0)}%)</span>
+                    </span>
+                  )
+                })}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Section 1: Transaction Identity */}
       <section>
         <h3 className="text-lg font-semibold text-gray-900 mb-4 border-b pb-2">
@@ -166,9 +207,6 @@ export function ExtractionReviewForm({
             fieldName="lcNumber"
             label="Nomor LC/SKBDN"
             confidence={confidence}
-            confirmedFields={confirmedFields}
-            onConfirm={handleConfirm}
-            extractedValue={String(initialValues.lcNumber || '')}
             error={errors.lcNumber?.message}
           >
             <input {...register('lcNumber')} className={inputClass} />
@@ -178,9 +216,6 @@ export function ExtractionReviewForm({
             fieldName="issueDate"
             label="Tanggal Terbit"
             confidence={confidence}
-            confirmedFields={confirmedFields}
-            onConfirm={handleConfirm}
-            extractedValue={String(initialValues.issueDate || '')}
             error={errors.issueDate?.message}
           >
             <input {...register('issueDate')} type="date" className={inputClass} />
@@ -190,9 +225,6 @@ export function ExtractionReviewForm({
             fieldName="expiryDate"
             label="Tanggal Berakhir"
             confidence={confidence}
-            confirmedFields={confirmedFields}
-            onConfirm={handleConfirm}
-            extractedValue={String(initialValues.expiryDate || '')}
             error={errors.expiryDate?.message}
           >
             <input {...register('expiryDate')} type="date" className={inputClass} />
@@ -202,9 +234,6 @@ export function ExtractionReviewForm({
             fieldName="expiryPlace"
             label="Tempat Berakhir"
             confidence={confidence}
-            confirmedFields={confirmedFields}
-            onConfirm={handleConfirm}
-            extractedValue={String(initialValues.expiryPlace || '')}
             error={errors.expiryPlace?.message}
           >
             <input {...register('expiryPlace')} className={inputClass} />
@@ -225,9 +254,6 @@ export function ExtractionReviewForm({
               fieldName="issuingBank.name"
               label="Nama"
               confidence={confidence}
-              confirmedFields={confirmedFields}
-              onConfirm={handleConfirm}
-              extractedValue={String(initialValues.issuingBank?.name || '')}
               error={errors.issuingBank?.name?.message}
             >
               <input {...register('issuingBank.name')} className={inputClass} />
@@ -236,9 +262,6 @@ export function ExtractionReviewForm({
               fieldName="issuingBank.address"
               label="Alamat"
               confidence={confidence}
-              confirmedFields={confirmedFields}
-              onConfirm={handleConfirm}
-              extractedValue={String(initialValues.issuingBank?.address || '')}
               error={errors.issuingBank?.address?.message}
             >
               <input {...register('issuingBank.address')} className={inputClass} />
@@ -247,9 +270,6 @@ export function ExtractionReviewForm({
               fieldName="issuingBank.swiftCode"
               label="Kode SWIFT"
               confidence={confidence}
-              confirmedFields={confirmedFields}
-              onConfirm={handleConfirm}
-              extractedValue={String(initialValues.issuingBank?.swiftCode || '')}
               error={errors.issuingBank?.swiftCode?.message}
             >
               <input {...register('issuingBank.swiftCode')} className={inputClass} />
@@ -263,9 +283,6 @@ export function ExtractionReviewForm({
               fieldName="advisingBank.name"
               label="Nama"
               confidence={confidence}
-              confirmedFields={confirmedFields}
-              onConfirm={handleConfirm}
-              extractedValue={String(initialValues.advisingBank?.name || '')}
               error={errors.advisingBank?.name?.message}
             >
               <input {...register('advisingBank.name')} className={inputClass} />
@@ -274,9 +291,6 @@ export function ExtractionReviewForm({
               fieldName="advisingBank.address"
               label="Alamat"
               confidence={confidence}
-              confirmedFields={confirmedFields}
-              onConfirm={handleConfirm}
-              extractedValue={String(initialValues.advisingBank?.address || '')}
               error={errors.advisingBank?.address?.message}
             >
               <input {...register('advisingBank.address')} className={inputClass} />
@@ -285,9 +299,6 @@ export function ExtractionReviewForm({
               fieldName="advisingBank.swiftCode"
               label="Kode SWIFT"
               confidence={confidence}
-              confirmedFields={confirmedFields}
-              onConfirm={handleConfirm}
-              extractedValue={String(initialValues.advisingBank?.swiftCode || '')}
               error={errors.advisingBank?.swiftCode?.message}
             >
               <input {...register('advisingBank.swiftCode')} className={inputClass} />
@@ -301,9 +312,6 @@ export function ExtractionReviewForm({
               fieldName="applicant.name"
               label="Nama"
               confidence={confidence}
-              confirmedFields={confirmedFields}
-              onConfirm={handleConfirm}
-              extractedValue={String(initialValues.applicant?.name || '')}
               error={errors.applicant?.name?.message}
             >
               <input {...register('applicant.name')} className={inputClass} />
@@ -312,9 +320,6 @@ export function ExtractionReviewForm({
               fieldName="applicant.address"
               label="Alamat"
               confidence={confidence}
-              confirmedFields={confirmedFields}
-              onConfirm={handleConfirm}
-              extractedValue={String(initialValues.applicant?.address || '')}
               error={errors.applicant?.address?.message}
             >
               <input {...register('applicant.address')} className={inputClass} />
@@ -328,9 +333,6 @@ export function ExtractionReviewForm({
               fieldName="beneficiary.name"
               label="Nama"
               confidence={confidence}
-              confirmedFields={confirmedFields}
-              onConfirm={handleConfirm}
-              extractedValue={String(initialValues.beneficiary?.name || '')}
               error={errors.beneficiary?.name?.message}
             >
               <input {...register('beneficiary.name')} className={inputClass} />
@@ -339,9 +341,6 @@ export function ExtractionReviewForm({
               fieldName="beneficiary.address"
               label="Alamat"
               confidence={confidence}
-              confirmedFields={confirmedFields}
-              onConfirm={handleConfirm}
-              extractedValue={String(initialValues.beneficiary?.address || '')}
               error={errors.beneficiary?.address?.message}
             >
               <input {...register('beneficiary.address')} className={inputClass} />
@@ -360,9 +359,6 @@ export function ExtractionReviewForm({
             fieldName="currency"
             label="Mata Uang"
             confidence={confidence}
-            confirmedFields={confirmedFields}
-            onConfirm={handleConfirm}
-            extractedValue={String(initialValues.currency || '')}
             error={errors.currency?.message}
           >
             <input {...register('currency')} className={inputClass} maxLength={3} />
@@ -372,9 +368,6 @@ export function ExtractionReviewForm({
             fieldName="amount"
             label="Jumlah"
             confidence={confidence}
-            confirmedFields={confirmedFields}
-            onConfirm={handleConfirm}
-            extractedValue={String(initialValues.amount || '')}
             error={errors.amount?.message}
           >
             <Controller
@@ -396,9 +389,6 @@ export function ExtractionReviewForm({
             fieldName="tolerancePct"
             label="Toleransi (%)"
             confidence={confidence}
-            confirmedFields={confirmedFields}
-            onConfirm={handleConfirm}
-            extractedValue={String(initialValues.tolerancePct ?? '')}
             error={errors.tolerancePct?.message}
           >
             <Controller
@@ -422,9 +412,6 @@ export function ExtractionReviewForm({
             fieldName="paymentTenor"
             label="Tenor Pembayaran"
             confidence={confidence}
-            confirmedFields={confirmedFields}
-            onConfirm={handleConfirm}
-            extractedValue={String(initialValues.paymentTenor || '')}
             error={errors.paymentTenor?.message}
           >
             <input {...register('paymentTenor')} className={inputClass} />
@@ -434,9 +421,6 @@ export function ExtractionReviewForm({
             fieldName="availableWith"
             label="Tersedia Pada"
             confidence={confidence}
-            confirmedFields={confirmedFields}
-            onConfirm={handleConfirm}
-            extractedValue={String(initialValues.availableWith || '')}
             error={errors.availableWith?.message}
           >
             <input {...register('availableWith')} className={inputClass} />
@@ -446,9 +430,6 @@ export function ExtractionReviewForm({
             fieldName="availableBy"
             label="Tersedia Dengan"
             confidence={confidence}
-            confirmedFields={confirmedFields}
-            onConfirm={handleConfirm}
-            extractedValue={String(initialValues.availableBy || '')}
             error={errors.availableBy?.message}
           >
             <input {...register('availableBy')} className={inputClass} />
@@ -466,9 +447,6 @@ export function ExtractionReviewForm({
             fieldName="goodsDescription"
             label="Deskripsi Barang"
             confidence={confidence}
-            confirmedFields={confirmedFields}
-            onConfirm={handleConfirm}
-            extractedValue={String(initialValues.goodsDescription || '')}
             error={errors.goodsDescription?.message}
           >
             <textarea {...register('goodsDescription')} rows={3} className={inputClass} />
@@ -479,9 +457,6 @@ export function ExtractionReviewForm({
               fieldName="quantity"
               label="Kuantitas"
               confidence={confidence}
-              confirmedFields={confirmedFields}
-              onConfirm={handleConfirm}
-              extractedValue={String(initialValues.quantity ?? '')}
               error={errors.quantity?.message}
             >
               <input {...register('quantity')} className={inputClass} />
@@ -491,9 +466,6 @@ export function ExtractionReviewForm({
               fieldName="incoterms"
               label="Incoterms"
               confidence={confidence}
-              confirmedFields={confirmedFields}
-              onConfirm={handleConfirm}
-              extractedValue={String(initialValues.incoterms || '')}
               error={errors.incoterms?.message}
             >
               <input {...register('incoterms')} className={inputClass} />
@@ -503,9 +475,6 @@ export function ExtractionReviewForm({
               fieldName="latestShipmentDate"
               label="Tanggal Pengiriman Terakhir"
               confidence={confidence}
-              confirmedFields={confirmedFields}
-              onConfirm={handleConfirm}
-              extractedValue={String(initialValues.latestShipmentDate || '')}
               error={errors.latestShipmentDate?.message}
             >
               <input {...register('latestShipmentDate')} type="date" className={inputClass} />
@@ -515,9 +484,6 @@ export function ExtractionReviewForm({
               fieldName="portOfLoading"
               label="Pelabuhan Muat"
               confidence={confidence}
-              confirmedFields={confirmedFields}
-              onConfirm={handleConfirm}
-              extractedValue={String(initialValues.portOfLoading || '')}
               error={errors.portOfLoading?.message}
             >
               <input {...register('portOfLoading')} className={inputClass} />
@@ -527,9 +493,6 @@ export function ExtractionReviewForm({
               fieldName="portOfDischarge"
               label="Pelabuhan Bongkar"
               confidence={confidence}
-              confirmedFields={confirmedFields}
-              onConfirm={handleConfirm}
-              extractedValue={String(initialValues.portOfDischarge || '')}
               error={errors.portOfDischarge?.message}
             >
               <input {...register('portOfDischarge')} className={inputClass} />
@@ -539,9 +502,6 @@ export function ExtractionReviewForm({
               fieldName="presentationPeriodDays"
               label="Periode Penyerahan (hari)"
               confidence={confidence}
-              confirmedFields={confirmedFields}
-              onConfirm={handleConfirm}
-              extractedValue={String(initialValues.presentationPeriodDays ?? '')}
               error={errors.presentationPeriodDays?.message}
             >
               <Controller
@@ -564,9 +524,6 @@ export function ExtractionReviewForm({
               fieldName="partialShipment"
               label="Pengiriman Parsial"
               confidence={confidence}
-              confirmedFields={confirmedFields}
-              onConfirm={handleConfirm}
-              extractedValue={String(initialValues.partialShipment || '')}
               error={errors.partialShipment?.message}
             >
               <select {...register('partialShipment')} className={inputClass}>
@@ -580,9 +537,6 @@ export function ExtractionReviewForm({
               fieldName="transshipment"
               label="Transshipment"
               confidence={confidence}
-              confirmedFields={confirmedFields}
-              onConfirm={handleConfirm}
-              extractedValue={String(initialValues.transshipment || '')}
               error={errors.transshipment?.message}
             >
               <select {...register('transshipment')} className={inputClass}>
@@ -696,9 +650,6 @@ export function ExtractionReviewForm({
           fieldName="additionalConditions"
           label="Syarat Tambahan"
           confidence={confidence}
-          confirmedFields={confirmedFields}
-          onConfirm={handleConfirm}
-          extractedValue={String(initialValues.additionalConditions ?? '')}
           error={errors.additionalConditions?.message}
         >
           <textarea {...register('additionalConditions')} rows={4} className={inputClass} />
@@ -712,13 +663,12 @@ export function ExtractionReviewForm({
         </div>
       )}
 
-      {/* Low confidence warning */}
-      {!allLowConfirmed && lowConfidenceFields.length > 0 && (
+      {/* Low confidence info */}
+      {lowConfidenceFields.length > 0 && (
         <div className="rounded-md bg-amber-50 border border-amber-200 p-4">
           <p className="text-sm text-amber-800">
-            Terdapat {lowConfidenceFields.length - confirmedFields.size} kolom dengan tingkat
-            kepercayaan rendah yang belum dikonfirmasi. Konfirmasi semua kolom tersebut untuk
-            melanjutkan.
+            Terdapat {lowConfidenceFields.length} kolom dengan tingkat kepercayaan rendah.
+            Pastikan kolom tersebut sudah terisi dengan benar sebelum melanjutkan.
           </p>
         </div>
       )}
@@ -727,7 +677,7 @@ export function ExtractionReviewForm({
       <div className="flex justify-end pt-4 border-t">
         <button
           type="submit"
-          disabled={isSubmitting || !allLowConfirmed}
+          disabled={isSubmitting}
           className="rounded-md bg-blue-600 px-6 py-3 text-white font-medium hover:bg-blue-700 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors"
         >
           {isSubmitting ? (
