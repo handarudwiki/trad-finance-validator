@@ -79,12 +79,13 @@ async function extractSourceDocumentAsync(
       data: { status: 'EXTRACTION_REVIEW' },
     })
   } catch (error) {
-    // Set transaction status to FAILED with error details
+    // Set transaction status to FAILED with sanitized error (no traces exposed to frontend)
+    console.error('[extractSourceDocumentAsync] Extraction failed:', error)
     await prisma.transaction.update({
       where: { id: transactionId },
       data: {
         status: 'FAILED',
-        errorDetails: error instanceof Error ? error.message : String(error),
+        errorDetails: 'Ekstraksi dokumen gagal. Silakan coba lagi nanti.',
       },
     })
   }

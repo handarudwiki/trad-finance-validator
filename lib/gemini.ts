@@ -11,7 +11,7 @@ if (!apiKey) {
   throw new Error('GEMINI_API_KEY environment variable is not set')
 }
 
-export const ai = new GoogleGenAI({ apiKey })
+export const ai = new GoogleGenAI({ apiKey: apiKey })
 
 /** Model name for vision/text generation */
 export const VISION_MODEL = 'gemini-2.5-flash-preview-05-20'
