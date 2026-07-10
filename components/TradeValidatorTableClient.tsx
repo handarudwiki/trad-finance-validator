@@ -118,7 +118,7 @@ export function TradeValidatorTableClient({ initialTransactions }: TradeValidato
 
   return (
     <div className="space-y-6">
-      {/* Search & Filter Header Row (Increased height) */}
+      {/* Search & Filter Header Row */}
       <div className="flex flex-col gap-4">
         <div className="flex items-center gap-3">
           <div className="relative flex-1 max-w-sm">
@@ -134,13 +134,14 @@ export function TradeValidatorTableClient({ initialTransactions }: TradeValidato
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="w-full h-10 pl-9 pr-4 bg-white border border-zinc-200 rounded-md text-sm focus:outline-none focus:ring-1 focus:ring-zinc-950 focus:border-zinc-950 transition"
+              style={{ borderRadius: '8px' }}
             />
           </div>
 
           <button
             onClick={() => setIsFilterOpen(!isFilterOpen)}
             className={`btn btn-secondary h-10 px-4 flex items-center gap-2 ${isFilterOpen ? 'bg-zinc-50 border-zinc-950' : ''}`}
-            style={{ borderRadius: '6px' }}
+            style={{ borderRadius: '8px' }}
           >
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3" />
@@ -149,19 +150,19 @@ export function TradeValidatorTableClient({ initialTransactions }: TradeValidato
           </button>
         </div>
 
-        {/* Collapsible Filter Panel */}
+        {/* Minimalist Filter Panel (Attachment 2 refactor) */}
         {isFilterOpen && (
-          <div className="p-4 border border-zinc-200 bg-white rounded-lg space-y-4">
-            <h3 className="text-[11px] font-semibold uppercase tracking-wider text-zinc-400">Filter Berdasarkan :</h3>
+          <div className="p-4 border border-zinc-200 bg-white rounded-lg space-y-4" style={{ borderRadius: '12px' }}>
+            <h3 className="text-xs font-semibold uppercase tracking-wider text-zinc-500">Filter Berdasarkan :</h3>
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
               {/* Type */}
               <div className="form-group mb-0">
-                <label className="form-label text-[11px] font-medium text-zinc-400">Tipe</label>
+                <label className="form-label text-xs font-medium text-zinc-600">Tipe</label>
                 <select
                   value={filterType}
                   onChange={(e) => setFilterType(e.target.value)}
                   className="form-input"
-                  style={{ borderRadius: '6px', height: '38px' }}
+                  style={{ borderRadius: '8px', height: '38px' }}
                 >
                   <option value="ALL">Pilih Tipe</option>
                   <option value="LC">LC</option>
@@ -171,12 +172,12 @@ export function TradeValidatorTableClient({ initialTransactions }: TradeValidato
 
               {/* Status */}
               <div className="form-group mb-0">
-                <label className="form-label text-[11px] font-medium text-zinc-400">Status</label>
+                <label className="form-label text-xs font-medium text-zinc-600">Status</label>
                 <select
                   value={filterStatus}
                   onChange={(e) => setFilterStatus(e.target.value)}
                   className="form-input"
-                  style={{ borderRadius: '6px', height: '38px' }}
+                  style={{ borderRadius: '8px', height: '38px' }}
                 >
                   <option value="ALL">Pilih Status</option>
                   <option value="DRAFT">Draft</option>
@@ -189,25 +190,25 @@ export function TradeValidatorTableClient({ initialTransactions }: TradeValidato
 
               {/* Created Date */}
               <div className="form-group mb-0">
-                <label className="form-label text-[11px] font-medium text-zinc-400">Tanggal Dibuat</label>
+                <label className="form-label text-xs font-medium text-zinc-600">Tanggal Dibuat</label>
                 <input
                   type="date"
                   value={filterDate}
                   onChange={(e) => setFilterDate(e.target.value)}
                   className="form-input"
-                  style={{ borderRadius: '6px', height: '38px' }}
+                  style={{ borderRadius: '8px', height: '38px' }}
                 />
               </div>
 
               {/* Updated Date */}
               <div className="form-group mb-0">
-                <label className="form-label text-[11px] font-medium text-zinc-400">Tanggal Update</label>
+                <label className="form-label text-xs font-medium text-zinc-600">Tanggal Update</label>
                 <input
                   type="date"
                   value={filterUpdatedDate}
                   onChange={(e) => setFilterUpdatedDate(e.target.value)}
                   className="form-input"
-                  style={{ borderRadius: '6px', height: '38px' }}
+                  style={{ borderRadius: '8px', height: '38px' }}
                 />
               </div>
             </div>
@@ -216,14 +217,14 @@ export function TradeValidatorTableClient({ initialTransactions }: TradeValidato
               <button
                 onClick={handleApplyFilters}
                 className="btn btn-primary btn-sm"
-                style={{ borderRadius: '6px' }}
+                style={{ borderRadius: '8px' }}
               >
                 Terapkan
               </button>
               <button
                 onClick={handleResetFilters}
                 className="btn btn-secondary btn-sm"
-                style={{ borderRadius: '6px' }}
+                style={{ borderRadius: '8px' }}
               >
                 Reset
               </button>
@@ -232,15 +233,8 @@ export function TradeValidatorTableClient({ initialTransactions }: TradeValidato
         )}
       </div>
 
-      {/* Table (Reverted to original card structure but with uniform typography) */}
-      <div className="table-wrapper">
-        <div className="card-header">
-          <span className="card-title">Validation History</span>
-          <span style={{ fontSize: '12px', color: 'var(--text-tertiary)' }}>
-            {recordCount} record{recordCount !== 1 ? 's' : ''}
-          </span>
-        </div>
-
+      {/* Table (Reverted to card wrapper but removed .card-header box) */}
+      <div className="table-wrapper" style={{ borderRadius: '12px' }}>
         {filteredTransactions.length === 0 ? (
           <div className="empty-state">
             <div className="empty-state-icon">
@@ -259,19 +253,18 @@ export function TradeValidatorTableClient({ initialTransactions }: TradeValidato
           <table className="data-table">
             <thead>
               <tr>
-                <th>Transaction ID</th>
+                <th style={{ paddingLeft: '1.25rem' }}>Transaction ID</th>
                 <th>Type</th>
                 <th>Status</th>
                 <th>Created</th>
                 <th>Last Updated</th>
-                <th>Actions</th>
+                <th style={{ paddingRight: '1.25rem' }}>Actions</th>
               </tr>
             </thead>
             <tbody>
               {filteredTransactions.map((tx) => (
                 <tr key={tx.id}>
-                  <td>
-                    {/* Uniform Sans-Serif ID font linking to document validation */}
+                  <td style={{ paddingLeft: '1.25rem' }}>
                     <Link
                       href={getTransactionLink(tx.id, tx.status)}
                       className="table-id-link"
@@ -304,10 +297,11 @@ export function TradeValidatorTableClient({ initialTransactions }: TradeValidato
                       minute: '2-digit',
                     })}
                   </td>
-                  <td>
+                  <td style={{ paddingRight: '1.25rem' }}>
                     <Link
                       href={getTransactionLink(tx.id, tx.status)}
                       className="btn btn-secondary btn-sm"
+                      style={{ borderRadius: '8px' }}
                     >
                       {getActionLabel(tx.status)}
                       <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
