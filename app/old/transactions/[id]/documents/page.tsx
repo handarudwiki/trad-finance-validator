@@ -65,7 +65,7 @@ export default function DocumentsPage() {
         return
       }
 
-      router.push(`/transactions/${transactionId}/validate`)
+      router.push(`/old/transactions/${transactionId}/validate`)
     } catch {
       setError('Gagal terhubung ke server. Periksa koneksi internet Anda.')
       setValidating(false)

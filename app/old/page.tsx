@@ -1,5 +1,5 @@
 import { redirect } from 'next/navigation'
 
-export default function TransactionsRedirectPage() {
+export default function OldRedirectPage() {
   redirect('/old/transactions')
 }

@@ -16,10 +16,10 @@ export default function LandingPage() {
 
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
           <Link
-            href="/transactions/new"
+            href="/old/transactions/new"
             className="inline-flex items-center gap-2 rounded-lg bg-blue-600 px-6 py-3 text-lg font-medium text-white hover:bg-blue-700 transition-colors"
           >
-            Mulai Validasi
+            Mulai Validasi Lama
             <svg
               className="h-5 w-5"
               fill="none"
@@ -35,7 +35,13 @@ export default function LandingPage() {
             </svg>
           </Link>
           <Link
-            href="/transactions"
+            href="/new"
+            className="inline-flex items-center gap-2 rounded-lg bg-emerald-600 px-6 py-3 text-lg font-medium text-white hover:bg-emerald-700 transition-colors"
+          >
+            Coba OCR Baru
+          </Link>
+          <Link
+            href="/old/transactions"
             className="inline-flex items-center gap-2 rounded-lg border border-gray-300 bg-white px-6 py-3 text-lg font-medium text-gray-700 hover:bg-gray-50 transition-colors"
           >
             Lihat Riwayat Transaksi
