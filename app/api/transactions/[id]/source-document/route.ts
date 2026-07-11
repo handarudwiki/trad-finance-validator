@@ -16,13 +16,11 @@ export async function POST(
 ) {
   const { id } = await params
 
-  // Verify transaction exists
   const transaction = await prisma.transaction.findUnique({ where: { id } })
   if (!transaction) {
     return NextResponse.json({ error: 'Transaction not found' }, { status: 404 })
   }
 
-  // Parse multipart form data
   const formData = await request.formData()
   const file = formData.get('file') as File | null
 
@@ -30,7 +28,6 @@ export async function POST(
     return NextResponse.json({ error: 'No file provided' }, { status: 400 })
   }
 
-  // Validate MIME type
   if (!isAllowedMimeType(file.type)) {
     return NextResponse.json(
       { error: 'Unsupported file type. Accepted: PDF, JPEG, PNG, TIFF' },
@@ -38,19 +35,16 @@ export async function POST(
     )
   }
 
-  // Generate UUID storage path and save file
   const storagePath = generateStoragePath()
   const buffer = Buffer.from(await file.arrayBuffer())
   await saveFile(buffer, storagePath)
 
-  // Check if SourceDocument already exists
   const existingSourceDoc = await prisma.sourceDocument.findUnique({
     where: { transactionId: id },
   })
 
   let sourceDoc
   if (existingSourceDoc) {
-    // Delete old file from storage to avoid orphan files
     try {
       const { unlink } = await import('fs/promises')
       await unlink(existingSourceDoc.filePath)
@@ -58,7 +52,6 @@ export async function POST(
       console.warn(`Failed to delete old file: ${existingSourceDoc.filePath}`, e)
     }
 
-    // Update existing SourceDocument record and reset fields
     sourceDoc = await prisma.sourceDocument.update({
       where: { transactionId: id },
       data: {
@@ -74,7 +67,6 @@ export async function POST(
       },
     })
 
-    // Reset transaction status to DRAFT and clear errors
     await prisma.transaction.update({
       where: { id },
       data: {
@@ -83,7 +75,6 @@ export async function POST(
       },
     })
   } else {
-    // Create SourceDocument record
     sourceDoc = await prisma.sourceDocument.create({
       data: {
         transactionId: id,
