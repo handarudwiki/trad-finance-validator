@@ -59,7 +59,7 @@ export async function POST(
   // Save the new amendment file
   const storagePath = generateStoragePath()
   const buffer = Buffer.from(await file.arrayBuffer())
-  await saveFile(buffer, storagePath)
+  await saveFile(buffer, storagePath, file.type)
 
   // Archive current reviewedFields into previousVersions
   const previousVersions = [

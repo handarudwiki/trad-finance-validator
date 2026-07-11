@@ -37,7 +37,7 @@ export async function POST(
 
   const storagePath = generateStoragePath()
   const buffer = Buffer.from(await file.arrayBuffer())
-  await saveFile(buffer, storagePath)
+  await saveFile(buffer, storagePath, file.type)
 
   const existingSourceDoc = await prisma.sourceDocument.findUnique({
     where: { transactionId: id },
