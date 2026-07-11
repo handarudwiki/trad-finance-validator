@@ -427,7 +427,7 @@ export function ExtractionReviewForm({
             <input {...register('availableBy')} className={inputClass} />
           </FieldWrapper>
         </div>
-      </section>
+      </FormSection>
 
       {/* Section 4: Goods & Shipment */}
       <FormSection title="Barang &amp; Pengiriman">
