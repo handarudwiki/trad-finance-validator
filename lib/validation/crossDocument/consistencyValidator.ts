@@ -8,7 +8,7 @@
 import type { Finding } from '@/schema/finding'
 
 /** Document type keys used in the cross-document checks */
-type DocumentType =
+type _DocumentType =
   | 'BILL_OF_LADING'
   | 'PACKING_LIST'
   | 'INSURANCE_CERTIFICATE'

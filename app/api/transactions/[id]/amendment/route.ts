@@ -71,7 +71,7 @@ export async function POST(
   await prisma.sourceDocument.update({
     where: { id: sourceDoc.id },
     data: {
-      previousVersions: previousVersions as any,
+      previousVersions: previousVersions as unknown as Prisma.InputJsonValue[],
       extractedFields: Prisma.DbNull,
       reviewedFields: Prisma.DbNull,
       confidence: Prisma.DbNull,

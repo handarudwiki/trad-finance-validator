@@ -24,7 +24,8 @@ export async function GET(request: Request) {
 
     const skip = (page - 1) * limit
 
-    const where: any = {}
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const where: Record<string, any> = {}
 
     if (search) {
       where.OR = [
