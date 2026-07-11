@@ -17,8 +17,27 @@ export function checkAmount(
 ): Finding[] {
   const findings: Finding[] = []
 
-  const invoiceAmount = invoiceData.amount
-  if (invoiceAmount == null || typeof invoiceAmount !== 'number') {
+  // Invoice extraction returns totalAmount at root level, not .amount
+  // Fallback to summing lineItems[].amount if totalAmount is null
+  let invoiceAmount: number | null = null
+
+  if (invoiceData.totalAmount != null && typeof invoiceData.totalAmount === 'number') {
+    invoiceAmount = invoiceData.totalAmount
+  } else if (Array.isArray(invoiceData.lineItems)) {
+    const sum = (invoiceData.lineItems as Array<Record<string, unknown>>).reduce(
+      (acc, item) => {
+        const itemAmount = item.amount
+        return acc + (typeof itemAmount === 'number' ? itemAmount : 0)
+      },
+      0,
+    )
+    if (sum > 0) {
+      invoiceAmount = sum
+    }
+  }
+
+  if (invoiceAmount == null) {
+    console.warn('[checkAmount] Skipped: invoice totalAmount is null and lineItems sum is 0 or unavailable')
     return findings
   }
 
@@ -31,10 +50,10 @@ export function checkAmount(
       checkType: 'DETERMINISTIC',
       severity: 'FATAL',
       field: 'amount',
-      expected: `<= ${maxAllowedAmount} (LC amount ${lcAmount} + tolerance ${tolerancePct}%)`,
+      expected: `<= ${maxAllowedAmount} (jumlah LC ${lcAmount} + toleransi ${tolerancePct}%)`,
       found: String(invoiceAmount),
-      description: `Invoice amount ${invoiceAmount} exceeds the maximum allowed amount of ${maxAllowedAmount} (LC amount ${lcAmount} with ${tolerancePct}% tolerance).`,
-      suggestedCorrection: `Reduce invoice amount to not exceed ${maxAllowedAmount}.`,
+      description: `Jumlah invoice ${invoiceAmount} melebihi batas maksimum ${maxAllowedAmount} (jumlah LC ${lcAmount} dengan toleransi ${tolerancePct}%).`,
+      suggestedCorrection: `Kurangi jumlah invoice agar tidak melebihi ${maxAllowedAmount}.`,
       regulatoryRef: 'UCP 600 Art. 14(b)',
       ragChunkIds: [],
     })

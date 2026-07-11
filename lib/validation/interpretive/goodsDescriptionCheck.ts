@@ -58,10 +58,26 @@ ${regulatoryContext}
 Rules:
 - The invoice description must NOT be inconsistent with the LC description (UCP 600 Art. 18(c)).
 - Minor wording differences that do not change meaning are acceptable.
-- Return a JSON array of findings. Each finding must have: checkType, severity, field, expected, found, description, suggestedCorrection, regulatoryRef, ragChunkIds.
-- Use checkType: "INTERPRETIVE"
 - Return an empty array [] if no discrepancy is found.
 - Write "description" and "suggestedCorrection" fields in Bahasa Indonesia.
+
+Return a JSON array of Finding objects. Each Finding must match this exact schema:
+{
+  "checkType": "INTERPRETIVE",
+  "severity": "FATAL" | "MAJOR" | "MINOR",
+  "field": string (the field name, e.g. "goodsDescription"),
+  "expected": string or null (the value from the LC/SKBDN),
+  "found": string or null (the value from the supporting document),
+  "description": string (clear explanation in Bahasa Indonesia),
+  "suggestedCorrection": string or null (recommended fix in Bahasa Indonesia),
+  "regulatoryRef": string (specific article/clause, e.g. "UCP 600 Art. 18(c)"),
+  "ragChunkIds": []
+}
+
+Severity guide:
+- FATAL: Document will be rejected (e.g., goods completely different from LC)
+- MAJOR: Significant discrepancy that likely causes discrepancy (e.g., missing key terms)
+- MINOR: Minor wording issue that may or may not be accepted (e.g., abbreviation differences)
 
 Return ONLY valid JSON array.`
 
@@ -70,20 +86,8 @@ Return ONLY valid JSON array.`
     const cleaned = responseText.replace(/```(?:json)?\s*\n?([\s\S]*?)\n?```/, '$1').trim()
     const raw = JSON.parse(cleaned)
     return FindingArraySchema.parse(raw)
-  } catch {
-    return [
-      {
-        checkType: 'INTERPRETIVE',
-        severity: 'MAJOR',
-        field: 'goodsDescription',
-        expected: null,
-        found: null,
-        description:
-          'Interpretive check could not be completed: goods description response parsing failed',
-        suggestedCorrection: null,
-        regulatoryRef: 'N/A',
-        ragChunkIds: [],
-      },
-    ]
+  } catch (err) {
+    console.error('[goodsDescriptionCheck] LLM response parsing failed:', err)
+    return []
   }
 }

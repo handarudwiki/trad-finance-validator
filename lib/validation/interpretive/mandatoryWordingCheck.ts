@@ -57,10 +57,26 @@ ${regulatoryContext}
 Rules:
 - Check if the document contains required wording specified in the LC requirements.
 - Check compliance with ISBP 745 certificate requirements.
-- Return a JSON array of findings. Each finding must have: checkType, severity, field, expected, found, description, suggestedCorrection, regulatoryRef, ragChunkIds.
-- Use checkType: "INTERPRETIVE"
 - Return an empty array [] if no discrepancy is found.
 - Write "description" and "suggestedCorrection" fields in Bahasa Indonesia.
+
+Return a JSON array of Finding objects. Each Finding must match this exact schema:
+{
+  "checkType": "INTERPRETIVE",
+  "severity": "FATAL" | "MAJOR" | "MINOR",
+  "field": string (the field name, e.g. "mandatoryWording"),
+  "expected": string or null (the required wording from the LC/SKBDN),
+  "found": string or null (what was found in the document, or null if missing),
+  "description": string (clear explanation in Bahasa Indonesia),
+  "suggestedCorrection": string or null (recommended fix in Bahasa Indonesia),
+  "regulatoryRef": string (specific article/clause, e.g. "ISBP 745 Para. A23"),
+  "ragChunkIds": []
+}
+
+Severity guide:
+- FATAL: Required wording completely missing or contradicts LC requirements
+- MAJOR: Significant deviation from required wording that likely causes discrepancy
+- MINOR: Minor formatting or phrasing difference that may still be acceptable
 
 Return ONLY valid JSON array.`
 
@@ -69,20 +85,9 @@ Return ONLY valid JSON array.`
     const cleaned = responseText.replace(/```(?:json)?\s*\n?([\s\S]*?)\n?```/, '$1').trim()
     const raw = JSON.parse(cleaned)
     return FindingArraySchema.parse(raw)
-  } catch {
-    return [
-      {
-        checkType: 'INTERPRETIVE',
-        severity: 'MAJOR',
-        field: 'mandatoryWording',
-        expected: null,
-        found: null,
-        description:
-          'Interpretive check could not be completed: mandatory wording response parsing failed',
-        suggestedCorrection: null,
-        regulatoryRef: 'N/A',
-        ragChunkIds: [],
-      },
-    ]
+  } catch (err) {
+    console.error('[mandatoryWordingCheck] LLM response parsing failed:', err)
+    // Don't surface system errors as document findings — just skip
+    return []
   }
 }

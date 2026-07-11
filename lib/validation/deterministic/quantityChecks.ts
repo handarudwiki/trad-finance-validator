@@ -16,10 +16,18 @@ export function checkQuantity(
 ): Finding[] {
   const findings: Finding[] = []
 
-  const invoiceQuantity = invoiceData.quantity
-  const packingListQuantity = packingListData.quantity
+  // Invoice extraction returns totalQuantity (string), not quantity
+  // Packing List extraction also returns totalQuantity (string)
+  const invoiceQuantity = invoiceData.totalQuantity ?? invoiceData.quantity
+  const packingListQuantity = packingListData.totalQuantity ?? packingListData.quantity
 
   if (invoiceQuantity == null || packingListQuantity == null) {
+    if (invoiceQuantity == null) {
+      console.warn('[checkQuantity] Skipped: invoice totalQuantity/quantity is null')
+    }
+    if (packingListQuantity == null) {
+      console.warn('[checkQuantity] Skipped: packingList totalQuantity/quantity is null')
+    }
     return findings
   }
 
@@ -32,10 +40,10 @@ export function checkQuantity(
       checkType: 'DETERMINISTIC',
       severity: 'MAJOR',
       field: 'quantity',
-      expected: `${packingListQtyStr} (from packing list)`,
-      found: `${invoiceQtyStr} (from invoice)`,
-      description: `Invoice quantity "${invoiceQtyStr}" does not match packing list quantity "${packingListQtyStr}".`,
-      suggestedCorrection: `Ensure invoice and packing list quantities are consistent.`,
+      expected: `${packingListQtyStr} (dari packing list)`,
+      found: `${invoiceQtyStr} (dari invoice)`,
+      description: `Kuantitas invoice "${invoiceQtyStr}" tidak sesuai dengan kuantitas packing list "${packingListQtyStr}".`,
+      suggestedCorrection: `Pastikan kuantitas invoice dan packing list konsisten.`,
       regulatoryRef: 'UCP 600 Art. 14(d)',
       ragChunkIds: [],
     })

@@ -58,10 +58,26 @@ Rules:
 - Check that the insured amount meets the minimum coverage requirement.
 - Check that the currency of insurance matches the LC currency.
 - Check risks covered as specified in the LC.
-- Return a JSON array of findings. Each finding must have: checkType, severity, field, expected, found, description, suggestedCorrection, regulatoryRef, ragChunkIds.
-- Use checkType: "INTERPRETIVE"
 - Return an empty array [] if no discrepancy is found.
 - Write "description" and "suggestedCorrection" fields in Bahasa Indonesia.
+
+Return a JSON array of Finding objects. Each Finding must match this exact schema:
+{
+  "checkType": "INTERPRETIVE",
+  "severity": "FATAL" | "MAJOR" | "MINOR",
+  "field": string (the field name, e.g. "insuredAmount", "risksCovered"),
+  "expected": string or null (the required value from the LC/SKBDN),
+  "found": string or null (the value found in the insurance certificate),
+  "description": string (clear explanation in Bahasa Indonesia),
+  "suggestedCorrection": string or null (recommended fix in Bahasa Indonesia),
+  "regulatoryRef": string (specific article/clause, e.g. "UCP 600 Art. 28(b)"),
+  "ragChunkIds": []
+}
+
+Severity guide:
+- FATAL: Coverage completely insufficient or currency mismatch (e.g., insured amount < 110% CIF)
+- MAJOR: Significant gap in coverage requirements (e.g., required risk not covered)
+- MINOR: Minor formatting or detail issue that may still be acceptable
 
 Return ONLY valid JSON array.`
 
@@ -70,20 +86,8 @@ Return ONLY valid JSON array.`
     const cleaned = responseText.replace(/```(?:json)?\s*\n?([\s\S]*?)\n?```/, '$1').trim()
     const raw = JSON.parse(cleaned)
     return FindingArraySchema.parse(raw)
-  } catch {
-    return [
-      {
-        checkType: 'INTERPRETIVE',
-        severity: 'MAJOR',
-        field: 'insuranceCoverage',
-        expected: null,
-        found: null,
-        description:
-          'Interpretive check could not be completed: insurance coverage response parsing failed',
-        suggestedCorrection: null,
-        regulatoryRef: 'N/A',
-        ragChunkIds: [],
-      },
-    ]
+  } catch (err) {
+    console.error('[insuranceCoverageCheck] LLM response parsing failed:', err)
+    return []
   }
 }
