@@ -6,7 +6,7 @@
 
 import { GoogleGenAI } from '@google/genai'
 
-const GEMINI_MODEL = 'gemini-3.1-flash-lite'
+const GEMINI_MODEL = 'gemini-2.0-flash'
 
 const OPENROUTER_MODELS = [
   'google/gemma-4-31b-it:free',
