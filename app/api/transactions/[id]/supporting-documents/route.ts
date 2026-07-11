@@ -73,7 +73,7 @@ export async function POST(
   // Generate UUID storage path and save file
   const storagePath = generateStoragePath()
   const buffer = Buffer.from(await file.arrayBuffer())
-  await saveFile(buffer, storagePath)
+  await saveFile(buffer, storagePath, file.type)
 
   // Create SupportingDocument record
   const supportingDoc = await prisma.supportingDocument.create({
