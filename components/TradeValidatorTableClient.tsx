@@ -230,16 +230,16 @@ export function TradeValidatorTableClient({
         {/* Collapsible Filter Panel */}
         {isFilterOpen && (
           <div className="p-4 border border-zinc-200 bg-white rounded-lg space-y-4">
-            <h3 className="text-xs font-semibold uppercase tracking-wider text-zinc-500">Filter Berdasarkan :</h3>
+            <h3 className="text-[11px] font-bold uppercase tracking-wider text-zinc-400">Filter Berdasarkan :</h3>
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
               {/* Type */}
               <div className="form-group mb-0">
-                <label className="form-label text-xs font-medium text-zinc-600">Tipe</label>
+                <label className="form-label text-[10px] font-bold uppercase tracking-wider text-zinc-400 block mb-1.5">Tipe</label>
                 <select
                   value={filterType}
                   onChange={(e) => setFilterType(e.target.value)}
-                  className="form-input"
-                  style={{ borderRadius: '8px', height: '38px' }}
+                  className="form-input text-xs font-semibold text-zinc-700"
+                  style={{ borderRadius: '8px', height: '38px', fontSize: '12px' }}
                 >
                   <option value="ALL">Pilih Tipe</option>
                   <option value="LC">LC</option>
@@ -249,12 +249,12 @@ export function TradeValidatorTableClient({
 
               {/* Status */}
               <div className="form-group mb-0">
-                <label className="form-label text-xs font-medium text-zinc-600">Status</label>
+                <label className="form-label text-[10px] font-bold uppercase tracking-wider text-zinc-400 block mb-1.5">Status</label>
                 <select
                   value={filterStatus}
                   onChange={(e) => setFilterStatus(e.target.value)}
-                  className="form-input"
-                  style={{ borderRadius: '8px', height: '38px' }}
+                  className="form-input text-xs font-semibold text-zinc-700"
+                  style={{ borderRadius: '8px', height: '38px', fontSize: '12px' }}
                 >
                   <option value="ALL">Pilih Status</option>
                   <option value="DRAFT">Draft</option>
@@ -267,41 +267,41 @@ export function TradeValidatorTableClient({
 
               {/* Created Date */}
               <div className="form-group mb-0">
-                <label className="form-label text-xs font-medium text-zinc-600">Tanggal Dibuat</label>
+                <label className="form-label text-[10px] font-bold uppercase tracking-wider text-zinc-400 block mb-1.5">Tanggal Dibuat</label>
                 <input
                   type="date"
                   value={filterDate}
                   onChange={(e) => setFilterDate(e.target.value)}
-                  className="form-input"
-                  style={{ borderRadius: '8px', height: '38px' }}
+                  className="form-input text-xs font-semibold text-zinc-700"
+                  style={{ borderRadius: '8px', height: '38px', fontSize: '12px' }}
                 />
               </div>
 
               {/* Updated Date */}
               <div className="form-group mb-0">
-                <label className="form-label text-xs font-medium text-zinc-600">Tanggal Update</label>
+                <label className="form-label text-[10px] font-bold uppercase tracking-wider text-zinc-400 block mb-1.5">Tanggal Update</label>
                 <input
                   type="date"
                   value={filterUpdatedDate}
                   onChange={(e) => setFilterUpdatedDate(e.target.value)}
-                  className="form-input"
-                  style={{ borderRadius: '8px', height: '38px' }}
+                  className="form-input text-xs font-semibold text-zinc-700"
+                  style={{ borderRadius: '8px', height: '38px', fontSize: '12px' }}
                 />
               </div>
             </div>
 
-            <div className="flex items-center gap-2 pt-2">
+            <div className="flex items-center gap-2 pt-1">
               <button
                 onClick={handleApplyFilters}
-                className="btn btn-primary h-10 px-5 text-sm"
-                style={{ borderRadius: '8px' }}
+                className="btn btn-primary h-9 px-4 text-xs font-semibold"
+                style={{ borderRadius: '6px' }}
               >
                 Terapkan
               </button>
               <button
                 onClick={handleResetFilters}
-                className="btn btn-secondary h-10 px-5 text-sm"
-                style={{ borderRadius: '8px' }}
+                className="btn btn-secondary h-9 px-4 text-xs font-semibold"
+                style={{ borderRadius: '6px' }}
               >
                 Reset
               </button>
