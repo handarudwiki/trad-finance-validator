@@ -5,6 +5,7 @@ import { useForm, useFieldArray, Controller } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useRouter } from 'next/navigation'
 import { ExtractedLCFieldsSchema, type ExtractedLCFields } from '@/schema/extraction'
+import { FormSection } from './FormSection'
 
 const LOW_CONFIDENCE_THRESHOLD = 0.85
 
@@ -198,10 +199,7 @@ export function ExtractionReviewForm({
       )}
 
       {/* Section 1: Transaction Identity */}
-      <section>
-        <h3 className="text-xs font-bold uppercase tracking-wider text-zinc-400 mb-4 border-b border-zinc-200 pb-2">
-          Identitas Transaksi
-        </h3>
+      <FormSection title="Identitas Transaksi">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <FieldWrapper
             fieldName="lcNumber"
@@ -239,13 +237,10 @@ export function ExtractionReviewForm({
             <input {...register('expiryPlace')} className={inputClass} />
           </FieldWrapper>
         </div>
-      </section>
+      </FormSection>
 
       {/* Section 2: Parties */}
-      <section>
-        <h3 className="text-xs font-bold uppercase tracking-wider text-zinc-400 mb-4 border-b border-zinc-200 pb-2">
-          Pihak-pihak
-        </h3>
+      <FormSection title="Pihak-pihak">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {/* Issuing Bank */}
           <div className="space-y-3">
@@ -347,13 +342,10 @@ export function ExtractionReviewForm({
             </FieldWrapper>
           </div>
         </div>
-      </section>
+      </FormSection>
 
       {/* Section 3: Financial Terms */}
-      <section>
-        <h3 className="text-xs font-bold uppercase tracking-wider text-zinc-400 mb-4 border-b border-zinc-200 pb-2">
-          Ketentuan Keuangan
-        </h3>
+      <FormSection title="Ketentuan Keuangan">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <FieldWrapper
             fieldName="currency"
@@ -438,10 +430,7 @@ export function ExtractionReviewForm({
       </section>
 
       {/* Section 4: Goods & Shipment */}
-      <section>
-        <h3 className="text-xs font-bold uppercase tracking-wider text-zinc-400 mb-4 border-b border-zinc-200 pb-2">
-          Barang &amp; Pengiriman
-        </h3>
+      <FormSection title="Barang &amp; Pengiriman">
         <div className="space-y-4">
           <FieldWrapper
             fieldName="goodsDescription"
@@ -547,13 +536,10 @@ export function ExtractionReviewForm({
             </FieldWrapper>
           </div>
         </div>
-      </section>
+      </FormSection>
 
       {/* Section 5: Required Documents (dynamic table) */}
-      <section>
-        <h3 className="text-xs font-bold uppercase tracking-wider text-zinc-400 mb-4 border-b border-zinc-200 pb-2">
-          Dokumen yang Diperlukan
-        </h3>
+      <FormSection title="Dokumen yang Diperlukan">
         <div className="space-y-3">
           {docFields.map((field, index) => (
             <div
@@ -645,13 +631,10 @@ export function ExtractionReviewForm({
             Tambah Dokumen
           </button>
         </div>
-      </section>
+      </FormSection>
 
       {/* Section 6: Additional Conditions */}
-      <section>
-        <h3 className="text-xs font-bold uppercase tracking-wider text-zinc-400 mb-4 border-b border-zinc-200 pb-2">
-          Syarat Tambahan
-        </h3>
+      <FormSection title="Syarat Tambahan">
         <FieldWrapper
           fieldName="additionalConditions"
           label="Syarat Tambahan"
@@ -660,7 +643,7 @@ export function ExtractionReviewForm({
         >
           <textarea {...register('additionalConditions')} rows={4} className={inputClass} />
         </FieldWrapper>
-      </section>
+      </FormSection>
 
       {/* API Error */}
       {apiError && (
