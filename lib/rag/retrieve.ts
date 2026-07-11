@@ -8,8 +8,8 @@ import { QdrantClient } from '@qdrant/js-client-rest'
 import { embedText } from '@/lib/rag/embed'
 import { env } from '@/lib/config'
 
-/** Qdrant client initialized with URL from environment */
-const qdrant = new QdrantClient({ url: env.QDRANT_URL, checkCompatibility: false })
+/** Qdrant client initialized with URL and API key from environment */
+const qdrant = new QdrantClient({ url: env.QDRANT_URL, apiKey: env.QDRANT_API_KEY })
 
 /** Collection name from environment (default: 'regulatory_knowledge') */
 const collectionName = env.QDRANT_COLLECTION || 'regulatory_knowledge'
