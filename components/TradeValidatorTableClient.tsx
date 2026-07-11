@@ -194,7 +194,7 @@ export function TradeValidatorTableClient({
     activeFilters.updatedDate !== ''
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6"  >
       {/* Search & Filter Header Row */}
       <div className="flex flex-col gap-4">
         <div className="flex items-center gap-3">
@@ -413,143 +413,145 @@ export function TradeValidatorTableClient({
               </p>
             </div>
           ) : (
-            <table className="data-table">
-              <thead>
-                <tr>
-                  <th style={{ paddingLeft: '1.25rem' }}>Transaction ID</th>
-                  <th>Type</th>
-                  <th>Status</th>
-                  <th>Created</th>
-                  <th>Last Updated</th>
-                  <th style={{ paddingRight: '1.25rem' }}>Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                {transactions.map((tx) => (
-                  <tr key={tx.id}>
-                    <td style={{ paddingLeft: '1.25rem' }}>
-                      <Link
-                        href={getTransactionLink(tx.id, tx.status)}
-                        className="table-id-link"
-                        title={tx.id}
-                      >
-                        {tx.id.slice(0, 8)}…
-                      </Link>
-                    </td>
-                    <td>
-                      <span className="badge-type">{tx.type}</span>
-                    </td>
-                    <td>
-                      <span className={STATUS_BADGE[tx.status]}>
-                        {STATUS_LABELS[tx.status]}
-                      </span>
-                    </td>
-                    <td style={{ color: 'var(--text-secondary)' }}>
-                      {new Date(tx.createdAt).toLocaleDateString('en-GB', {
-                        day: 'numeric',
-                        month: 'short',
-                        year: 'numeric',
-                      })}
-                    </td>
-                    <td style={{ color: 'var(--text-secondary)' }}>
-                      {new Date(tx.updatedAt).toLocaleDateString('en-GB', {
-                        day: 'numeric',
-                        month: 'short',
-                        year: 'numeric',
-                        hour: '2-digit',
-                        minute: '2-digit',
-                      })}
-                    </td>
-                    <td style={{ paddingRight: '1.25rem' }}>
-                      <Link
-                        href={getTransactionLink(tx.id, tx.status)}
-                        className="btn btn-secondary btn-sm"
-                        style={{ borderRadius: '8px' }}
-                      >
-                        {getActionLabel(tx.status)}
-                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                          <path d="M5 12h14M12 5l7 7-7 7" />
-                        </svg>
-                      </Link>
-                    </td>
+            <>
+              <table className="data-table">
+                <thead>
+                  <tr>
+                    <th style={{ paddingLeft: '1.25rem' }}>Transaction ID</th>
+                    <th>Type</th>
+                    <th>Status</th>
+                    <th>Created</th>
+                    <th>Last Updated</th>
+                    <th style={{ paddingRight: '1.25rem' }}>Actions</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
-          )}
-        </div>
-      </div>
+                </thead>
+                <tbody>
+                  {transactions.map((tx) => (
+                    <tr key={tx.id}>
+                      <td style={{ paddingLeft: '1.25rem' }}>
+                        <Link
+                          href={getTransactionLink(tx.id, tx.status)}
+                          className="table-id-link"
+                          title={tx.id}
+                        >
+                          {tx.id.slice(0, 8)}…
+                        </Link>
+                      </td>
+                      <td>
+                        <span className="badge-type">{tx.type}</span>
+                      </td>
+                      <td>
+                        <span className={STATUS_BADGE[tx.status]}>
+                          {STATUS_LABELS[tx.status]}
+                        </span>
+                      </td>
+                      <td style={{ color: 'var(--text-secondary)' }}>
+                        {new Date(tx.createdAt).toLocaleDateString('en-GB', {
+                          day: 'numeric',
+                          month: 'short',
+                          year: 'numeric',
+                        })}
+                      </td>
+                      <td style={{ color: 'var(--text-secondary)' }}>
+                        {new Date(tx.updatedAt).toLocaleDateString('en-GB', {
+                          day: 'numeric',
+                          month: 'short',
+                          year: 'numeric',
+                          hour: '2-digit',
+                          minute: '2-digit',
+                        })}
+                      </td>
+                      <td style={{ paddingRight: '1.25rem' }}>
+                        <Link
+                          href={getTransactionLink(tx.id, tx.status)}
+                          className="btn btn-secondary btn-sm"
+                          style={{ borderRadius: '8px' }}
+                        >
+                          {getActionLabel(tx.status)}
+                          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                            <path d="M5 12h14M12 5l7 7-7 7" />
+                          </svg>
+                        </Link>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
 
-      {/* Pagination & Limit Section */}
-      <div className="flex flex-col md:flex-row items-center justify-between border-t border-zinc-200 pt-4 mt-2 gap-4 text-xs font-semibold text-zinc-500">
-        <div className="flex items-center gap-4">
-          <div className="flex items-center gap-2">
-            <span>Show</span>
-            <select
-              value={limit}
-              onChange={(e) => {
-                setLimit(parseInt(e.target.value, 10))
-                setPage(1)
-              }}
-              className="bg-white border border-zinc-200 rounded-md py-1 px-2 focus:outline-none focus:ring-1 focus:ring-zinc-950 text-xs font-semibold"
-              style={{ borderRadius: '6px' }}
-            >
-              <option value="10">10</option>
-              <option value="20">20</option>
-              <option value="50">50</option>
-              <option value="100">100</option>
-            </select>
-            <span>entries</span>
-          </div>
-          
-          <span>
-            Showing {totalItems > 0 ? (page - 1) * limit + 1 : 0} to {Math.min(page * limit, totalItems)} of {totalItems} entries
-          </span>
-        </div>
+              {/* Pagination & Limit Section */}
+              <div className="flex flex-col md:flex-row items-center justify-between border-t border-zinc-200 p-4 gap-4 text-xs font-semibold text-zinc-500 bg-white">
+                <div className="flex items-center gap-4">
+                  <div className="flex items-center gap-2">
+                    <span>Show</span>
+                    <select
+                      value={limit}
+                      onChange={(e) => {
+                        setLimit(parseInt(e.target.value, 10))
+                        setPage(1)
+                      }}
+                      className="bg-white border border-zinc-200 rounded-md py-1 px-2 focus:outline-none focus:ring-1 focus:ring-zinc-950 text-xs font-semibold"
+                      style={{ borderRadius: '6px' }}
+                    >
+                      <option value="10">10</option>
+                      <option value="20">20</option>
+                      <option value="50">50</option>
+                      <option value="100">100</option>
+                    </select>
+                    <span>entries</span>
+                  </div>
+                  
+                  <span>
+                    Showing {totalItems > 0 ? (page - 1) * limit + 1 : 0} to {Math.min(page * limit, totalItems)} of {totalItems} entries
+                  </span>
+                </div>
 
-        {/* Page Buttons */}
-        <div className="flex items-center gap-1.5">
-          <button
-            onClick={() => setPage(p => Math.max(p - 1, 1))}
-            disabled={page === 1 || loading}
-            className="btn btn-secondary h-8 px-3 text-xs font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
-            style={{ borderRadius: '6px' }}
-          >
-            Previous
-          </button>
-          
-          {Array.from({ length: Math.ceil(totalItems / limit) }, (_, i) => i + 1)
-            .filter(p => p === 1 || p === Math.ceil(totalItems / limit) || Math.abs(p - page) <= 1)
-            .map((p, idx, arr) => {
-              const showEllipsis = idx > 0 && p - arr[idx - 1] > 1
-              return (
-                <React.Fragment key={p}>
-                  {showEllipsis && <span className="px-1 text-zinc-400">...</span>}
+                {/* Page Buttons */}
+                <div className="flex items-center gap-1.5">
                   <button
-                    onClick={() => setPage(p)}
-                    className={`h-8 w-8 text-xs font-bold border flex items-center justify-center transition ${
-                      p === page
-                        ? 'bg-zinc-900 border-zinc-900 text-white'
-                        : 'bg-white border-zinc-200 text-zinc-650 hover:bg-zinc-50'
-                    }`}
+                    onClick={() => setPage(p => Math.max(p - 1, 1))}
+                    disabled={page === 1 || loading}
+                    className="btn btn-secondary h-8 px-3 text-xs font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
                     style={{ borderRadius: '6px' }}
-                    disabled={loading}
                   >
-                    {p}
+                    Previous
                   </button>
-                </React.Fragment>
-              )
-            })
-          }
+                  
+                  {Array.from({ length: Math.ceil(totalItems / limit) }, (_, i) => i + 1)
+                    .filter(p => p === 1 || p === Math.ceil(totalItems / limit) || Math.abs(p - page) <= 1)
+                    .map((p, idx, arr) => {
+                      const showEllipsis = idx > 0 && p - arr[idx - 1] > 1
+                      return (
+                        <React.Fragment key={p}>
+                          {showEllipsis && <span className="px-1 text-zinc-400">...</span>}
+                          <button
+                            onClick={() => setPage(p)}
+                            className={`h-8 w-8 text-xs font-bold border flex items-center justify-center transition ${
+                              p === page
+                                ? 'bg-zinc-900 border-zinc-900 text-white'
+                                : 'bg-white border-zinc-200 text-zinc-650 hover:bg-zinc-50'
+                            }`}
+                            style={{ borderRadius: '6px' }}
+                            disabled={loading}
+                          >
+                            {p}
+                          </button>
+                        </React.Fragment>
+                      )
+                    })
+                  }
 
-          <button
-            onClick={() => setPage(p => Math.min(p + 1, Math.ceil(totalItems / limit)))}
-            disabled={page === Math.ceil(totalItems / limit) || totalItems === 0 || loading}
-            className="btn btn-secondary h-8 px-3 text-xs font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
-            style={{ borderRadius: '6px' }}
-          >
-            Next
-          </button>
+                  <button
+                    onClick={() => setPage(p => Math.min(p + 1, Math.ceil(totalItems / limit)))}
+                    disabled={page === Math.ceil(totalItems / limit) || totalItems === 0 || loading}
+                    className="btn btn-secondary h-8 px-3 text-xs font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
+                    style={{ borderRadius: '6px' }}
+                  >
+                    Next
+                  </button>
+                </div>
+              </div>
+            </>
+          )}
         </div>
       </div>
     </div>
