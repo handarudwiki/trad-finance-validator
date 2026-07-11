@@ -25,11 +25,16 @@ export async function insuranceCoverageCheck(
   docData: Record<string, unknown>,
   transactionType: 'LC' | 'SKBDN',
 ): Promise<Finding[]> {
-  const ragContext = await retrieveRegulatory(
-    'insurance percentage CIF value coverage UCP 600',
-    transactionType,
-    'INSURANCE_CERTIFICATE',
-  )
+  let ragContext: Awaited<ReturnType<typeof retrieveRegulatory>> = []
+  try {
+    ragContext = await retrieveRegulatory(
+      'insurance percentage CIF value coverage UCP 600',
+      transactionType,
+      'INSURANCE_CERTIFICATE',
+    )
+  } catch (ragErr) {
+    console.warn('[insuranceCoverageCheck] RAG retrieval failed, continuing without regulatory context:', ragErr)
+  }
 
   // Find requirements for insurance certificate from the LC
   const requiredDoc = lcFields.requiredDocuments.find(

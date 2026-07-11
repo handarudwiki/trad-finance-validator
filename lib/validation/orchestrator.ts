@@ -141,6 +141,7 @@ export async function runValidation(transactionId: string): Promise<void> {
       data: { status: 'COMPLETED' },
     })
   } catch (err) {
+    console.error(`[runValidation] Pipeline failed for transaction ${transactionId}:`, err)
     await prisma.transaction.update({
       where: { id: transactionId },
       data: { status: 'FAILED', errorDetails: String(err) },

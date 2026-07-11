@@ -27,10 +27,15 @@ export async function checkPartyNameConsistency(
   transactionType: 'LC' | 'SKBDN',
 ): Promise<Finding[]> {
   // 1. Retrieve regulatory context via RAG
-  const ragChunks = await retrieveRegulatory(
-    'name variations beneficiary applicant consistency UCP ISBP',
-    transactionType,
-  )
+  let ragChunks: Awaited<ReturnType<typeof retrieveRegulatory>> = []
+  try {
+    ragChunks = await retrieveRegulatory(
+      'name variations beneficiary applicant consistency UCP ISBP',
+      transactionType,
+    )
+  } catch (ragErr) {
+    console.warn('[checkPartyNameConsistency] RAG retrieval failed, continuing without regulatory context:', ragErr)
+  }
 
   const ragContext = ragChunks
     .map((chunk) => `[${chunk.source} ${chunk.article}] ${chunk.title}: ${chunk.text}`)

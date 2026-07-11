@@ -27,11 +27,16 @@ export async function mandatoryWordingCheck(
   documentType: string,
   transactionType: 'LC' | 'SKBDN',
 ): Promise<Finding[]> {
-  const ragContext = await retrieveRegulatory(
-    'mandatory wording certificate beneficiary ISBP 745',
-    transactionType,
-    documentType,
-  )
+  let ragContext: Awaited<ReturnType<typeof retrieveRegulatory>> = []
+  try {
+    ragContext = await retrieveRegulatory(
+      'mandatory wording certificate beneficiary ISBP 745',
+      transactionType,
+      documentType,
+    )
+  } catch (ragErr) {
+    console.warn('[mandatoryWordingCheck] RAG retrieval failed, continuing without regulatory context:', ragErr)
+  }
 
   // Find requirements for this document type from the LC
   const requiredDoc = lcFields.requiredDocuments.find(

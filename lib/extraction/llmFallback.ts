@@ -10,7 +10,7 @@
 import { GoogleGenAI } from '@google/genai'
 
 // --- Provider Configuration ---
-const GEMINI_MODEL = 'gemini-3.1-flash-lite'
+const GEMINI_MODEL = 'gemini-2.0-flash'
 
 // Multiple OpenRouter free models to try (in order)
 const OPENROUTER_MODELS = [

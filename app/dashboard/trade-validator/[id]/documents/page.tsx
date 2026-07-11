@@ -46,6 +46,7 @@ export default function DocumentsPage() {
   const transactionId = params.id
 
   const [requiredDocuments, setRequiredDocuments] = useState<RequiredDocument[]>([])
+  const [uploadedDocs, setUploadedDocs] = useState<{ documentType: string }[]>([])
   const [loading, setLoading] = useState(true)
   const [validating, setValidating] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -59,6 +60,9 @@ export default function DocumentsPage() {
         const reviewedFields = data.sourceDocument?.reviewedFields
         if (reviewedFields?.requiredDocuments) {
           setRequiredDocuments(reviewedFields.requiredDocuments)
+        }
+        if (data.supportingDocs) {
+          setUploadedDocs(data.supportingDocs)
         }
       } catch {
         setError('Unable to connect to server.')
@@ -130,6 +134,7 @@ export default function DocumentsPage() {
         <div>
           <DocumentChecklist
             requiredDocuments={requiredDocuments}
+            uploadedDocs={uploadedDocs}
             transactionId={transactionId}
           />
 

@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { DocumentUploader } from './DocumentUploader'
 import { FormSection } from './FormSection'
 
@@ -11,6 +11,7 @@ interface RequiredDocument {
 
 interface DocumentChecklistProps {
   requiredDocuments: RequiredDocument[]
+  uploadedDocs?: { documentType: string }[]
   transactionId: string
 }
 
@@ -22,15 +23,20 @@ interface UploadSlot {
 
 export function DocumentChecklist({
   requiredDocuments,
+  uploadedDocs = [],
   transactionId,
 }: DocumentChecklistProps) {
-  const [slots, setSlots] = useState<UploadSlot[]>(
-    requiredDocuments.map((doc) => ({
-      document: doc,
-      uploaded: false,
-      uploading: false,
-    }))
-  )
+  const [slots, setSlots] = useState<UploadSlot[]>([])
+
+  useEffect(() => {
+    setSlots(
+      requiredDocuments.map((doc) => ({
+        document: doc,
+        uploaded: uploadedDocs.some((ud) => ud.documentType === doc.documentType),
+        uploading: false,
+      }))
+    )
+  }, [requiredDocuments, uploadedDocs])
 
   const handleUpload = (index: number) => async (file: File) => {
     setSlots((prev) =>
@@ -150,7 +156,21 @@ export function DocumentChecklist({
               )}
             </div>
 
-            {!slot.uploaded && (
+            {slot.uploaded ? (
+              <div style={{ marginTop: '16px' }}>
+                <button
+                  onClick={() => {
+                    setSlots((prev) =>
+                      prev.map((s, i) => (i === index ? { ...s, uploaded: false } : s))
+                    )
+                  }}
+                  className="btn btn-secondary h-8 px-3 text-xs"
+                  style={{ borderRadius: '8px' }}
+                >
+                  Change File
+                </button>
+              </div>
+            ) : (
               <div style={{ marginTop: '20px' }}>
                 <DocumentUploader
                   onUpload={handleUpload(index)}
