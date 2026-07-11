@@ -25,11 +25,16 @@ export async function goodsDescriptionCheck(
   docsData: Map<string, Record<string, unknown>>,
   transactionType: 'LC' | 'SKBDN',
 ): Promise<Finding[]> {
-  const ragContext = await retrieveRegulatory(
-    'goods description consistency invoice UCP 600',
-    transactionType,
-    'COMMERCIAL_INVOICE',
-  )
+  let ragContext: Awaited<ReturnType<typeof retrieveRegulatory>> = []
+  try {
+    ragContext = await retrieveRegulatory(
+      'goods description consistency invoice UCP 600',
+      transactionType,
+      'COMMERCIAL_INVOICE',
+    )
+  } catch (ragErr) {
+    console.warn('[goodsDescriptionCheck] RAG retrieval failed, continuing without regulatory context:', ragErr)
+  }
 
   const docDescriptions: string[] = []
   for (const [docType, data] of docsData) {
