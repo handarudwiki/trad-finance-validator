@@ -2,8 +2,7 @@
 @import "tailwindcss";
 
 :root {
-  /* Minimalist Base (Shadcn/Vercel Inspired) */
-  --bg: #FAFAFA;
+  --bg: hsl(0, 0%, 99.2%);  
   --surface: #FFFFFF;
   --surface-hover: #F4F4F5;
 

@@ -93,13 +93,54 @@ export function Sidebar({ onCollapseChange }: SidebarProps) {
   return (
     <nav className={`sidebar${collapsed ? ' collapsed' : ''}`}>
       {/* Header */}
-      <div className="sidebar-header">
-        <div className="sidebar-logo">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
-          </svg>
-        </div>
-        <span className="sidebar-brand">Trade Validator</span>
+      <div 
+        className="sidebar-header flex items-center justify-between" 
+        style={{ 
+          padding: collapsed ? '0 12px' : '0 20px', 
+          justifyContent: collapsed ? 'center' : 'space-between' 
+        }}
+      >
+        {collapsed ? (
+          <button
+            onClick={() => {
+              const next = !collapsed
+              setCollapsed(next)
+              onCollapseChange?.(next)
+            }}
+            className="w-8 h-8 flex items-center justify-center hover:bg-zinc-50 border border-zinc-200 text-zinc-500 hover:text-zinc-900 transition shrink-0"
+            title="Expand sidebar"
+            style={{ borderRadius: '6px', background: 'var(--surface)' }}
+          >
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+              <path d="m9 18 6-6-6-6" />
+            </svg>
+          </button>
+        ) : (
+          <>
+            <div className="flex items-center gap-2.5">
+              <div className="sidebar-logo">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                </svg>
+              </div>
+              <span className="sidebar-brand">Trade Validator</span>
+            </div>
+            <button
+              onClick={() => {
+                const next = !collapsed
+                setCollapsed(next)
+                onCollapseChange?.(next)
+              }}
+              className="p-1.5 hover:bg-zinc-50 border border-zinc-200 text-zinc-500 hover:text-zinc-900 transition shrink-0"
+              title="Collapse sidebar"
+              style={{ borderRadius: '6px', background: 'var(--surface)' }}
+            >
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <path d="m15 18-6-6 6-6" />
+              </svg>
+            </button>
+          </>
+        )}
       </div>
 
       {/* Navigation */}
@@ -131,34 +172,22 @@ export function Sidebar({ onCollapseChange }: SidebarProps) {
         ))}
       </div>
 
-      {/* Footer — collapse toggle */}
-      <div className="sidebar-footer">
-        <button
-          className="sidebar-collapse-btn"
-          onClick={() => {
-            const next = !collapsed
-            setCollapsed(next)
-            onCollapseChange?.(next)
-          }}
-          title={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
-        >
-          <span className="sidebar-item-icon">
-            {collapsed ? (
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M13 17l5-5-5-5" />
-                <path d="M6 17l5-5-5-5" />
-              </svg>
-            ) : (
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M11 17l-5-5 5-5" />
-                <path d="M18 17l-5-5 5-5" />
-              </svg>
-            )}
-          </span>
-          <span className="sidebar-item-label" style={{ fontSize: '12px' }}>
-            {collapsed ? 'Expand' : 'Collapse'}
-          </span>
-        </button>
+      {/* Footer — Profile */}
+      <div className="sidebar-footer" style={{ borderTop: '1px solid var(--sidebar-border)', padding: collapsed ? '12px 8px' : '12px 16px' }}>
+        <div className="flex items-center gap-3">
+          <div 
+            className="flex items-center justify-center w-8 h-8 rounded-full bg-zinc-800 text-white text-xs font-semibold select-none shrink-0"
+            title="Admin Koperasi"
+          >
+            AD
+          </div>
+          {!collapsed && (
+            <div className="text-left overflow-hidden">
+              <p className="text-xs font-bold text-zinc-900 truncate leading-tight">Admin Koperasi</p>
+              <p className="text-[10px] text-zinc-400 truncate leading-none mt-1 font-semibold uppercase tracking-wider">Auditor</p>
+            </div>
+          )}
+        </div>
       </div>
     </nav>
   )
