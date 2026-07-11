@@ -13,6 +13,8 @@ import { AIRWAY_BILL_EXTRACTION_PROMPT } from './prompts/airwayBillExtractionPro
 import { CERTIFICATE_OF_ORIGIN_EXTRACTION_PROMPT } from './prompts/certificateOfOriginExtractionPrompt'
 import { INSURANCE_CERTIFICATE_EXTRACTION_PROMPT } from './prompts/insuranceCertificateExtractionPrompt'
 import { GENERIC_DOCUMENT_EXTRACTION_PROMPT } from './prompts/genericDocumentExtractionPrompt'
+import { extractTextFromDocument } from './ocr'
+import { extractWithLLMFallback } from './llmFallback'
 
 export type DocumentType =
   | 'BILL_OF_EXCHANGE'
@@ -78,11 +80,24 @@ export async function extractSupportingDocument(
 
     return parsed
   } catch (error) {
-    if (error instanceof ExtractionError) throw error
-    throw new ExtractionError(
-      `Supporting document extraction failed for ${documentType}: ${error instanceof Error ? error.message : String(error)}`,
-      { code: 'GEMINI_API_ERROR', documentType, cause: error }
-    )
+    console.warn(`[extractSupportingDocument] Gemini Vision failed for ${documentType}. Attempting OCR + LLM Fallback... Error details:`, error)
+
+    try {
+      // Step 1: Run OCR to extract text
+      const ocrText = await extractTextFromDocument(fileBuffer, mimeType)
+
+      // Step 2: Run LLM fallback chain (Gemini Text -> OpenRouter -> Groq)
+      const fallbackResult = await extractWithLLMFallback(prompt, ocrText)
+
+      return fallbackResult.data as Record<string, unknown>
+    } catch (fallbackError) {
+      console.error(`[extractSupportingDocument] OCR + LLM Fallback also failed for ${documentType}:`, fallbackError)
+      if (error instanceof ExtractionError) throw error
+      throw new ExtractionError(
+        `Supporting document extraction failed for ${documentType}: ${error instanceof Error ? error.message : String(error)}`,
+        { code: 'GEMINI_API_ERROR', documentType, cause: error }
+      )
+    }
   }
 }
 
