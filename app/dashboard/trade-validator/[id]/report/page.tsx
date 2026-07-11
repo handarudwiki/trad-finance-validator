@@ -157,12 +157,15 @@ export default async function ReportPage({ params }: ReportPageProps) {
       />
 
       <div className="dashboard-content">
-        <div className="page-header">
+        <div className="page-header flex items-center justify-between">
           <div>
             <h1 className="page-title">Discrepancy Report</h1>
             <p className="page-subtitle">
               Validation complete — review all findings before submission to the bank.
             </p>
+          </div>
+          <div className="flex items-center gap-3 shrink-0">
+            <ReportExportButton transactionId={id} />
           </div>
         </div>
 

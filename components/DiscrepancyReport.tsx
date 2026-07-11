@@ -34,7 +34,7 @@ export function DiscrepancyReport({ report }: DiscrepancyReportProps) {
     <div className="space-y-6">
       {/* Header Metadata */}
       <div className="flex items-center justify-between">
-        <span className="text-[11px] font-bold uppercase tracking-wider text-zinc-400">
+        <span className="text-[11px] font-medium uppercase tracking-wider text-zinc-400">
           Generated: {new Date(report.generatedAt).toLocaleString('id-ID', { dateStyle: 'long', timeStyle: 'short' })}
         </span>
       </div>
@@ -44,40 +44,40 @@ export function DiscrepancyReport({ report }: DiscrepancyReportProps) {
         {/* Fatal */}
         <div className="card" style={{ border: '1px solid var(--border)', borderRadius: '8px', boxShadow: 'none' }}>
           <div className="card-body" style={{ padding: '16px', textAlign: 'center' }}>
-            <p className="text-2xl font-bold" style={{ color: report.summary.fatal > 0 ? 'var(--danger)' : 'var(--text-primary)' }}>
+            <p className="text-2xl font-semibold" style={{ color: report.summary.fatal > 0 ? 'var(--danger)' : 'var(--text-primary)' }}>
               {report.summary.fatal}
             </p>
-            <p className="text-[10px] font-bold uppercase tracking-wider text-zinc-400 mt-1">Fatal</p>
+            <p className="text-[10px] font-medium uppercase tracking-wider text-zinc-400 mt-1">Fatal</p>
           </div>
         </div>
 
         {/* Major */}
         <div className="card" style={{ border: '1px solid var(--border)', borderRadius: '8px', boxShadow: 'none' }}>
           <div className="card-body" style={{ padding: '16px', textAlign: 'center' }}>
-            <p className="text-2xl font-bold" style={{ color: report.summary.major > 0 ? '#d97706' : 'var(--text-primary)' }}>
+            <p className="text-2xl font-semibold" style={{ color: report.summary.major > 0 ? '#d97706' : 'var(--text-primary)' }}>
               {report.summary.major}
             </p>
-            <p className="text-[10px] font-bold uppercase tracking-wider text-zinc-400 mt-1">Major</p>
+            <p className="text-[10px] font-medium uppercase tracking-wider text-zinc-400 mt-1">Major</p>
           </div>
         </div>
 
         {/* Minor */}
         <div className="card" style={{ border: '1px solid var(--border)', borderRadius: '8px', boxShadow: 'none' }}>
           <div className="card-body" style={{ padding: '16px', textAlign: 'center' }}>
-            <p className="text-2xl font-bold" style={{ color: report.summary.minor > 0 ? '#2563eb' : 'var(--text-primary)' }}>
+            <p className="text-2xl font-semibold" style={{ color: report.summary.minor > 0 ? '#2563eb' : 'var(--text-primary)' }}>
               {report.summary.minor}
             </p>
-            <p className="text-[10px] font-bold uppercase tracking-wider text-zinc-400 mt-1">Minor</p>
+            <p className="text-[10px] font-medium uppercase tracking-wider text-zinc-400 mt-1">Minor</p>
           </div>
         </div>
 
         {/* Total */}
         <div className="card" style={{ border: '1px solid var(--border)', borderRadius: '8px', boxShadow: 'none' }}>
           <div className="card-body" style={{ padding: '16px', textAlign: 'center' }}>
-            <p className="text-2xl font-bold text-zinc-900">
+            <p className="text-2xl font-semibold text-zinc-900">
               {report.summary.total}
             </p>
-            <p className="text-[10px] font-bold uppercase tracking-wider text-zinc-400 mt-1">Total Findings</p>
+            <p className="text-[10px] font-medium uppercase tracking-wider text-zinc-400 mt-1">Total Findings</p>
           </div>
         </div>
       </div>

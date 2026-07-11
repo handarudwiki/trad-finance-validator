@@ -118,7 +118,7 @@ export function TopBar(props: any) {
           {isSearchFocused && (
             <div className="absolute left-0 right-0 mt-2 bg-white border border-zinc-200 rounded-md py-2 z-50 max-h-80 overflow-y-auto" style={{ border: '1px solid var(--border)', borderRadius: '8px', boxShadow: 'none' }}>
               <div className="px-3 pb-1 border-b border-zinc-100 flex items-center justify-between">
-                <span className="text-[10px] font-bold uppercase tracking-wider text-zinc-400">
+                <span className="text-[10px] font-semibold uppercase tracking-wider text-zinc-400">
                   {searchQuery.trim() === '' ? 'Quick Navigation' : 'Search Results'}
                 </span>
                 {searchQuery.trim() !== '' && (
@@ -140,7 +140,7 @@ export function TopBar(props: any) {
                       }}
                       className="block px-4 py-2.5 hover:bg-zinc-50 transition text-left"
                     >
-                      <p className="text-xs font-bold text-zinc-900">{feature.name}</p>
+                      <p className="text-xs font-semibold text-zinc-900">{feature.name}</p>
                       <p className="text-[10px] text-zinc-400 mt-0.5 font-medium leading-normal">{feature.description}</p>
                     </Link>
                   ))}
