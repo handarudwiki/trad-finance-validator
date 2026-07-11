@@ -11,7 +11,7 @@ import { env } from '@/lib/config'
 import type { RegulatoryChunk } from '@/lib/rag/retrieve'
 
 /** Qdrant client initialized with URL from environment */
-const qdrant = new QdrantClient({ url: env.QDRANT_URL })
+const qdrant = new QdrantClient({ url: env.QDRANT_URL, checkCompatibility: false })
 
 /** Collection name from environment (default: 'regulatory_knowledge') */
 const collectionName = env.QDRANT_COLLECTION || 'regulatory_knowledge'

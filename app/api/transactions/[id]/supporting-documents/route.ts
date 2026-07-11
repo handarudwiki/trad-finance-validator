@@ -9,6 +9,7 @@
 import { NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import { isAllowedMimeType, generateStoragePath, saveFile } from '@/lib/storage'
+import { unlink } from 'fs/promises'
 
 const VALID_DOCUMENT_TYPES = [
   'BILL_OF_EXCHANGE',
@@ -68,6 +69,25 @@ export async function POST(
       { error: 'Unsupported file type. Accepted: PDF, JPEG, PNG, TIFF' },
       { status: 415 }
     )
+  }
+
+  // Find and delete existing supporting document of the same type
+  const existingDoc = await prisma.supportingDocument.findFirst({
+    where: {
+      transactionId: id,
+      documentType: documentType as import('@prisma/client').DocumentType,
+    },
+  })
+
+  if (existingDoc) {
+    try {
+      await unlink(existingDoc.filePath)
+    } catch (e) {
+      console.warn('Failed to delete old file:', existingDoc.filePath, e)
+    }
+    await prisma.supportingDocument.delete({
+      where: { id: existingDoc.id },
+    })
   }
 
   // Generate UUID storage path and save file
