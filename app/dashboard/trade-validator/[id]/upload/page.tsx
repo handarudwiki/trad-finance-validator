@@ -190,7 +190,7 @@ export default function UploadPage() {
                 <p style={{ fontSize: '13px', color: 'var(--text-secondary)', marginBottom: '16px' }}>
                   Source document has been previously reviewed. Upload an amendment to update the extracted data.
                 </p>
-                <DocumentUploader onUpload={handleAmendmentUpload} label="Amendment File (LC/SKBDN)" />
+                <DocumentUploader onUpload={handleAmendmentUpload} label="Amendment File (LC/SKBDN)" disabled={amendmentUploading} />
                 {amendmentUploading && (
                   <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginTop: '12px' }}>
                     <span className="spinner spinner-dark" style={{ width: '16px', height: '16px' }} />
@@ -216,7 +216,7 @@ export default function UploadPage() {
                 <span className="card-title">Source Document</span>
               </div>
               <div className="card-body">
-                <DocumentUploader onUpload={handleUpload} label="LC / SKBDN Document" />
+                <DocumentUploader onUpload={handleUpload} label="LC / SKBDN Document" disabled={extracting} />
                 
                 {/* Download example document */}
                 <div className="mt-4 pt-4 border-t border-zinc-100 flex items-center gap-2 text-xs text-zinc-500 font-medium">

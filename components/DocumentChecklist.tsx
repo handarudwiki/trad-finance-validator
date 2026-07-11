@@ -157,6 +157,7 @@ export function DocumentChecklist({
                   <DocumentUploader
                     onUpload={handleUpload(index)}
                     label=""
+                    disabled={slot.uploading}
                   />
                 </div>
               )}

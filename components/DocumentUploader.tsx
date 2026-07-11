@@ -20,9 +20,10 @@ function formatFileSize(bytes: number): string {
 interface DocumentUploaderProps {
   onUpload: (file: File) => Promise<void>
   label?: string
+  disabled?: boolean
 }
 
-export function DocumentUploader({ onUpload, label }: DocumentUploaderProps) {
+export function DocumentUploader({ onUpload, label, disabled = false }: DocumentUploaderProps) {
   const [isDragOver, setIsDragOver] = useState(false)
   const [selectedFile, setSelectedFile] = useState<File | null>(null)
   const [progress, setProgress] = useState(0)
@@ -39,6 +40,7 @@ export function DocumentUploader({ onUpload, label }: DocumentUploaderProps) {
   }
 
   const resetState = () => {
+    if (isUploading || disabled) return
     setSelectedFile(null)
     setProgress(0)
     setIsUploading(false)
@@ -48,6 +50,7 @@ export function DocumentUploader({ onUpload, label }: DocumentUploaderProps) {
   }
 
   const handleFile = useCallback(async (file: File) => {
+    if (isUploading || disabled) return
     setError(null)
     setSuccess(false)
     setProgress(0)
@@ -85,10 +88,11 @@ export function DocumentUploader({ onUpload, label }: DocumentUploaderProps) {
     } finally {
       setIsUploading(false)
     }
-  }, [onUpload])
+  }, [onUpload, isUploading, disabled])
 
   const handleDragOver = (e: DragEvent<HTMLDivElement>) => {
     e.preventDefault()
+    if (isUploading || disabled) return
     setIsDragOver(true)
   }
 
@@ -99,18 +103,20 @@ export function DocumentUploader({ onUpload, label }: DocumentUploaderProps) {
 
   const handleDrop = (e: DragEvent<HTMLDivElement>) => {
     e.preventDefault()
+    if (isUploading || disabled) return
     setIsDragOver(false)
     const file = e.dataTransfer.files[0]
     if (file) handleFile(file)
   }
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
+    if (isUploading || disabled) return
     const file = e.target.files?.[0]
     if (file) handleFile(file)
   }
 
   const handleClick = () => {
-    if (!isUploading && !success) {
+    if (!isUploading && !success && !disabled) {
       inputRef.current?.click()
     }
   }
@@ -137,8 +143,9 @@ export function DocumentUploader({ onUpload, label }: DocumentUploaderProps) {
             </div>
             <button
               onClick={resetState}
-              className="btn btn-secondary h-8 px-3 text-xs font-semibold border border-green-200 hover:bg-green-100/50"
+              className="btn btn-secondary h-8 px-3 text-xs font-semibold border border-green-200 hover:bg-green-100/50 disabled:opacity-50 disabled:cursor-not-allowed"
               style={{ borderRadius: '8px' }}
+              disabled={isUploading || disabled}
             >
               Change File
             </button>
@@ -156,7 +163,7 @@ export function DocumentUploader({ onUpload, label }: DocumentUploaderProps) {
               isDragOver
                 ? 'border-zinc-800 bg-zinc-50/60'
                 : 'border-zinc-300 hover:border-zinc-650 bg-zinc-50/20'
-            } ${isUploading ? 'pointer-events-none opacity-60' : ''}`}
+            } ${(isUploading || disabled) ? 'pointer-events-none opacity-60' : ''}`}
             style={{ borderRadius: '8px' }}
           >
             <input
@@ -165,7 +172,7 @@ export function DocumentUploader({ onUpload, label }: DocumentUploaderProps) {
               accept={ALLOWED_EXTENSIONS}
               onChange={handleInputChange}
               className="hidden"
-              disabled={isUploading}
+              disabled={isUploading || disabled}
             />
 
             <div className="flex flex-col items-center gap-3">
