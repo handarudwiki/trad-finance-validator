@@ -234,7 +234,7 @@ export function TradeValidatorTableClient({
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
               {/* Type */}
               <div className="form-group mb-0">
-                <label className="form-label text-[10px] font-bold uppercase tracking-wider text-zinc-400 block mb-1.5">Tipe</label>
+                <label className="form-label block mb-1.5 uppercase tracking-wider" style={{ fontSize: '10px', color: '#a1a1aa', fontWeight: 'bold' }}>Tipe</label>
                 <select
                   value={filterType}
                   onChange={(e) => setFilterType(e.target.value)}
@@ -249,7 +249,7 @@ export function TradeValidatorTableClient({
 
               {/* Status */}
               <div className="form-group mb-0">
-                <label className="form-label text-[10px] font-bold uppercase tracking-wider text-zinc-400 block mb-1.5">Status</label>
+                <label className="form-label block mb-1.5 uppercase tracking-wider" style={{ fontSize: '10px', color: '#a1a1aa', fontWeight: 'bold' }}>Status</label>
                 <select
                   value={filterStatus}
                   onChange={(e) => setFilterStatus(e.target.value)}
@@ -267,7 +267,7 @@ export function TradeValidatorTableClient({
 
               {/* Created Date */}
               <div className="form-group mb-0">
-                <label className="form-label text-[10px] font-bold uppercase tracking-wider text-zinc-400 block mb-1.5">Tanggal Dibuat</label>
+                <label className="form-label block mb-1.5 uppercase tracking-wider" style={{ fontSize: '10px', color: '#a1a1aa', fontWeight: 'bold' }}>Tanggal Dibuat</label>
                 <input
                   type="date"
                   value={filterDate}
@@ -279,7 +279,7 @@ export function TradeValidatorTableClient({
 
               {/* Updated Date */}
               <div className="form-group mb-0">
-                <label className="form-label text-[10px] font-bold uppercase tracking-wider text-zinc-400 block mb-1.5">Tanggal Update</label>
+                <label className="form-label block mb-1.5 uppercase tracking-wider" style={{ fontSize: '10px', color: '#a1a1aa', fontWeight: 'bold' }}>Tanggal Update</label>
                 <input
                   type="date"
                   value={filterUpdatedDate}
