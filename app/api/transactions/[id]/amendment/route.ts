@@ -79,6 +79,7 @@ export async function POST(
       reviewedAt: null,
       filePath: storagePath,
       mimeType: file.type,
+      fileName: file.name,
     },
   })
 

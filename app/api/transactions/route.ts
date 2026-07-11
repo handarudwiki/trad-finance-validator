@@ -27,10 +27,22 @@ export async function GET(request: Request) {
     const where: any = {}
 
     if (search) {
-      where.id = {
-        contains: search,
-        mode: 'insensitive',
-      }
+      where.OR = [
+        {
+          id: {
+            contains: search,
+            mode: 'insensitive',
+          },
+        },
+        {
+          sourceDocument: {
+            fileName: {
+              contains: search,
+              mode: 'insensitive',
+            },
+          },
+        },
+      ];
     }
 
     if (type !== 'ALL') {
@@ -77,6 +89,11 @@ export async function GET(request: Request) {
         status: true,
         createdAt: true,
         updatedAt: true,
+        sourceDocument: {
+          select: {
+            fileName: true,
+          },
+        },
       },
     })
 

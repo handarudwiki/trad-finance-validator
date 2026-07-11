@@ -16,6 +16,11 @@ export default async function TradeValidatorPage() {
       status: true,
       createdAt: true,
       updatedAt: true,
+      sourceDocument: {
+        select: {
+          fileName: true,
+        },
+      },
     },
   })
 
@@ -24,6 +29,7 @@ export default async function TradeValidatorPage() {
     ...tx,
     createdAt: tx.createdAt.toISOString(),
     updatedAt: tx.updatedAt.toISOString(),
+    sourceDocument: tx.sourceDocument ? { fileName: tx.sourceDocument.fileName } : null,
   }))
 
   return (

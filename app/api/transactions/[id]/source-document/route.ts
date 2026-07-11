@@ -64,6 +64,7 @@ export async function POST(
       data: {
         filePath: storagePath,
         mimeType: file.type,
+        fileName: file.name,
         extractedFields: null,
         reviewedFields: null,
         confidence: null,
@@ -88,6 +89,7 @@ export async function POST(
         transactionId: id,
         filePath: storagePath,
         mimeType: file.type,
+        fileName: file.name,
       },
     })
   }

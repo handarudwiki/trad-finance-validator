@@ -10,6 +10,9 @@ interface TransactionItem {
   status: TransactionStatus
   createdAt: string
   updatedAt: string
+  sourceDocument?: {
+    fileName: string | null
+  } | null
 }
 
 interface TradeValidatorTableClientProps {
@@ -418,6 +421,7 @@ export function TradeValidatorTableClient({
                 <thead>
                   <tr>
                     <th style={{ paddingLeft: '1.25rem' }}>Transaction ID</th>
+                    <th>Document Name</th>
                     <th>Type</th>
                     <th>Status</th>
                     <th>Created</th>
@@ -430,12 +434,20 @@ export function TradeValidatorTableClient({
                     <tr key={tx.id}>
                       <td style={{ paddingLeft: '1.25rem' }}>
                         <Link
-                          href={getTransactionLink(tx.id, tx.status)}
-                          className="table-id-link"
-                          title={tx.id}
+                           href={getTransactionLink(tx.id, tx.status)}
+                           className="table-id-link"
+                           title={tx.id}
                         >
                           {tx.id.slice(0, 8)}…
                         </Link>
+                      </td>
+                      <td>
+                        <span 
+                          className="text-xs font-semibold text-zinc-700 truncate block max-w-[200px]"
+                          title={tx.sourceDocument?.fileName || 'No document uploaded'}
+                        >
+                          {tx.sourceDocument?.fileName || '-'}
+                        </span>
                       </td>
                       <td>
                         <span className="badge-type">{tx.type}</span>

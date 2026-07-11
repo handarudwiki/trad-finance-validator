@@ -25,6 +25,7 @@ model SourceDocument {
   transaction      Transaction @relation(fields: [transactionId], references: [id], onDelete: Cascade)
   filePath         String
   mimeType         String
+  fileName         String?
 
   /// Extracted fields from OCR + LLM. Shape: ExtractedLCFields (see schema/extraction.ts)
   /// Example:
