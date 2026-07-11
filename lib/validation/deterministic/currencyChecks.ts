@@ -19,6 +19,7 @@ export function checkCurrency(
 
   const invoiceCurrency = invoiceData.currency
   if (invoiceCurrency == null || typeof invoiceCurrency !== 'string') {
+    console.warn('[checkCurrency] Skipped: invoice currency is null or not a string')
     return findings
   }
 
@@ -31,8 +32,8 @@ export function checkCurrency(
       field: 'currency',
       expected: lcCurrency,
       found: invoiceCurrency,
-      description: `Invoice currency "${invoiceCurrency}" does not match LC currency "${lcCurrency}".`,
-      suggestedCorrection: `Correct invoice currency to "${lcCurrency}".`,
+      description: `Mata uang invoice "${invoiceCurrency}" tidak sesuai dengan mata uang LC "${lcCurrency}".`,
+      suggestedCorrection: `Perbaiki mata uang invoice menjadi "${lcCurrency}".`,
       regulatoryRef: 'UCP 600 Art. 14(b)',
       ragChunkIds: [],
     })

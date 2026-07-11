@@ -97,19 +97,27 @@ ${Object.entries(namesFromDocs)
 ## Instructions
 Compare the beneficiary and applicant names across the LC/SKBDN and all supporting documents. Consider acceptable name variations per the regulatory context (e.g., abbreviations, trade names). Flag only genuine discrepancies that would be rejected by a bank checker.
 
-Return a JSON array of Finding objects. Each Finding must have:
-- "checkType": "INTERPRETIVE"
-- "severity": "FATAL" | "MAJOR" | "MINOR"
-- "field": the field name (e.g., "beneficiaryName", "applicantName")
-- "expected": the value from the LC/SKBDN
-- "found": the value from the supporting document
-- "description": a clear explanation of the discrepancy
-- "suggestedCorrection": recommended fix or null
-- "regulatoryRef": specific article/clause from the regulatory context provided
-- "ragChunkIds": []
-
 Return an empty array [] if no discrepancies are found.
 Write "description" and "suggestedCorrection" fields in Bahasa Indonesia.
+
+Return a JSON array of Finding objects. Each Finding must match this exact schema:
+{
+  "checkType": "INTERPRETIVE",
+  "severity": "FATAL" | "MAJOR" | "MINOR",
+  "field": string (e.g. "beneficiaryName", "applicantName"),
+  "expected": string or null (the value from the LC/SKBDN),
+  "found": string or null (the value from the supporting document),
+  "description": string (clear explanation in Bahasa Indonesia),
+  "suggestedCorrection": string or null (recommended fix in Bahasa Indonesia),
+  "regulatoryRef": string (specific article/clause from the regulatory context provided),
+  "ragChunkIds": []
+}
+
+Severity guide:
+- FATAL: Completely different entity name (e.g., different company entirely)
+- MAJOR: Significant name difference that a bank checker would likely reject
+- MINOR: Minor variation (abbreviation, punctuation) that may be acceptable per ISBP
+
 Return ONLY the JSON array, no other text.`
 
   // 3. Call LLM with fallback
@@ -122,18 +130,8 @@ Return ONLY the JSON array, no other text.`
     const findings = FindingArraySchema.parse(raw)
     // Attach RAG chunk IDs to each finding
     return findings.map((f) => ({ ...f, ragChunkIds: ragChunkIds }))
-  } catch {
-    // On parse failure: return one MAJOR Finding per Req 8.10
-    return [
-      {
-        checkType: 'INTERPRETIVE',
-        severity: 'MAJOR',
-        field: 'partyNameConsistency',
-        description:
-          'Interpretive check could not be completed: response parsing failed',
-        regulatoryRef: 'N/A',
-        ragChunkIds: [],
-      },
-    ]
+  } catch (err) {
+    console.error('[partyNameConsistency] LLM response parsing failed:', err)
+    return []
   }
 }

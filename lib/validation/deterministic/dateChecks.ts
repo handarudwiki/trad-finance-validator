@@ -17,8 +17,11 @@ export function checkDocumentDate(
 ): Finding[] {
   const findings: Finding[] = []
 
-  const docDate = docData.date
+  // Extraction prompts return different date field names per document type:
+  // Invoice → invoiceDate, Packing List → packingListDate, B/L → blDate, AWB → awbDate
+  const docDate = docData.invoiceDate ?? docData.packingListDate ?? docData.blDate ?? docData.awbDate ?? docData.date
   if (docDate == null || typeof docDate !== 'string') {
+    console.warn('[checkDocumentDate] Skipped: no valid date field found (checked invoiceDate, packingListDate, blDate, awbDate, date)')
     return findings
   }
 
@@ -29,10 +32,10 @@ export function checkDocumentDate(
       checkType: 'DETERMINISTIC',
       severity: 'FATAL',
       field: 'date',
-      expected: `<= ${expiryDate} (LC expiry date)`,
+      expected: `<= ${expiryDate} (tanggal berakhir LC)`,
       found: docDate,
-      description: `Document date ${docDate} exceeds the LC expiry date ${expiryDate}.`,
-      suggestedCorrection: `Ensure document date is on or before ${expiryDate}.`,
+      description: `Tanggal dokumen ${docDate} melebihi tanggal berakhir LC ${expiryDate}.`,
+      suggestedCorrection: `Pastikan tanggal dokumen tidak melebihi ${expiryDate}.`,
       regulatoryRef: 'UCP 600 Art. 14(c)',
       ragChunkIds: [],
     })
@@ -53,6 +56,7 @@ export function checkOnBoardDate(
 
   const onBoardDate = blData.onBoardDate
   if (onBoardDate == null || typeof onBoardDate !== 'string') {
+    console.warn('[checkOnBoardDate] Skipped: onBoardDate is null or not a string')
     return findings
   }
 
@@ -63,10 +67,10 @@ export function checkOnBoardDate(
       checkType: 'DETERMINISTIC',
       severity: 'FATAL',
       field: 'onBoardDate',
-      expected: `<= ${latestShipmentDate} (latest shipment date)`,
+      expected: `<= ${latestShipmentDate} (tanggal pengiriman terakhir)`,
       found: onBoardDate,
-      description: `On-board date ${onBoardDate} exceeds the latest shipment date ${latestShipmentDate}.`,
-      suggestedCorrection: `Ensure on-board date is on or before ${latestShipmentDate}.`,
+      description: `Tanggal on-board ${onBoardDate} melebihi tanggal pengiriman terakhir ${latestShipmentDate}.`,
+      suggestedCorrection: `Pastikan tanggal on-board tidak melebihi ${latestShipmentDate}.`,
       regulatoryRef: 'UCP 600 Art. 43(a)',
       ragChunkIds: [],
     })
@@ -85,13 +89,16 @@ export function checkPresentationPeriod(
 ): Finding[] {
   const findings: Finding[] = []
 
-  const blDate = blData.date
+  // B/L extraction returns blDate, AWB returns awbDate
+  const blDate = blData.blDate ?? blData.awbDate ?? blData.date
   if (blDate == null || typeof blDate !== 'string') {
+    console.warn('[checkPresentationPeriod] Skipped: blDate/awbDate is null or not a string')
     return findings
   }
 
   const presentationPeriodDays = lcFields.presentationPeriodDays
   if (presentationPeriodDays == null) {
+    console.warn('[checkPresentationPeriod] Skipped: LC presentationPeriodDays is null')
     return findings
   }
 
@@ -107,10 +114,10 @@ export function checkPresentationPeriod(
       checkType: 'DETERMINISTIC',
       severity: 'FATAL',
       field: 'presentationPeriod',
-      expected: `<= ${expiryDate} (LC expiry date)`,
-      found: `${presentationDeadline} (B/L date ${blDate} + ${presentationPeriodDays} days)`,
-      description: `Presentation deadline ${presentationDeadline} (B/L date ${blDate} + ${presentationPeriodDays} days) exceeds the LC expiry date ${expiryDate}.`,
-      suggestedCorrection: `Ensure documents are presented within ${presentationPeriodDays} days of B/L date and before the LC expiry date ${expiryDate}.`,
+      expected: `<= ${expiryDate} (tanggal berakhir LC)`,
+      found: `${presentationDeadline} (tanggal B/L ${blDate} + ${presentationPeriodDays} hari)`,
+      description: `Batas waktu penyerahan dokumen ${presentationDeadline} (tanggal B/L ${blDate} + ${presentationPeriodDays} hari) melebihi tanggal berakhir LC ${expiryDate}.`,
+      suggestedCorrection: `Pastikan dokumen diserahkan dalam ${presentationPeriodDays} hari dari tanggal B/L dan sebelum tanggal berakhir LC ${expiryDate}.`,
       regulatoryRef: 'UCP 600 Art. 14(c)',
       ragChunkIds: [],
     })

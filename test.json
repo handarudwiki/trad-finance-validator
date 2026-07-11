@@ -1,0 +1,314 @@
+{
+  "issuer": {
+    "name": "Global Commodity Trading Pte Ltd",
+    "address": null
+  },
+  "quantity": null,
+  "applicant": {
+    "name": "Applicant",
+    "address": null
+  },
+  "confidence": {
+    "issuer": 0.9,
+    "quantity": 0,
+    "applicant": 0.9,
+    "beneficiary": 0.9,
+    "lcReference": 1,
+    "documentDate": 0,
+    "documentTitle": 1,
+    "signatoryName": 0,
+    "documentNumber": 0,
+    "signatoryTitle": 1,
+    "additionalFields": 0.9,
+    "goodsDescription": 0,
+    "certificationText": 1
+  },
+  "beneficiary": {
+    "name": "Global Commodity Trading Pte Ltd",
+    "address": null
+  },
+  "lcReference": "LC-2026-JKT-004521",
+  "documentDate": null,
+  "documentTitle": "BENEFICIARY'S CERTIFICATE",
+  "signatoryName": null,
+  "documentNumber": null,
+  "signatoryTitle": "Authorized Signatory",
+  "additionalFields": {
+    "awbNumber": "1234567890",
+    "complianceNote": "Sesuai: memenuhi field 46A poin 7. Seluruh dokumen presented dalam 21 hari sejak B/L date dan sebelum expiry LC",
+    "courierService": "DHL"
+  },
+  "goodsDescription": null,
+  "certificationText": "Kami menyatakan bahwa 1 (satu) set lengkap dokumen pengapalan telah dikirim melalui kurir (DHL AWB No. 1234567890) kepada Applicant dalam waktu 3 hari setelah tanggal pengapalan, sesuai syarat LC No. LC-2026-JKT-004521."
+}
+
+{
+  "issuer": {
+    "name": "SGS Singapore Pte Ltd (Independent Surveyor)",
+    "address": null
+  },
+  "quantity": null,
+  "applicant": null,
+  "confidence": {
+    "issuer": 1,
+    "quantity": 0,
+    "applicant": 0,
+    "beneficiary": 0,
+    "lcReference": 1,
+    "documentDate": 0,
+    "documentTitle": 1,
+    "signatoryName": 0,
+    "documentNumber": 1,
+    "signatoryTitle": 0,
+    "additionalFields": 0.9,
+    "goodsDescription": 1,
+    "certificationText": 1
+  },
+  "beneficiary": null,
+  "lcReference": "LC-2026-JKT-004521",
+  "documentDate": null,
+  "documentTitle": "CERTIFICATE OF ANALYSIS",
+  "signatoryName": null,
+  "documentNumber": "COA-SGS-90212",
+  "signatoryTitle": null,
+  "additionalFields": {
+    "testResults": "FFA 0.10% max, Iodine Value 56-60",
+    "contractReference": "SC-0088/GCT-MBS/2026"
+  },
+  "goodsDescription": "Refined Bleached Deodorized (RBD) Palm Olein",
+  "certificationText": "FFA 0.10% max, Iodine Value 56-60, memenuhi spesifikasi kontrak SC-0088/GCT-MBS/2026. Sesuai: diterbitkan oleh surveyor independen sesuai field 46A poin 6."
+}
+
+{
+  "issuer": {
+    "name": null,
+    "address": null
+  },
+  "quantity": null,
+  "applicant": {
+    "name": null,
+    "address": null
+  },
+  "confidence": {
+    "issuer": 0,
+    "quantity": 0,
+    "applicant": 0,
+    "beneficiary": 0,
+    "lcReference": 1,
+    "documentDate": 0,
+    "documentTitle": 1,
+    "signatoryName": 0,
+    "documentNumber": 0,
+    "signatoryTitle": 0,
+    "additionalFields": 1,
+    "goodsDescription": 0,
+    "certificationText": 0
+  },
+  "beneficiary": {
+    "name": null,
+    "address": null
+  },
+  "lcReference": "LC-2026-JKT-004521",
+  "documentDate": null,
+  "documentTitle": "INSURANCE CERTIFICATE",
+  "signatoryName": null,
+  "documentNumber": null,
+  "signatoryTitle": null,
+  "additionalFields": {
+    "clause": "Institute Cargo Clauses (C)",
+    "discrepancies": "Nilai pertanggungan hanya 100%, kurang dari syarat minimum 110% (LC 46A poin 5). Klausul 'ICC (C)' cakupan risikonya lebih sempit dari yang disyaratkan 'ICC (A)'.",
+    "insuranceValue": "USD 485,000.00",
+    "insuranceCoverage": "100% dari invoice"
+  },
+  "goodsDescription": null,
+  "certificationText": null
+}
+
+{
+  "hsCode": null,
+  "exporter": {
+    "name": null,
+    "address": null
+  },
+  "importer": {
+    "name": null,
+    "address": null
+  },
+  "quantity": null,
+  "confidence": {
+    "hsCode": 0,
+    "exporter": 0,
+    "importer": 0,
+    "quantity": 0,
+    "grossWeight": 0,
+    "invoiceDate": 0,
+    "lcReference": 1,
+    "invoiceNumber": 0,
+    "certificateDate": 0,
+    "countryOfOrigin": 1,
+    "declarationText": 0,
+    "grossWeightUnit": 0,
+    "goodsDescription": 0,
+    "issuingAuthority": 1,
+    "certificateNumber": 0,
+    "countryOfDestination": 0
+  },
+  "grossWeight": null,
+  "invoiceDate": null,
+  "lcReference": "LC-2026-JKT-004521",
+  "invoiceNumber": null,
+  "certificateDate": null,
+  "countryOfOrigin": "Singapore",
+  "declarationText": null,
+  "grossWeightUnit": null,
+  "goodsDescription": null,
+  "issuingAuthority": "Perusahaan sendiri (self-issued oleh Beneficiary)",
+  "certificateNumber": null,
+  "countryOfDestination": null
+}
+
+{
+  "buyer": {
+    "name": null,
+    "address": null
+  },
+  "items": null,
+  "seller": {
+    "name": null,
+    "address": null
+  },
+  "confidence": {
+    "buyer": 0,
+    "items": 0,
+    "seller": 0,
+    "lcReference": 1,
+    "portOfLoading": 0,
+    "totalPackages": 0,
+    "totalQuantity": 0,
+    "totalNetWeight": 1,
+    "packingListDate": 1,
+    "portOfDischarge": 0,
+    "containerNumbers": 0,
+    "totalGrossWeight": 0,
+    "packingListNumber": 1,
+    "totalNetWeightUnit": 1,
+    "totalGrossWeightUnit": 0
+  },
+  "lcReference": "LC-2026-JKT-004521",
+  "portOfLoading": null,
+  "totalPackages": null,
+  "totalQuantity": null,
+  "totalNetWeight": 5000,
+  "packingListDate": "2026-09-20",
+  "portOfDischarge": null,
+  "containerNumbers": null,
+  "totalGrossWeight": null,
+  "packingListNumber": "PL-GCT-0621",
+  "totalNetWeightUnit": "MT",
+  "totalGrossWeightUnit": null
+}
+
+{
+  "blDate": null,
+  "carrier": null,
+  "shipper": {
+    "name": null,
+    "address": null
+  },
+  "blNumber": "BL-SGJKT-88871",
+  "consignee": {
+    "name": "TO THE ORDER OF SHIPPER",
+    "address": null
+  },
+  "isCleanBL": null,
+  "confidence": {
+    "blDate": 0,
+    "carrier": 0,
+    "shipper": 0,
+    "blNumber": 1,
+    "consignee": 1,
+    "isCleanBL": 0,
+    "vesselName": 0,
+    "lcReference": 1,
+    "notifyParty": 1,
+    "onBoardDate": 1,
+    "sealNumbers": 0,
+    "freightTerms": 1,
+    "voyageNumber": 0,
+    "portOfLoading": 0,
+    "totalPackages": 0,
+    "placeOfDelivery": 0,
+    "portOfDischarge": 0,
+    "containerNumbers": 0,
+    "goodsDescription": 0,
+    "totalGrossWeight": 0,
+    "numberOfOriginals": 1,
+    "totalGrossWeightUnit": 0
+  },
+  "vesselName": null,
+  "lcReference": "LC-2026-JKT-004521",
+  "notifyParty": {
+    "name": null,
+    "address": null
+  },
+  "onBoardDate": "2026-10-05",
+  "sealNumbers": null,
+  "freightTerms": "COLLECT",
+  "voyageNumber": null,
+  "portOfLoading": null,
+  "totalPackages": null,
+  "placeOfDelivery": null,
+  "portOfDischarge": null,
+  "containerNumbers": null,
+  "goodsDescription": null,
+  "totalGrossWeight": null,
+  "numberOfOriginals": 2,
+  "totalGrossWeightUnit": null
+}
+
+{
+  "buyer": {
+    "name": "PT MAJU BERSAMA SEJAHTERA",
+    "address": null
+  },
+  "seller": {
+    "name": "GLOBAL COMMODITY TRADING PTE LTD",
+    "address": null
+  },
+  "currency": "USD",
+  "incoterms": null,
+  "lineItems": [
+    {
+      "unit": "MT",
+      "amount": 543200,
+      "quantity": 5600,
+      "unitPrice": 97,
+      "description": "Palm Oil (bulk)"
+    }
+  ],
+  "confidence": {
+    "buyer": 1,
+    "seller": 1,
+    "currency": 1,
+    "incoterms": 0,
+    "lineItems": 0.95,
+    "invoiceDate": 1,
+    "lcReference": 1,
+    "totalAmount": 1,
+    "invoiceNumber": 1,
+    "portOfLoading": 0,
+    "totalQuantity": 1,
+    "countryOfOrigin": 0,
+    "portOfDischarge": 0,
+    "goodsDescription": 0.95
+  },
+  "invoiceDate": "2026-09-20",
+  "lcReference": "LC-2026-JKT-004521",
+  "totalAmount": 543200,
+  "invoiceNumber": "INV-GCT-0621",
+  "portOfLoading": null,
+  "totalQuantity": "5,600 MT",
+  "countryOfOrigin": null,
+  "portOfDischarge": null,
+  "goodsDescription": "5,000 MT Palm Oil (bulk)"
+}
