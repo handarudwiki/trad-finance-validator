@@ -47,7 +47,7 @@ const APP_FEATURES = [
   }
 ]
 
-export function TopBar(props: any) {
+export function TopBar(_props: Record<string, unknown>) {
   const [isOpen, setIsOpen] = useState(false)
   const dropdownRef = useRef<HTMLDivElement>(null)
   

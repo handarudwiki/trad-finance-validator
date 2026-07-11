@@ -21,7 +21,7 @@ interface TradeValidatorTableClientProps {
   initialLimit: number
 }
 
-const STATUS_LABELS: Record<TransactionStatus, string> = {
+const STATUS_LABELS: Record<string, string> = {
   DRAFT: 'Draft',
   EXTRACTION_REVIEW: 'Extraction Review',
   VALIDATING: 'Validating',
@@ -29,7 +29,7 @@ const STATUS_LABELS: Record<TransactionStatus, string> = {
   FAILED: 'Failed',
 }
 
-const STATUS_BADGE: Record<TransactionStatus, string> = {
+const STATUS_BADGE: Record<string, string> = {
   DRAFT: 'badge badge-draft',
   EXTRACTION_REVIEW: 'badge badge-review',
   VALIDATING: 'badge badge-validating',

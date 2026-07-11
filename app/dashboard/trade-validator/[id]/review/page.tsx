@@ -3,6 +3,8 @@ import { prisma } from '@/lib/prisma'
 import { ExtractionReviewForm } from '@/components/ExtractionReviewForm'
 import { TopBar } from '@/components/layout/TopBar'
 
+export const dynamic = 'force-dynamic'
+
 interface ReviewPageProps {
   params: Promise<{ id: string }>
 }
