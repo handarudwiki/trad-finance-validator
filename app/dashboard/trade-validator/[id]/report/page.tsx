@@ -5,6 +5,8 @@ import { ReportExportButton } from '@/components/ReportExportButton'
 import { TopBar } from '@/components/layout/TopBar'
 import type { Finding } from '@/schema/finding'
 
+export const dynamic = 'force-dynamic'
+
 interface ReportPageProps {
   params: Promise<{ id: string }>
 }

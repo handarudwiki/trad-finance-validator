@@ -3,6 +3,8 @@ import { prisma } from '@/lib/prisma'
 import { TopBar } from '@/components/layout/TopBar'
 import { TradeValidatorTableClient } from '@/components/TradeValidatorTableClient'
 
+export const dynamic = 'force-dynamic'
+
 export default async function TradeValidatorPage() {
   const initialLimit = 10
   const totalItems = await prisma.transaction.count()
