@@ -334,7 +334,7 @@ function drawFinding(ctx: DrawContext, finding: {
   regulatoryRef: string
 }): void {
   // Estimate required space for this finding
-  ensureSpace(ctx, LINE_HEIGHT * 5)
+  ensureSpace(ctx, LINE_HEIGHT * 6)
 
   // Severity badge
   const severityLabel = SEVERITY_LABELS[finding.severity] ?? finding.severity
@@ -360,12 +360,9 @@ function drawFinding(ctx: DrawContext, finding: {
 
   const indent = PAGE_MARGIN + 16
 
-  if (finding.expected) {
-    drawWrappedText(ctx, `${LABELS.expected}: ${finding.expected}`, { x: indent, size: 9 })
-  }
-
-  if (finding.found) {
-    drawWrappedText(ctx, `${LABELS.found}: ${finding.found}`, { x: indent, size: 9 })
+  if (finding.expected || finding.found) {
+    ctx.y -= 4
+    drawDiffBlock(ctx, finding.expected, finding.found)
   }
 
   drawWrappedText(ctx, `${LABELS.description}: ${finding.description}`, { x: indent, size: 9 })
@@ -378,4 +375,178 @@ function drawFinding(ctx: DrawContext, finding: {
   drawWrappedText(ctx, `${LABELS.regulatoryRef}: ${finding.regulatoryRef}`, { x: indent, size: 9, color: rgb(0.3, 0.3, 0.6) })
 
   ctx.y -= 8
+}
+
+function getWrappedLines(text: string, font: PDFFont, size: number, maxWidth: number): string[] {
+  const words = text.split(' ')
+  const lines: string[] = []
+  let currentLine = ''
+
+  for (const word of words) {
+    const testLine = currentLine ? `${currentLine} ${word}` : word
+    const testWidth = font.widthOfTextAtSize(testLine, size)
+
+    if (testWidth > maxWidth && currentLine) {
+      lines.push(currentLine)
+      currentLine = word
+    } else {
+      currentLine = testLine
+    }
+  }
+  if (currentLine) {
+    lines.push(currentLine)
+  }
+  return lines
+}
+
+function drawDiffBlock(ctx: DrawContext, expected: string | null, found: string | null): void {
+  const fontSize = 8.5
+  const lineSpacing = 12
+
+  if (expected && found) {
+    // Side-by-side
+    const colWidth = (CONTENT_WIDTH - 24) / 2
+    const textMaxWidth = colWidth - 16
+
+    const expectedText = `- ${expected}`
+    const foundText = `+ ${found}`
+    const expectedLines = getWrappedLines(expectedText, ctx.font, fontSize, textMaxWidth)
+    const foundLines = getWrappedLines(foundText, ctx.font, fontSize, textMaxWidth)
+
+    const expectedHeight = expectedLines.length * lineSpacing + 16
+    const foundHeight = foundLines.length * lineSpacing + 16
+    const maxHeight = Math.max(expectedHeight, foundHeight)
+
+    ensureSpace(ctx, maxHeight + 8)
+
+    // Expected (Red)
+    ctx.currentPage.drawRectangle({
+      x: PAGE_MARGIN + 8,
+      y: ctx.y - maxHeight,
+      width: colWidth,
+      height: maxHeight,
+      color: rgb(254 / 255, 242 / 255, 242 / 255), // red-50
+    })
+    ctx.currentPage.drawLine({
+      start: { x: PAGE_MARGIN + 8, y: ctx.y },
+      end: { x: PAGE_MARGIN + 8, y: ctx.y - maxHeight },
+      thickness: 2,
+      color: rgb(239 / 255, 68 / 255, 68 / 255), // red-500
+    })
+
+    // Found (Green)
+    ctx.currentPage.drawRectangle({
+      x: PAGE_MARGIN + 8 + colWidth + 8,
+      y: ctx.y - maxHeight,
+      width: colWidth,
+      height: maxHeight,
+      color: rgb(240 / 255, 253 / 255, 250 / 255), // emerald-50
+    })
+    ctx.currentPage.drawLine({
+      start: { x: PAGE_MARGIN + 8 + colWidth + 8, y: ctx.y },
+      end: { x: PAGE_MARGIN + 8 + colWidth + 8, y: ctx.y - maxHeight },
+      thickness: 2,
+      color: rgb(16 / 255, 185 / 255, 129 / 255), // emerald-500
+    })
+
+    // Draw Expected lines
+    let textY = ctx.y - 12
+    for (const line of expectedLines) {
+      ctx.currentPage.drawText(line, {
+        x: PAGE_MARGIN + 8 + 8,
+        y: textY,
+        size: fontSize,
+        font: ctx.font,
+        color: rgb(153 / 255, 27 / 255, 27 / 255), // red-800
+      })
+      textY -= lineSpacing
+    }
+
+    // Draw Found lines
+    textY = ctx.y - 12
+    for (const line of foundLines) {
+      ctx.currentPage.drawText(line, {
+        x: PAGE_MARGIN + 8 + colWidth + 8 + 8,
+        y: textY,
+        size: fontSize,
+        font: ctx.font,
+        color: rgb(6 / 255, 95 / 255, 70 / 255), // emerald-800
+      })
+      textY -= lineSpacing
+    }
+
+    ctx.y -= (maxHeight + 8)
+  } else if (expected) {
+    // Single column red
+    const textMaxWidth = CONTENT_WIDTH - 24
+    const expectedText = `- ${expected}`
+    const expectedLines = getWrappedLines(expectedText, ctx.font, fontSize, textMaxWidth)
+    const maxHeight = expectedLines.length * lineSpacing + 16
+
+    ensureSpace(ctx, maxHeight + 8)
+
+    ctx.currentPage.drawRectangle({
+      x: PAGE_MARGIN + 8,
+      y: ctx.y - maxHeight,
+      width: CONTENT_WIDTH - 16,
+      height: maxHeight,
+      color: rgb(254 / 255, 242 / 255, 242 / 255),
+    })
+    ctx.currentPage.drawLine({
+      start: { x: PAGE_MARGIN + 8, y: ctx.y },
+      end: { x: PAGE_MARGIN + 8, y: ctx.y - maxHeight },
+      thickness: 2,
+      color: rgb(239 / 255, 68 / 255, 68 / 255),
+    })
+
+    let textY = ctx.y - 12
+    for (const line of expectedLines) {
+      ctx.currentPage.drawText(line, {
+        x: PAGE_MARGIN + 8 + 8,
+        y: textY,
+        size: fontSize,
+        font: ctx.font,
+        color: rgb(153 / 255, 27 / 255, 27 / 255),
+      })
+      textY -= lineSpacing
+    }
+
+    ctx.y -= (maxHeight + 8)
+  } else if (found) {
+    // Single column green
+    const textMaxWidth = CONTENT_WIDTH - 24
+    const foundText = `+ ${found}`
+    const foundLines = getWrappedLines(foundText, ctx.font, fontSize, textMaxWidth)
+    const maxHeight = foundLines.length * lineSpacing + 16
+
+    ensureSpace(ctx, maxHeight + 8)
+
+    ctx.currentPage.drawRectangle({
+      x: PAGE_MARGIN + 8,
+      y: ctx.y - maxHeight,
+      width: CONTENT_WIDTH - 16,
+      height: maxHeight,
+      color: rgb(240 / 255, 253 / 255, 250 / 255),
+    })
+    ctx.currentPage.drawLine({
+      start: { x: PAGE_MARGIN + 8, y: ctx.y },
+      end: { x: PAGE_MARGIN + 8, y: ctx.y - maxHeight },
+      thickness: 2,
+      color: rgb(16 / 255, 185 / 255, 129 / 255),
+    })
+
+    let textY = ctx.y - 12
+    for (const line of foundLines) {
+      ctx.currentPage.drawText(line, {
+        x: PAGE_MARGIN + 8 + 8,
+        y: textY,
+        size: fontSize,
+        font: ctx.font,
+        color: rgb(6 / 255, 95 / 255, 70 / 255),
+      })
+      textY -= lineSpacing
+    }
+
+    ctx.y -= (maxHeight + 8)
+  }
 }
