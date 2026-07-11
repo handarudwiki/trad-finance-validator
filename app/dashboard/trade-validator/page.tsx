@@ -4,9 +4,12 @@ import { TopBar } from '@/components/layout/TopBar'
 import { TradeValidatorTableClient } from '@/components/TradeValidatorTableClient'
 
 export default async function TradeValidatorPage() {
+  const initialLimit = 10
+  const totalItems = await prisma.transaction.count()
+
   const transactions = await prisma.transaction.findMany({
     orderBy: { createdAt: 'desc' },
-    take: 100,
+    take: initialLimit,
     select: {
       id: true,
       type: true,
@@ -55,7 +58,11 @@ export default async function TradeValidatorPage() {
         </div>
 
         {/* Client-side Search, Filtering, and History Table */}
-        <TradeValidatorTableClient initialTransactions={serializedTransactions} />
+        <TradeValidatorTableClient
+          initialTransactions={serializedTransactions}
+          initialTotalItems={totalItems}
+          initialLimit={initialLimit}
+        />
       </div>
     </>
   )
