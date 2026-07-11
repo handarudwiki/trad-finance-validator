@@ -1,5 +1,6 @@
 import type { Finding } from '@/schema/finding'
 import { FindingCard } from './FindingCard'
+import { FormSection } from './FormSection'
 
 interface DocumentFindings {
   documentId: string
@@ -83,30 +84,24 @@ export function DiscrepancyReport({ report }: DiscrepancyReportProps) {
 
       {/* Findings by Document */}
       {report.findingsByDocument.map((docGroup) => (
-        <section key={docGroup.documentId} className="pt-2">
-          <h3 className="text-xs font-bold uppercase tracking-wider text-zinc-400 mb-4 border-b border-zinc-200 pb-2">
-            {docGroup.documentType.split('_').join(' ')}
-          </h3>
+        <FormSection key={docGroup.documentId} title={docGroup.documentType.split('_').join(' ')}>
           <div className="space-y-3">
             {docGroup.findings.map((finding, idx) => (
               <FindingCard key={`${docGroup.documentId}-${idx}`} finding={finding} />
             ))}
           </div>
-        </section>
+        </FormSection>
       ))}
 
       {/* Cross-Document Findings */}
       {report.crossDocumentFindings.length > 0 && (
-        <section className="pt-2">
-          <h3 className="text-xs font-bold uppercase tracking-wider text-zinc-400 mb-4 border-b border-zinc-200 pb-2">
-            Cross-Document Findings
-          </h3>
+        <FormSection title="Cross-Document Findings">
           <div className="space-y-3">
             {report.crossDocumentFindings.map((finding, idx) => (
               <FindingCard key={`cross-${idx}`} finding={finding} />
             ))}
           </div>
-        </section>
+        </FormSection>
       )}
     </div>
   )

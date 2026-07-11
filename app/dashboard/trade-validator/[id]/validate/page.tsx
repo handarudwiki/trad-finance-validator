@@ -4,6 +4,7 @@ import { useParams } from 'next/navigation'
 import Link from 'next/link'
 import { ValidationProgress } from '@/components/ValidationProgress'
 import { TopBar } from '@/components/layout/TopBar'
+import { FormSection } from '@/components/FormSection'
 
 const STEPS = ['Upload', 'Review', 'Documents', 'Validate', 'Report']
 
@@ -67,11 +68,9 @@ export default function ValidatePage() {
         <StepBar current={3} />
 
         <div>
-          <div className="card" style={{ boxShadow: 'none', border: '1px solid var(--border)', borderRadius: '8px' }}>
-            <div className="card-body" style={{ padding: '40px 32px' }}>
-              <ValidationProgress transactionId={transactionId} />
-            </div>
-          </div>
+          <FormSection title="Validation Status" bodyStyle={{ padding: '40px 32px' }}>
+            <ValidationProgress transactionId={transactionId} />
+          </FormSection>
         </div>
       </div>
     </>
