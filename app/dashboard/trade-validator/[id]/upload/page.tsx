@@ -5,6 +5,7 @@ import { useParams, useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { DocumentUploader } from '@/components/DocumentUploader'
 import { TopBar } from '@/components/layout/TopBar'
+import { FormSection } from '@/components/FormSection'
 
 const STEPS = [
   { label: 'Upload' },
@@ -179,55 +180,52 @@ export default function UploadPage() {
         <div>
           {/* Amendment section */}
           {hasReviewedFields && (
-            <div className="card" style={{ marginBottom: '20px', border: '1px solid #fde68a', borderRadius: '8px', boxShadow: 'none' }}>
-              <div className="card-header" style={{ background: '#fffbeb', borderBottom: '1px solid #fde68a' }}>
-                <span className="card-title" style={{ color: '#78350F' }}>Upload Amendment</span>
+            <FormSection
+              title="Upload Amendment"
+              badge={
                 <span style={{ fontSize: '11px', background: '#FEF3C7', color: '#92400E', padding: '2px 8px', borderRadius: '8px', fontWeight: 600 }}>
                   Amendment
                 </span>
-              </div>
-              <div className="card-body">
-                <p style={{ fontSize: '13px', color: 'var(--text-secondary)', marginBottom: '16px' }}>
-                  Source document has been previously reviewed. Upload an amendment to update the extracted data.
-                </p>
-                <DocumentUploader onUpload={handleAmendmentUpload} label="Amendment File (LC/SKBDN)" disabled={amendmentUploading} />
-                {amendmentUploading && (
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginTop: '12px' }}>
-                    <span className="spinner spinner-dark" style={{ width: '16px', height: '16px' }} />
-                    <span style={{ fontSize: '13px', color: 'var(--text-secondary)' }}>Uploading amendment…</span>
-                  </div>
-                )}
-                {amendmentSuccess && (
-                  <div className="alert alert-success" style={{ marginTop: '12px', borderRadius: '8px' }}>
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0 }}>
-                      <path d="M20 6L9 17l-5-5" />
-                    </svg>
-                    Amendment uploaded. Reloading…
-                  </div>
-                )}
-              </div>
-            </div>
+              }
+              style={{ borderColor: '#fde68a' }}
+              bodyStyle={{ background: '#fffbeb' }}
+              headerStyle={{ background: '#fffbeb', borderBottom: '1px solid #fde68a' }}
+            >
+              <p style={{ fontSize: '13px', color: 'var(--text-secondary)', marginBottom: '16px' }}>
+                Source document has been previously reviewed. Upload an amendment to update the extracted data.
+              </p>
+              <DocumentUploader onUpload={handleAmendmentUpload} label="Amendment File (LC/SKBDN)" disabled={amendmentUploading} />
+              {amendmentUploading && (
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginTop: '12px' }}>
+                  <span className="spinner spinner-dark" style={{ width: '16px', height: '16px' }} />
+                  <span style={{ fontSize: '13px', color: 'var(--text-secondary)' }}>Uploading amendment…</span>
+                </div>
+              )}
+              {amendmentSuccess && (
+                <div className="alert alert-success" style={{ marginTop: '12px', borderRadius: '8px' }}>
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0 }}>
+                    <path d="M20 6L9 17l-5-5" />
+                  </svg>
+                  Amendment uploaded. Reloading…
+                </div>
+              )}
+            </FormSection>
           )}
 
           {/* Standard upload */}
           {!hasReviewedFields && (
-            <div className="card" style={{ marginBottom: '20px', border: '1px solid var(--border)', borderRadius: '8px', boxShadow: 'none' }}>
-              <div className="card-header">
-                <span className="card-title">Source Document</span>
+            <FormSection title="Source Document">
+              <DocumentUploader onUpload={handleUpload} label="LC / SKBDN Document" disabled={extracting} />
+              
+              {/* Download example document */}
+              <div className="mt-4 pt-4 border-t border-zinc-100 flex items-center gap-2 text-xs text-zinc-500 font-medium">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="text-zinc-400">
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/>
+                </svg>
+                <span>Need a test file?</span>
+                <a href="/examples/sample_lc.pdf" download className="text-zinc-850 hover:underline font-bold">Download Sample LC Document</a>
               </div>
-              <div className="card-body">
-                <DocumentUploader onUpload={handleUpload} label="LC / SKBDN Document" disabled={extracting} />
-                
-                {/* Download example document */}
-                <div className="mt-4 pt-4 border-t border-zinc-100 flex items-center gap-2 text-xs text-zinc-500 font-medium">
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="text-zinc-400">
-                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/>
-                  </svg>
-                  <span>Need a test file?</span>
-                  <a href="/examples/sample_lc.pdf" download className="text-zinc-850 hover:underline font-bold">Download Sample LC Document</a>
-                </div>
-              </div>
-            </div>
+            </FormSection>
           )}
 
           {/* Extract button */}

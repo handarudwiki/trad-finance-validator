@@ -6,9 +6,10 @@ interface FormSectionProps {
   badge?: React.ReactNode
   style?: React.CSSProperties
   bodyStyle?: React.CSSProperties
+  headerStyle?: React.CSSProperties
 }
 
-export function FormSection({ title, children, badge, style, bodyStyle }: FormSectionProps) {
+export function FormSection({ title, children, badge, style, bodyStyle, headerStyle }: FormSectionProps) {
   return (
     <div 
       className="card" 
@@ -26,9 +27,10 @@ export function FormSection({ title, children, badge, style, bodyStyle }: FormSe
         style={{ 
           padding: '12px 16px', 
           borderBottom: '1px solid var(--border)', 
-          background: 'var(--bg)',
+          background: '#FAFAFA',
           borderTopLeftRadius: '8px',
-          borderTopRightRadius: '8px'
+          borderTopRightRadius: '8px',
+          ...headerStyle 
         }}
       >
         <span 

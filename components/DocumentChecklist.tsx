@@ -137,6 +137,10 @@ export function DocumentChecklist({
             bodyStyle={{
               background: slot.uploaded ? '#f0fdf4' : 'var(--surface)',
             }}
+            headerStyle={{
+              background: slot.uploaded ? '#f0fdf4' : '#FAFAFA',
+              borderBottom: slot.uploaded ? '1px solid #bbf7d0' : '1px solid var(--border)',
+            }}
           >
             <div className="space-y-2">
               {slot.document.requirements && (
