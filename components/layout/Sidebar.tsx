@@ -172,22 +172,23 @@ export function Sidebar({ onCollapseChange }: SidebarProps) {
         ))}
       </div>
 
-      {/* Footer — Profile */}
+      {/* Footer — Help */}
       <div className="sidebar-footer" style={{ borderTop: '1px solid var(--sidebar-border)', padding: collapsed ? '12px 8px' : '12px 16px' }}>
-        <div className="flex items-center gap-3">
-          <div 
-            className="flex items-center justify-center w-8 h-8 rounded-full bg-zinc-800 text-white text-xs font-semibold select-none shrink-0"
-            title="Admin Koperasi"
-          >
-            AD
-          </div>
-          {!collapsed && (
-            <div className="text-left overflow-hidden">
-              <p className="text-xs font-bold text-zinc-900 truncate leading-tight">Admin Koperasi</p>
-              <p className="text-[10px] text-zinc-400 truncate leading-none mt-1 font-semibold uppercase tracking-wider">Auditor</p>
-            </div>
-          )}
-        </div>
+        <Link
+          href="/dashboard/setup"
+          className="sidebar-item"
+          style={{ width: '100%', margin: 0, padding: '8px' }}
+          title={collapsed ? 'Help & Support' : undefined}
+        >
+          <span className="sidebar-item-icon">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+              <circle cx="12" cy="12" r="10" />
+              <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" />
+              <line x1="12" y1="17" x2="12.01" y2="17" />
+            </svg>
+          </span>
+          <span className="sidebar-item-label">Help & Support</span>
+        </Link>
       </div>
     </nav>
   )

@@ -155,29 +155,24 @@ export function TopBar(props: any) {
         </div>
       </div>
 
-      {/* Right Section - Settings & Compact Avatar Dropdown */}
+      {/* Right Section - Profile with Name, Role, & Dropdown */}
       <div className="flex-1 flex justify-end items-center gap-3">
-        {/* Settings Button */}
-        <Link 
-          href="/dashboard/setup" 
-          className="p-1.5 hover:bg-zinc-50 border border-zinc-200 text-zinc-500 hover:text-zinc-900 transition shrink-0"
-          style={{ borderRadius: '6px' }}
-          title="Settings"
-        >
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-            <circle cx="12" cy="12" r="3" />
-            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z" />
-          </svg>
-        </Link>
-
         {/* Compact Avatar Dropdown */}
         <div className="relative" ref={dropdownRef}>
           <button 
             onClick={() => setIsOpen(!isOpen)}
-            className="flex items-center justify-center w-8 h-8 rounded-full bg-zinc-100 text-zinc-900 border border-zinc-200 text-xs font-semibold select-none hover:bg-zinc-200 transition focus:outline-none shrink-0"
+            className="flex items-center gap-2.5 px-2.5 py-1.5 rounded-md hover:bg-zinc-50 transition focus:outline-none shrink-0"
             title="Profile Menu"
           >
-            AD
+            {/* User Details (left of avatar) */}
+            <div className="text-right hidden md:block mr-0.5">
+              <p className="text-xs font-semibold text-zinc-950 leading-tight">Admin Koperasi</p>
+              <p className="text-[10px] text-zinc-400 leading-none mt-0.5 font-medium">Auditor</p>
+            </div>
+            {/* Avatar Circle (right of details) */}
+            <div className="flex items-center justify-center w-8 h-8 rounded-full bg-zinc-100 text-zinc-900 border border-zinc-200 text-xs font-semibold select-none shrink-0">
+              AD
+            </div>
           </button>
           
           {isOpen && (
