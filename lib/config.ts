@@ -7,6 +7,7 @@
 const requiredEnvVars = [
   'DATABASE_URL',
   'QDRANT_URL',
+  'QDRANT_API_KEY',
   'QDRANT_COLLECTION',
   'GEMINI_API_KEY',
   'STORAGE_PATH',
