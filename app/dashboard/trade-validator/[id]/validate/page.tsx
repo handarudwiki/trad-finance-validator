@@ -45,7 +45,7 @@ export default function ValidatePage() {
           { label: 'Validating' },
         ]}
         actions={
-          <Link href="/dashboard/trade-validator" className="btn btn-ghost btn-sm">
+          <Link href="/dashboard/trade-validator" className="btn btn-secondary h-10 px-4 flex items-center gap-2" style={{ borderRadius: '8px' }}>
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <path d="M19 12H5M12 5l-7 7 7 7" />
             </svg>

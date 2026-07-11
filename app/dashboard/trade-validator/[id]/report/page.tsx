@@ -38,7 +38,7 @@ export default async function ReportPage({ params }: ReportPageProps) {
             { label: 'Validation Failed' },
           ]}
           actions={
-            <a href="/dashboard/trade-validator" className="btn btn-secondary btn-sm">
+            <a href="/dashboard/trade-validator" className="btn btn-secondary h-10 px-4 flex items-center gap-2" style={{ borderRadius: '8px' }}>
               Back to List
             </a>
           }
@@ -63,7 +63,8 @@ export default async function ReportPage({ params }: ReportPageProps) {
                 <div style={{ marginTop: '20px' }}>
                   <a
                     href={`/dashboard/trade-validator/${id}/upload`}
-                    className="btn btn-primary btn-sm"
+                    className="btn btn-primary h-10 px-4 flex items-center gap-2"
+                    style={{ borderRadius: '8px' }}
                   >
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                       <path d="M1 4v6h6M23 20v-6h-6" /><path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 0 1 3.51 15" />

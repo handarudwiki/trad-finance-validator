@@ -17,21 +17,21 @@
   --sidebar-width: 240px;
   --sidebar-collapsed: 64px;
 
-  /* Accent (Black/Zinc) */
-  --accent: #09090B;
-  --accent-hover: #27272A;
-  --accent-subtle: #F4F4F5;
-  --accent-muted: #E4E4E7;
+  /* Accent (Dark Slate Blue - Landing page base) */
+  --accent: #0f172a;
+  --accent-hover: #1e293b;
+  --accent-subtle: #f1f5f9;
+  --accent-muted: #e2e8f0;
 
   /* Text */
-  --text-primary: #09090B;
-  --text-secondary: #71717A;
-  --text-tertiary: #A1A1AA;
-  --text-inverse: #FAFAFA;
+  --text-primary: #0f172a;
+  --text-secondary: #475569;
+  --text-tertiary: #94a3b8;
+  --text-inverse: #f8fafc;
 
   /* Border */
-  --border: #E4E4E7;
-  --border-focus: #09090B;
+  --border: #e2e8f0;
+  --border-focus: #0f172a;
 
   /* Status (Muted/Subtle) */
   --status-draft-bg: #F4F4F5;

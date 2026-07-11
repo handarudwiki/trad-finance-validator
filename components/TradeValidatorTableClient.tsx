@@ -253,11 +253,11 @@ export function TradeValidatorTableClient({ initialTransactions }: TradeValidato
 
         {/* Active Filters Row (Attachment 2 refactor) */}
         {hasActiveFilters && (
-          <div className="flex items-center flex-wrap gap-2.5 py-1 text-sm font-sans">
-            <span className="font-semibold text-zinc-950">Filter Berdasarkan :</span>
+          <div className="flex items-center flex-wrap gap-2.5 py-1">
+            <span className="text-xs font-bold uppercase tracking-wider text-zinc-400">Filter Berdasarkan :</span>
             
             {activeFilters.type !== 'ALL' && (
-              <span className="inline-flex items-center gap-1.5 px-3 h-9 bg-zinc-100 border border-zinc-200 text-zinc-900 rounded-md text-xs font-medium">
+              <span className="inline-flex items-center gap-1.5 px-3 h-8 bg-zinc-50 border border-zinc-200 text-zinc-900 rounded-md text-xs font-semibold">
                 Tipe: {activeFilters.type}
                 <button 
                   onClick={() => handleRemoveFilter('type')}
@@ -273,7 +273,7 @@ export function TradeValidatorTableClient({ initialTransactions }: TradeValidato
             )}
 
             {activeFilters.status !== 'ALL' && (
-              <span className="inline-flex items-center gap-1.5 px-3 h-9 bg-zinc-100 border border-zinc-200 text-zinc-900 rounded-md text-xs font-medium">
+              <span className="inline-flex items-center gap-1.5 px-3 h-8 bg-zinc-50 border border-zinc-200 text-zinc-900 rounded-md text-xs font-semibold">
                 Status: {STATUS_LABELS[activeFilters.status]}
                 <button 
                   onClick={() => handleRemoveFilter('status')}
@@ -289,7 +289,7 @@ export function TradeValidatorTableClient({ initialTransactions }: TradeValidato
             )}
 
             {activeFilters.date && (
-              <span className="inline-flex items-center gap-1.5 px-3 h-9 bg-zinc-100 border border-zinc-200 text-zinc-900 rounded-md text-xs font-medium">
+              <span className="inline-flex items-center gap-1.5 px-3 h-8 bg-zinc-50 border border-zinc-200 text-zinc-900 rounded-md text-xs font-semibold">
                 Dibuat: {activeFilters.date}
                 <button 
                   onClick={() => handleRemoveFilter('date')}
@@ -305,7 +305,7 @@ export function TradeValidatorTableClient({ initialTransactions }: TradeValidato
             )}
 
             {activeFilters.updatedDate && (
-              <span className="inline-flex items-center gap-1.5 px-3 h-9 bg-zinc-100 border border-zinc-200 text-zinc-900 rounded-md text-xs font-medium">
+              <span className="inline-flex items-center gap-1.5 px-3 h-8 bg-zinc-50 border border-zinc-200 text-zinc-900 rounded-md text-xs font-semibold">
                 Update: {activeFilters.updatedDate}
                 <button 
                   onClick={() => handleRemoveFilter('updatedDate')}
@@ -322,7 +322,7 @@ export function TradeValidatorTableClient({ initialTransactions }: TradeValidato
 
             <button
               onClick={handleResetFilters}
-              className="btn btn-primary h-9 px-4 text-xs font-semibold"
+              className="btn btn-secondary h-8 px-4 text-xs font-semibold"
               style={{ borderRadius: '8px' }}
             >
               Atur Ulang
